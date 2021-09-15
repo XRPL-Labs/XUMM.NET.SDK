@@ -5,6 +5,6 @@ namespace XUMM.Net.Models.Misc
     public class XummCall
     {
         [JsonPropertyName("uuidv4")]
-        public string Uuidv4 { get; set; }
+        public string Uuidv4 { get; set; } = default!;
     }
 }

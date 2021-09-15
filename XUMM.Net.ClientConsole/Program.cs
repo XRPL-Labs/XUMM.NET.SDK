@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.Logging;
+using System;
 using System.Text.Json;
 using System.Threading.Tasks;
 
@@ -14,7 +15,8 @@ namespace XUMM.Net.ClientConsole
             // Xumm client options with default endpoint is used here.
             var options = new XummClientOptions(credentials);
 
-            using var client = new XummClient(options);
+            using var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
+            using var client = new XummClient(options, loggerFactory);
 
             await CallAndWriteResponseAsync(client.Misc.PingAsync);
             await CallAndWriteResponseAsync(client.Misc.CuratedAssetsAsync);

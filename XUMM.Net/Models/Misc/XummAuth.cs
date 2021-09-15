@@ -6,12 +6,12 @@ namespace XUMM.Net.Models.Misc
     public class XummAuth
     {
         [JsonPropertyName("application")]
-        public XummApplication Application { get; set; }
+        public XummApplication Application { get; set; } = default!;
 
         [JsonPropertyName("call")]
-        public XummCall Call { get; set; }
+        public XummCall Call { get; set; } = default!;
 
         [JsonPropertyName("quota")]
-        public Dictionary<string, object> Quota { get; set; }
+        public Dictionary<string, object> Quota { get; set; } = default!;
     }
 }

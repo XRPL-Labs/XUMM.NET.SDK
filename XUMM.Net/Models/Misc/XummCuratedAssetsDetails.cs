@@ -9,18 +9,18 @@ namespace XUMM.Net.Models.Misc
         public int Id { get; set; }
 
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = default!;
 
         [JsonPropertyName("domain")]
-        public string Domain { get; set; }
+        public string Domain { get; set; } = default!;
 
         [JsonPropertyName("avatar")]
-        public string Avatar { get; set; }
+        public string Avatar { get; set; } = default!;
 
         [JsonPropertyName("shortlist")]
         public int Shortlist { get; set; }
 
         [JsonPropertyName("currencies")]
-        public Dictionary<string, XummCuratedAssetsDetailsCurrency> Currencies { get; set; }
+        public Dictionary<string, XummCuratedAssetsDetailsCurrency> Currencies { get; set; } = default!;
     }
 }

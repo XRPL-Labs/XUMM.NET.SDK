@@ -8,6 +8,6 @@ namespace XUMM.Net.Models.Misc
         public bool Pong { get; set; }
 
         [JsonPropertyName("auth")]
-        public XummAuth Auth { get; set; }
+        public XummAuth Auth { get; set; } = default!;
     }
 }

@@ -6,12 +6,12 @@ namespace XUMM.Net.Models.Misc
     public class XummCuratedAssets
     {
         [JsonPropertyName("issuers")]
-        public List<string> Issuers { get; set; }
+        public List<string> Issuers { get; set; } = default!;
 
         [JsonPropertyName("currencies")]
-        public List<string> Currencies { get; set; }
+        public List<string> Currencies { get; set; } = default!;
 
         [JsonPropertyName("details")]
-        public Dictionary<string, XummCuratedAssetsDetails> Details { get; set; }
+        public Dictionary<string, XummCuratedAssetsDetails> Details { get; set; } = default!;
     }
 }

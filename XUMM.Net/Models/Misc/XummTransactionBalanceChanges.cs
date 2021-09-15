@@ -5,15 +5,15 @@ namespace XUMM.Net.Models.Misc
     public class XummTransactionBalanceChanges
     {
         [JsonPropertyName("counterparty")]
-        public string CounterParty { get; set; }
+        public string CounterParty { get; set; } = default!;
 
         [JsonPropertyName("currency")]
-        public string Currency { get; set; }
+        public string Currency { get; set; } = default!;
 
         [JsonPropertyName("value")]
-        public string Value { get; set; }
+        public string Value { get; set; } = default!;
 
         [JsonPropertyName("formatted")]
-        public XummTransactionBalanceChangesFormatted Formatted { get; set; }
+        public XummTransactionBalanceChangesFormatted Formatted { get; set; } = default!;
     }
 }

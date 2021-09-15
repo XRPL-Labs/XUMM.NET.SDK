@@ -11,16 +11,16 @@ namespace XUMM.Net.Models.Misc
         public int IssuerId { get; set; }
 
         [JsonPropertyName("issuer")]
-        public string Issuer { get; set; }
+        public string Issuer { get; set; } = default!;
 
         [JsonPropertyName("currency")]
-        public string Currency { get; set; }
+        public string Currency { get; set; } = default!;
 
         [JsonPropertyName("name")]
-        public string Name { get; set; }
+        public string Name { get; set; } = default!;
 
         [JsonPropertyName("avatar")]
-        public string Avatar { get; set; }
+        public string Avatar { get; set; } = default!;
 
         [JsonPropertyName("shortlist")]
         public int Shortlist { get; set; }

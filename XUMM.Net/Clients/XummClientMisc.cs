@@ -16,19 +16,19 @@ namespace XUMM.Net.Clients
         /// <inheritdoc cref="IXummClientMisc.PingAsync"/>
         public async Task<XummPong> PingAsync()
         {
-            return await _xummClient.ReadResponseAsync<XummPong>("platform/ping");
+            return await _xummClient.GetAsync<XummPong>("platform/ping");
         }
 
         /// <inheritdoc cref="IXummClientMisc.CuratedAssetsAsync"/>
         public async Task<XummCuratedAssets> CuratedAssetsAsync()
         {
-            return await _xummClient.ReadResponseAsync<XummCuratedAssets>("platform/curated-assets");
+            return await _xummClient.GetAsync<XummCuratedAssets>("platform/curated-assets");
         }
 
         /// <inheritdoc cref="IXummClientMisc.GetTransactionAsync"/>
         public async Task<XummTransaction> GetTransactionAsync(string txHash)
         {
-            return await _xummClient.ReadResponseAsync<XummTransaction>($"platform/xrpl-tx/{txHash.Trim()}");
+            return await _xummClient.GetAsync<XummTransaction>($"platform/xrpl-tx/{txHash.Trim()}");
         }
     }
 }
