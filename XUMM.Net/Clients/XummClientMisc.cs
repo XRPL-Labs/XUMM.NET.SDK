@@ -24,5 +24,11 @@ namespace XUMM.Net.Clients
         {
             return await _xummClient.ReadResponseAsync<XummCuratedAssets>("platform/curated-assets");
         }
+
+        /// <inheritdoc cref="IXummClientMisc.GetTransactionAsync"/>
+        public async Task<XummTransaction> GetTransactionAsync(string txHash)
+        {
+            return await _xummClient.ReadResponseAsync<XummTransaction>($"platform/xrpl-tx/{txHash.Trim()}");
+        }
     }
 }
