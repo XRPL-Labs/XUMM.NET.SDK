@@ -19,8 +19,9 @@ namespace XUMM.Net.ClientConsole
             using var client = new XummClient(options, loggerFactory);
 
             await CallAndWriteResponseAsync(client.Misc.PingAsync);
-            await CallAndWriteResponseAsync(client.Misc.CuratedAssetsAsync);
+            await CallAndWriteResponseAsync(client.Misc.GetCuratedAssetsAsync);
             await CallAndWriteResponseAsync(() => client.Misc.GetTransactionAsync(Settings.TxHash));
+            await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(Settings.Account));
             Console.ReadKey();
         }
 

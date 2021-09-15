@@ -11,14 +11,14 @@ namespace XUMM.Net
 
         public XummApiCredentials(string apiKey, string apiSecret)
         {
-            if (string.IsNullOrWhiteSpace(apiKey))
+            if (!apiKey.IsValidUuid())
             {
-                throw new ArgumentException($"{nameof(apiKey)} cannot be null or whitespace", nameof(apiKey));
+                throw new ArgumentException("A valid API Key must be provided", nameof(apiKey));
             }
 
-            if (string.IsNullOrWhiteSpace(apiSecret))
+            if (!apiSecret.IsValidUuid())
             {
-                throw new ArgumentException($"{nameof(apiSecret)} cannot be null or whitespace", nameof(apiSecret));
+                throw new ArgumentException("A valid API Secret must be provided", nameof(apiSecret));
             }
 
             ApiKey = apiKey.ToSecureString();
