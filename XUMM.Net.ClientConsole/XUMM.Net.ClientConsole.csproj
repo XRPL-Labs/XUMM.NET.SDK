@@ -3,6 +3,8 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <TargetFramework>net5.0</TargetFramework>
+    <Authors>Dominique Blomsma</Authors>
+    <Copyright>Dominique Blomsma © 2021</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
