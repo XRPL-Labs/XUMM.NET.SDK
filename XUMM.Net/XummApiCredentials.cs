@@ -6,8 +6,8 @@ namespace XUMM.Net
 {
     public class XummApiCredentials : IDisposable
     {
-        public SecureString ApiKey { get; }
-        public SecureString ApiSecret { get; }
+        internal SecureString ApiKey { get; }
+        internal SecureString ApiSecret { get; }
 
         public XummApiCredentials(string apiKey, string apiSecret)
         {
