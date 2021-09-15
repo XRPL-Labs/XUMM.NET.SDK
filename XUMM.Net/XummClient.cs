@@ -3,7 +3,6 @@ using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Json;
-using System.Text.Json;
 using System.Threading.Tasks;
 using XUMM.Net.Clients;
 using XUMM.Net.Clients.Interfaces;
@@ -42,44 +41,44 @@ namespace XUMM.Net
             {
                 using var client = GetHttpClient();
                 var response = await client.GetAsync($"{ClientOptions.BaseUrl}{endpoint}");
-
-                response.EnsureSuccessStatusCode();
+                if (!response.IsSuccessStatusCode)
+                {
+                    throw await GetHttpRequestException(response);
+                }
 
                 return (T)await response.Content.ReadFromJsonAsync(typeof(T));
             }
             catch (Exception ex)
             {
-                if (ex is HttpRequestException { StatusCode: HttpStatusCode.InternalServerError })
-                {
-                    TryLogFatalApiError(ex.Message);
-                }
-
                 Logger?.LogError(ex, $"Unexpected response from XUMM API [GET:{endpoint}]");
                 throw;
             }
         }
 
-        private void TryLogFatalApiError(string json)
+        private async Task<HttpRequestException> GetHttpRequestException(HttpResponseMessage response)
         {
+            HttpRequestException? exception = null;
             try
             {
-                var fatalApiError = JsonSerializer.Deserialize<XummFatalApiError>(json);
-                if (fatalApiError != null)
+                if (await response.Content.ReadFromJsonAsync(typeof(XummFatalApiError)) is XummFatalApiError fatalApiError)
                 {
                     if (!string.IsNullOrWhiteSpace(fatalApiError.Message))
                     {
-                        Logger?.LogError(fatalApiError.Message);
+                        exception = new HttpRequestException(fatalApiError.Message, null, response.StatusCode);
                     }
                     else if (fatalApiError.Code != 0)
                     {
-                        Logger?.LogError($"Error code ${fatalApiError.Code}, see XUMM Dev Console, reference: ${fatalApiError.Reference}");
+                        exception = new HttpRequestException($"Error code ${fatalApiError.Code}, see XUMM Dev Console, reference: ${fatalApiError.Reference}",
+                            null, (HttpStatusCode)fatalApiError.Code);
                     }
                 }
             }
             catch (Exception ex)
             {
-                Logger?.LogError(ex, "Failed to log a fatal API error");
+                Logger?.LogTrace(ex, $"No {nameof(XummFatalApiError)} available in unsuccessful response body of request: {response.RequestMessage?.RequestUri}");
             }
+
+            return exception ??= new HttpRequestException(response.ReasonPhrase, null, response.StatusCode);
         }
 
         private HttpClient GetHttpClient()
