@@ -13,9 +13,16 @@ namespace XUMM.Net.Clients
             _xummClient = xummClient;
         }
 
+        /// <inheritdoc cref="IXummClientMisc.PingAsync"/>
         public async Task<XummPong> PingAsync()
         {
             return await _xummClient.ReadResponseAsync<XummPong>("platform/ping");
+        }
+
+        /// <inheritdoc cref="IXummClientMisc.CuratedAssetsAsync"/>
+        public async Task<XummCuratedAssets> CuratedAssetsAsync()
+        {
+            return await _xummClient.ReadResponseAsync<XummCuratedAssets>("platform/curated-assets");
         }
     }
 }

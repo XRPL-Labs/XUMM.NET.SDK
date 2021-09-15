@@ -17,6 +17,7 @@ namespace XUMM.Net.ClientConsole
             using var client = new XummClient(options);
 
             await CallAndWriteResponseAsync(client.Misc.PingAsync);
+            await CallAndWriteResponseAsync(client.Misc.CuratedAssetsAsync);
             Console.ReadKey();
         }
 
