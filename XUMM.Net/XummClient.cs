@@ -32,7 +32,7 @@ namespace XUMM.Net
             Misc = new XummClientMisc(this);
 
             ClientOptions = options ?? throw new ArgumentNullException($"{nameof(options)} cannot be null", nameof(options));
-            Logger = loggerFactory.CreateLogger<XummClient>();
+            Logger = loggerFactory?.CreateLogger<XummClient>();
         }
 
         internal async Task<T> GetAsync<T>(string endpoint)
