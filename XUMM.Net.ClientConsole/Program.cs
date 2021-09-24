@@ -22,6 +22,7 @@ namespace XUMM.Net.ClientConsole
             await CallAndWriteResponseAsync(client.Misc.GetCuratedAssetsAsync);
             await CallAndWriteResponseAsync(() => client.Misc.GetTransactionAsync(Settings.TxHash));
             await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(Settings.Account));
+            await CallAndWriteResponseAsync(() => client.Misc.GetRatesAsync(Settings.CurrencyCode));
             Console.ReadKey();
         }
 

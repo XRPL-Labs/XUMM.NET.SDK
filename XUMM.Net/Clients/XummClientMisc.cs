@@ -49,5 +49,11 @@ namespace XUMM.Net.Clients
                 return EnumHelper.GetValueFromName<XummKycStatus>(kycInfo.KycStatus);
             }
         }
+
+        /// <inheritdoc />
+        public async Task<XummRates> GetRatesAsync(string currencyCode)
+        {
+            return await _xummClient.GetAsync<XummRates>($"platform/rates/{currencyCode.Trim().ToUpperInvariant()}");
+        }
     }
 }

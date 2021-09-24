@@ -60,17 +60,18 @@ namespace XUMM.Net
             HttpRequestException? exception = null;
             try
             {
-                if (await response.Content.ReadFromJsonAsync(typeof(XummFatalApiError)) is XummFatalApiError fatalApiError)
+                if (response.StatusCode == HttpStatusCode.InternalServerError &&
+                    await response.Content.ReadFromJsonAsync(typeof(XummFatalApiError)) is XummFatalApiError fatalApiError)
                 {
                     if (!string.IsNullOrWhiteSpace(fatalApiError.Message))
                     {
                         exception = new HttpRequestException(fatalApiError.Message, null, response.StatusCode);
                     }
-                    else if (fatalApiError.Code != 0)
-                    {
-                        exception = new HttpRequestException($"Error code ${fatalApiError.Code}, see XUMM Dev Console, reference: ${fatalApiError.Reference}",
-                            null, (HttpStatusCode)fatalApiError.Code);
-                    }
+                }
+                else if (await response.Content.ReadFromJsonAsync(typeof(XummApiError)) is XummApiError apiError)
+                {
+                    exception = new HttpRequestException($"Error code: '{apiError.Error.Code}' with message: '{apiError.Error.Message}', see XUMM Dev Console, reference: '{apiError.Error.Reference}'.",
+                        null, response.StatusCode);
                 }
             }
             catch (Exception ex)

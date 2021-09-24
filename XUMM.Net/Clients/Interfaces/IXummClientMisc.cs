@@ -24,5 +24,11 @@ namespace XUMM.Net.Clients.Interfaces
         /// </summary>
         /// <param name="userTokenOrAccount">Account address, eg. rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB</param>
         Task<XummKycStatus> GetKycStatusAsync(string userTokenOrAccount);
+
+        /// <summary>
+        /// Get semi-live XRP exchange rates
+        /// </summary>
+        /// <param name="currencyCode">The 3 alpha char currency code, eg. INR</param>
+        Task<XummRates> GetRatesAsync(string currencyCode);
     }
 }
