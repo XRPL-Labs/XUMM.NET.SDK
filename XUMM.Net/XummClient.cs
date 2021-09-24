@@ -37,9 +37,19 @@ namespace XUMM.Net
 
         internal async Task<T> GetAsync<T>(string endpoint)
         {
+            return await GetAsync<T>(endpoint, true);
+        }
+
+        internal async Task<T> GetPublicAsync<T>(string endpoint)
+        {
+            return await GetAsync<T>(endpoint, false);
+        }
+
+        private async Task<T> GetAsync<T>(string endpoint, bool setCredentials)
+        {
             try
             {
-                using var client = GetHttpClient();
+                using var client = GetHttpClient(setCredentials);
                 var response = await client.GetAsync($"{ClientOptions.BaseUrl}{endpoint}");
                 if (!response.IsSuccessStatusCode)
                 {
@@ -82,11 +92,15 @@ namespace XUMM.Net
             return exception ??= new HttpRequestException(response.ReasonPhrase, null, response.StatusCode);
         }
 
-        private HttpClient GetHttpClient()
+        private HttpClient GetHttpClient(bool setCredentials)
         {
             var client = new HttpClient();
-            client.DefaultRequestHeaders.Add("X-API-Key", ClientOptions.Credentials.ApiKey.GetString());
-            client.DefaultRequestHeaders.Add("X-API-Secret", ClientOptions.Credentials.ApiSecret.GetString());
+            if (setCredentials)
+            {
+                client.DefaultRequestHeaders.Add("X-API-Key", ClientOptions.Credentials.ApiKey.GetString());
+                client.DefaultRequestHeaders.Add("X-API-Secret", ClientOptions.Credentials.ApiSecret.GetString());
+            }
+
             client.DefaultRequestHeaders.Add("Accept", "application/json");
             client.DefaultRequestHeaders.Add("User-Agent", "XUMM-Net");
             return client;
