@@ -34,6 +34,8 @@ namespace XUMM.Net.ClientConsole
             await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(miscellaneousConfig.UserToken));
             await CallAndWriteResponseAsync(() => client.Misc.GetRatesAsync(miscellaneousConfig.CurrencyCode));
 
+            await CallAndWriteResponseAsync(client.Misc.AppStorage.GetAsync);
+
             Console.ReadKey();
         }
 

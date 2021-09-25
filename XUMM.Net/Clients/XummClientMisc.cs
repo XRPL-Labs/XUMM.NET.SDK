@@ -11,8 +11,12 @@ namespace XUMM.Net.Clients
     {
         private readonly XummClient _xummClient;
 
+        /// <inheritdoc />
+        public IXummClientMiscAppStorage AppStorage { get; }
+
         internal XummClientMisc(XummClient xummClient)
         {
+            AppStorage = new XummClientMiscAppStorage(xummClient);
             _xummClient = xummClient;
         }
 
@@ -45,7 +49,7 @@ namespace XUMM.Net.Clients
             else
             {
                 var request = new XummKycStatusRequest { UserToken = userTokenOrAccount };
-                var kycInfo = await _xummClient.PostAsync<XummKycStatusInfo>($"platform/kyc-status", request);
+                var kycInfo = await _xummClient.PostAsync<XummKycStatusInfo>("platform/kyc-status", request);
                 return EnumHelper.GetValueFromName<XummKycStatus>(kycInfo.KycStatus);
             }
         }

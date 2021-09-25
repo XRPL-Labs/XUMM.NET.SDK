@@ -16,9 +16,7 @@ namespace XUMM.Net
 {
     public class XummClient : IXummClient, IDisposable
     {
-        /// <summary>
-        /// Miscellaneous endpoints
-        /// </summary>
+        /// <inheritdoc />
         public IXummClientMisc Misc { get; }
 
         public XummClientOptions ClientOptions { get; }

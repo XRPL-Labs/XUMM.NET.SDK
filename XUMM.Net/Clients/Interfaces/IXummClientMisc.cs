@@ -6,6 +6,12 @@ namespace XUMM.Net.Clients.Interfaces
 {
     public interface IXummClientMisc
     {
+        /// <summary>
+        /// The app-storage endpoint allows your application to store max. 60KB of private JSON data for your headless
+        /// application (eg. POS device) to use to bootstrap / read config / ...
+        /// </summary>
+        IXummClientMiscAppStorage AppStorage { get; }
+
         Task<XummPong> PingAsync();
 
         /// <summary>

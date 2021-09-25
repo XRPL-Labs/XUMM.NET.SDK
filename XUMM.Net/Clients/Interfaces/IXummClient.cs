@@ -2,6 +2,9 @@
 {
     public interface IXummClient
     {
+        /// <summary>
+        /// Miscellaneous endpoints
+        /// </summary>
         public IXummClientMisc Misc { get; }
     }
 }
