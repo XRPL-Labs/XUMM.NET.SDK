@@ -39,13 +39,13 @@ namespace XUMM.Net.Clients
         {
             if (userTokenOrAccount.IsAccountAddress())
             {
-                var kycInfo = await _xummClient.GetPublicAsync<XummKycInfo>($"platform/kyc-status/{userTokenOrAccount}");
+                var kycInfo = await _xummClient.GetAsync<XummKycInfo>($"platform/kyc-status/{userTokenOrAccount}", isPublicEndpoint: true);
                 return kycInfo.KycApproved ? XummKycStatus.Successful : XummKycStatus.None;
             }
             else
             {
-                // TODO: Validate and extend the model of XummKycStatusInfo
-                var kycInfo = await _xummClient.GetPublicAsync<XummKycStatusInfo>($"platform/kyc-status/{userTokenOrAccount}");
+                var request = new XummKycStatusRequest { UserToken = userTokenOrAccount };
+                var kycInfo = await _xummClient.PostAsync<XummKycStatusInfo>($"platform/kyc-status", request);
                 return EnumHelper.GetValueFromName<XummKycStatus>(kycInfo.KycStatus);
             }
         }

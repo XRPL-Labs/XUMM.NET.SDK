@@ -2,7 +2,10 @@
 using System;
 using System.Net;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Net.Http.Json;
+using System.Text;
+using System.Text.Json;
 using System.Threading.Tasks;
 using XUMM.Net.Clients;
 using XUMM.Net.Clients.Interfaces;
@@ -35,22 +38,30 @@ namespace XUMM.Net
             Logger = loggerFactory?.CreateLogger<XummClient>();
         }
 
-        internal async Task<T> GetAsync<T>(string endpoint)
+        internal async Task<T> GetAsync<T>(string endpoint, bool isPublicEndpoint = false)
         {
-            return await GetAsync<T>(endpoint, true);
+            return await SendAsync<T>(HttpMethod.Get, endpoint, !isPublicEndpoint, default);
         }
 
-        internal async Task<T> GetPublicAsync<T>(string endpoint)
+        internal async Task<T> PostAsync<T>(string endpoint, object content)
         {
-            return await GetAsync<T>(endpoint, false);
+            return await SendAsync<T>(HttpMethod.Post, endpoint, true, content);
         }
 
-        private async Task<T> GetAsync<T>(string endpoint, bool setCredentials)
+        private async Task<T> SendAsync<T>(HttpMethod method, string endpoint, bool setCredentials, object? content)
         {
             try
             {
                 using var client = GetHttpClient(setCredentials);
-                var response = await client.GetAsync($"{ClientOptions.BaseUrl}{endpoint}");
+                using var requestMessage = new HttpRequestMessage(method, $"{ClientOptions.BaseUrl}{endpoint}");
+
+                if (content != null)
+                {
+                    requestMessage.Content = new StringContent(JsonSerializer.Serialize(content), Encoding.UTF8);
+                    requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
+                }
+
+                using var response = await client.SendAsync(requestMessage);
                 if (!response.IsSuccessStatusCode)
                 {
                     throw await GetHttpRequestException(response);
