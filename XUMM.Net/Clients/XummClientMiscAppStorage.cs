@@ -18,5 +18,11 @@ namespace XUMM.Net.Clients
         {
             return await _xummClient.GetAsync<XummStorage>("platform/app-storage");
         }
+
+        /// <inheritdoc />
+        public async Task<XummStorageStore> StoreAsync(string json)
+        {
+            return await _xummClient.PostAsync<XummStorageStore>("platform/app-storage", json);
+        }
     }
 }

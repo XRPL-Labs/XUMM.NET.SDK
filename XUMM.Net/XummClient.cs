@@ -43,19 +43,24 @@ namespace XUMM.Net
 
         internal async Task<T> PostAsync<T>(string endpoint, object content)
         {
-            return await SendAsync<T>(HttpMethod.Post, endpoint, true, content);
+            return await PostAsync<T>(endpoint, JsonSerializer.Serialize(content));
         }
 
-        private async Task<T> SendAsync<T>(HttpMethod method, string endpoint, bool setCredentials, object? content)
+        internal async Task<T> PostAsync<T>(string endpoint, string json)
+        {
+            return await SendAsync<T>(HttpMethod.Post, endpoint, true, json);
+        }
+
+        private async Task<T> SendAsync<T>(HttpMethod method, string endpoint, bool setCredentials, string? json)
         {
             try
             {
                 using var client = GetHttpClient(setCredentials);
                 using var requestMessage = new HttpRequestMessage(method, $"{ClientOptions.BaseUrl}{endpoint}");
 
-                if (content != null)
+                if (json != null)
                 {
-                    requestMessage.Content = new StringContent(JsonSerializer.Serialize(content), Encoding.UTF8);
+                    requestMessage.Content = new StringContent(json, Encoding.UTF8, "application/json");
                     requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
                 }
 

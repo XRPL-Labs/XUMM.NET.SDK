@@ -35,6 +35,7 @@ namespace XUMM.Net.ClientConsole
             await CallAndWriteResponseAsync(() => client.Misc.GetRatesAsync(miscellaneousConfig.CurrencyCode));
 
             await CallAndWriteResponseAsync(client.Misc.AppStorage.GetAsync);
+            await CallAndWriteResponseAsync(() => client.Misc.AppStorage.StoreAsync(miscellaneousConfig.AppStorageBody));
 
             Console.ReadKey();
         }

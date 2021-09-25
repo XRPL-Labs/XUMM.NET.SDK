@@ -6,5 +6,6 @@
         public string Account { get; set; } = default!;
         public string UserToken { get; set; } = default!;
         public string CurrencyCode { get; set; } = default!;
+        public string AppStorageBody { get; set; } = default!;
     }
 }
