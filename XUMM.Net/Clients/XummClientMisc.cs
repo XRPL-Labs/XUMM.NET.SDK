@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using XUMM.Net.Clients.Interfaces;
 using XUMM.Net.Enums;
 using XUMM.Net.Extensions;
@@ -9,6 +10,7 @@ namespace XUMM.Net.Clients
 {
     public class XummClientMisc : IXummClientMisc
     {
+        private const int MinimumAvatarDimensions = 200;
         private readonly XummClient _xummClient;
 
         /// <inheritdoc />
@@ -58,6 +60,22 @@ namespace XUMM.Net.Clients
         public async Task<XummRates> GetRatesAsync(string currencyCode)
         {
             return await _xummClient.GetAsync<XummRates>($"platform/rates/{currencyCode.Trim().ToUpperInvariant()}");
+        }
+
+        /// <inheritdoc />
+        public string GetAvatarUrl(string account, int dimensions, int padding)
+        {
+            if (dimensions < MinimumAvatarDimensions)
+            {
+                throw new ArgumentOutOfRangeException(nameof(dimensions), $"The minimum (square) dimensions are {MinimumAvatarDimensions}.");
+            }
+
+            if (padding < 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(padding), $"The padding should be equal or greater than zero.");
+            }
+
+            return $"https://xumm.app/avatar/{account}_{dimensions}_{padding}.png";
         }
     }
 }

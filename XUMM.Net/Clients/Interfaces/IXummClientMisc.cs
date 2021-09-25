@@ -36,5 +36,14 @@ namespace XUMM.Net.Clients.Interfaces
         /// </summary>
         /// <param name="currencyCode">The 3 alpha char currency code, eg. INR</param>
         Task<XummRates> GetRatesAsync(string currencyCode);
+
+        /// <summary>
+        /// Get an avatar (gravatar or personal avatar)
+        /// </summary>
+        /// <param name="account">Account address, eg. rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB</param>
+        /// <param name="dimensions">Dimensions in pixels</param>
+        /// <param name="padding">Padding surrounding the icon in pixels</param>
+        /// <returns>An avatar with specific (square) dimensions; otherwise a hashicon if no custom avatar can be found.</returns>
+        string GetAvatarUrl(string account, int dimensions, int padding);
     }
 }
