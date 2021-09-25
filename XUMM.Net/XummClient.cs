@@ -51,6 +51,11 @@ namespace XUMM.Net
             return await SendAsync<T>(HttpMethod.Post, endpoint, true, json);
         }
 
+        internal async Task<T> DeleteAsync<T>(string endpoint)
+        {
+            return await SendAsync<T>(HttpMethod.Delete, endpoint, true, default);
+        }
+
         private async Task<T> SendAsync<T>(HttpMethod method, string endpoint, bool setCredentials, string? json)
         {
             try

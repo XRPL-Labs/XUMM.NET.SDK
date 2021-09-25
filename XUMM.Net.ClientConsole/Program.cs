@@ -36,6 +36,7 @@ namespace XUMM.Net.ClientConsole
 
             await CallAndWriteResponseAsync(client.Misc.AppStorage.GetAsync);
             await CallAndWriteResponseAsync(() => client.Misc.AppStorage.StoreAsync(miscellaneousConfig.AppStorageBody));
+            await CallAndWriteResponseAsync(client.Misc.AppStorage.ClearAsync);
 
             Console.ReadKey();
         }
