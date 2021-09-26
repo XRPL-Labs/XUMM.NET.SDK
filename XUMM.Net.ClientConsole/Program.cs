@@ -28,6 +28,7 @@ namespace XUMM.Net.ClientConsole
             using var client = new XummClient(options, loggerFactory);
 
             var miscellaneousConfig = config.GetSection("Miscellaneous").Get<MiscellaneousConfig>();
+            var payloadConfig = config.GetSection("Payload").Get<PayloadConfig>();
 
             await CallAndWriteResponseAsync(client.Misc.PingAsync);
             await CallAndWriteResponseAsync(client.Misc.GetCuratedAssetsAsync);
@@ -41,9 +42,14 @@ namespace XUMM.Net.ClientConsole
             await CallAndWriteResponseAsync(() => client.Misc.AppStorage.StoreAsync(miscellaneousConfig.AppStorageBody));
             await CallAndWriteResponseAsync(client.Misc.AppStorage.ClearAsync);
 
-            var payloadConfig = config.GetSection("Payload").Get<PayloadConfig>();
+            var payload = new XummPayload(new TransactionCommonFields(payloadConfig.TransactionType, payloadConfig.Destination, payloadConfig.Fee))
+            {
+                CustomMeta = new XummPayloadCustomMeta
+                {
+                    Instruction = "Test payload created with the XUMM.Net Wrapper."
+                }
+            };
 
-            var payload = new XummPayload(new TransactionCommonFields(payloadConfig.TransactionType, payloadConfig.Destination, payloadConfig.Fee));
             await CallAndWriteResponseAsync(() => client.Payload.SubmitAsync(payload));
 
             Console.ReadKey();

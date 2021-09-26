@@ -33,5 +33,11 @@ namespace XUMM.Net.Models.Payload
         /// </summary>
         [JsonPropertyName("options")]
         public XummPayloadOptions? Options { get; set; }
+
+        /// <summary>
+        /// Attach information (custom identifier, meta object, user instruction text) to the payload
+        /// </summary>
+        [JsonPropertyName("custom_meta")]
+        public XummPayloadCustomMeta? CustomMeta { get; set; }
     }
 }
