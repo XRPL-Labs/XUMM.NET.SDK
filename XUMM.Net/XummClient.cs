@@ -6,6 +6,7 @@ using System.Net.Http.Headers;
 using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using XUMM.Net.Clients;
 using XUMM.Net.Clients.Interfaces;
@@ -24,6 +25,8 @@ namespace XUMM.Net
 
         public XummClientOptions ClientOptions { get; }
 
+        private JsonSerializerOptions _serializerOptions;
+
         internal readonly ILogger? Logger;
 
         public XummClient(XummClientOptions options) : this(options, default)
@@ -38,6 +41,12 @@ namespace XUMM.Net
 
             ClientOptions = options ?? throw new ArgumentNullException($"{nameof(options)} cannot be null", nameof(options));
             Logger = loggerFactory?.CreateLogger<XummClient>();
+
+            _serializerOptions = new JsonSerializerOptions
+            {
+                IgnoreNullValues = true,
+                Converters = { new JsonStringEnumConverter() }
+            };
         }
 
         internal async Task<T> GetAsync<T>(string endpoint, bool isPublicEndpoint = false)
@@ -47,7 +56,7 @@ namespace XUMM.Net
 
         internal async Task<T> PostAsync<T>(string endpoint, object content)
         {
-            return await PostAsync<T>(endpoint, JsonSerializer.Serialize(content));
+            return await PostAsync<T>(endpoint, JsonSerializer.Serialize(content, _serializerOptions));
         }
 
         internal async Task<T> PostAsync<T>(string endpoint, string json)
