@@ -1,4 +1,6 @@
-﻿using XUMM.Net.Clients.Interfaces;
+﻿using System.Threading.Tasks;
+using XUMM.Net.Clients.Interfaces;
+using XUMM.Net.Models.Payload;
 
 namespace XUMM.Net.Clients
 {
@@ -9,6 +11,12 @@ namespace XUMM.Net.Clients
         internal XummPayloadClient(XummClient xummClient)
         {
             _xummClient = xummClient;
+        }
+
+        /// <inheritdoc />
+        public async Task<XummPayloadResponse> SubmitAsync(XummPayload payload)
+        {
+            return await _xummClient.PostAsync<XummPayloadResponse>("platform/payload", payload);
         }
     }
 }
