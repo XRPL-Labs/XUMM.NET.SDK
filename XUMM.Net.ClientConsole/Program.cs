@@ -5,6 +5,8 @@ using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using XUMM.Net.ClientConsole.Configs;
+using XUMM.Net.Models.Payload;
+using XUMM.Net.Models.XrpLedger;
 
 namespace XUMM.Net.ClientConsole
 {
@@ -38,6 +40,11 @@ namespace XUMM.Net.ClientConsole
             await CallAndWriteResponseAsync(client.Misc.AppStorage.GetAsync);
             await CallAndWriteResponseAsync(() => client.Misc.AppStorage.StoreAsync(miscellaneousConfig.AppStorageBody));
             await CallAndWriteResponseAsync(client.Misc.AppStorage.ClearAsync);
+
+            var payloadConfig = config.GetSection("Payload").Get<PayloadConfig>();
+
+            var payload = new XummPayload(new TransactionCommonFields(payloadConfig.TransactionType, payloadConfig.Destination, payloadConfig.Fee));
+            await CallAndWriteResponseAsync(() => client.Payload.SubmitAsync(payload));
 
             Console.ReadKey();
         }
