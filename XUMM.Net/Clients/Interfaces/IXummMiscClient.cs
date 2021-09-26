@@ -4,13 +4,13 @@ using XUMM.Net.Models.Misc;
 
 namespace XUMM.Net.Clients.Interfaces
 {
-    public interface IXummClientMisc
+    public interface IXummMiscClient
     {
         /// <summary>
         /// The app-storage endpoint allows your application to store max. 60KB of private JSON data for your headless
         /// application (eg. POS device) to use to bootstrap / read config / ...
         /// </summary>
-        IXummClientMiscAppStorage AppStorage { get; }
+        IXummMiscAppStorageClient AppStorage { get; }
 
         Task<XummPong> PingAsync();
 

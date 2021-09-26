@@ -3,7 +3,7 @@ using XUMM.Net.Models.Misc.AppStorage;
 
 namespace XUMM.Net.Clients.Interfaces
 {
-    public interface IXummClientMiscAppStorage
+    public interface IXummMiscAppStorageClient
     {
         /// <summary>
         /// Retrieve simple JSON objects attached to your XUMM App

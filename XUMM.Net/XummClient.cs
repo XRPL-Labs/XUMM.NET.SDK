@@ -17,7 +17,10 @@ namespace XUMM.Net
     public class XummClient : IXummClient, IDisposable
     {
         /// <inheritdoc />
-        public IXummClientMisc Misc { get; }
+        public IXummMiscClient Misc { get; }
+
+        /// <inheritdoc />
+        public IXummPayloadClient Payload { get; }
 
         public XummClientOptions ClientOptions { get; }
 
@@ -30,7 +33,8 @@ namespace XUMM.Net
 
         public XummClient(XummClientOptions options, ILoggerFactory? loggerFactory)
         {
-            Misc = new XummClientMisc(this);
+            Misc = new XummMiscClient(this);
+            Payload = new XummPayloadClient(this);
 
             ClientOptions = options ?? throw new ArgumentNullException($"{nameof(options)} cannot be null", nameof(options));
             Logger = loggerFactory?.CreateLogger<XummClient>();

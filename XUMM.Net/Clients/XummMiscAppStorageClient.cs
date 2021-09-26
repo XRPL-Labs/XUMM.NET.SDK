@@ -4,11 +4,11 @@ using XUMM.Net.Models.Misc.AppStorage;
 
 namespace XUMM.Net.Clients
 {
-    public class XummClientMiscAppStorage : IXummClientMiscAppStorage
+    public class XummMiscAppStorageClient : IXummMiscAppStorageClient
     {
         private readonly XummClient _xummClient;
 
-        internal XummClientMiscAppStorage(XummClient xummClient)
+        internal XummMiscAppStorageClient(XummClient xummClient)
         {
             _xummClient = xummClient;
         }

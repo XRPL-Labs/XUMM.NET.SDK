@@ -5,6 +5,11 @@
         /// <summary>
         /// Miscellaneous endpoints
         /// </summary>
-        public IXummClientMisc Misc { get; }
+        public IXummMiscClient Misc { get; }
+
+        /// <summary>
+        /// Payload endpoints
+        /// </summary>
+        public IXummPayloadClient Payload { get; }
     }
 }

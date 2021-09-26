@@ -8,17 +8,17 @@ using XUMM.Net.Models.Misc;
 
 namespace XUMM.Net.Clients
 {
-    public class XummClientMisc : IXummClientMisc
+    public class XummMiscClient : IXummMiscClient
     {
         private const int MinimumAvatarDimensions = 200;
         private readonly XummClient _xummClient;
 
         /// <inheritdoc />
-        public IXummClientMiscAppStorage AppStorage { get; }
+        public IXummMiscAppStorageClient AppStorage { get; }
 
-        internal XummClientMisc(XummClient xummClient)
+        internal XummMiscClient(XummClient xummClient)
         {
-            AppStorage = new XummClientMiscAppStorage(xummClient);
+            AppStorage = new XummMiscAppStorageClient(xummClient);
             _xummClient = xummClient;
         }
 
