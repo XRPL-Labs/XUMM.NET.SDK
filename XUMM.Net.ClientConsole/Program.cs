@@ -50,18 +50,19 @@ namespace XUMM.Net.ClientConsole
                 }
             };
 
-            await CallAndWriteResponseAsync(() => client.Payload.SubmitAsync(payload));
-
+            var payloadResult = await CallAndWriteResponseAsync(() => client.Payload.SubmitAsync(payload));
+            await CallAndWriteResponseAsync(() => client.Payload.GetAsync(payloadResult.Uuid));
             Console.ReadKey();
         }
 
-        private static async Task CallAndWriteResponseAsync<T>(Func<Task<T>> task)
+        private static async Task<T> CallAndWriteResponseAsync<T>(Func<Task<T>> task)
         {
             var start = DateTime.UtcNow;
             var result = await task();
 
             Console.WriteLine(JsonSerializer.Serialize(result, new JsonSerializerOptions { WriteIndented = true }));
             Console.WriteLine($"Response time: {Math.Round((DateTime.UtcNow - start).TotalMilliseconds)}ms.");
+            return result;
         }
 
         private static IConfiguration GetConfiguration()
