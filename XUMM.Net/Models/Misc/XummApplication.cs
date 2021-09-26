@@ -10,10 +10,19 @@ namespace XUMM.Net.Models.Misc
         [JsonPropertyName("name")]
         public string Name { get; set; } = default!;
 
+        [JsonPropertyName("description")]
+        public string? Description { get; set; }
+
         [JsonPropertyName("webhookurl")]
-        public string WebhookUrl { get; set; } = default!;
+        public string? WebhookUrl { get; set; }
 
         [JsonPropertyName("disabled")]
         public int Disabled { get; set; }
+
+        [JsonPropertyName("icon_url")]
+        public string? IconUrl { get; set; }
+
+        [JsonPropertyName("issued_user_token")]
+        public object? IssuedUserToken { get; set; }
     }
 }
