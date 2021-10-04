@@ -1,6 +1,6 @@
 ﻿namespace XUMM.Net.Enums
 {
-    public enum XrpTransactionType
+    public enum XrplTransactionType
     {
         Payment,
         OfferCreate,
@@ -13,9 +13,14 @@
         EscrowCreate,
         EscrowFinish,
         EscrowCancel,
+        CheckCancel,
+        CheckCash,
+        CheckCreate,
         PaymentChannelCreate,
         PaymentChannelFund,
         PaymentChannelClaim,
-        DepositPreauth
+        DepositPreauth,
+        EnableAmendment,
+        SetFee
     }
 }

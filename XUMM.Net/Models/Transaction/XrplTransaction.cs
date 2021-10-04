@@ -2,25 +2,17 @@
 using System.Text.Json.Serialization;
 using XUMM.Net.Enums;
 
-namespace XUMM.Net.Models.XrpLedger
+namespace XUMM.Net.Models.Transaction
 {
-    public class TransactionCommonFields
+    public class XrplTransaction : XummPayloadTransactionBase
     {
-        public TransactionCommonFields(XrpTransactionType transactionType, string destination, int fee)
+        public XrplTransaction(XrplTransactionType transactionType, int fee) : base(transactionType.ToString())
         {
-            TransactionType = transactionType;
-            Destination = destination;
             Fee = fee.ToString();
         }
 
         [JsonPropertyName("Account")]
         public string? Account { get; set; }
-
-        [JsonPropertyName("TransactionType")]
-        public XrpTransactionType TransactionType { get; }
-
-        [JsonPropertyName("Destination")]
-        public string Destination { get; }
 
         [JsonPropertyName("Fee")]
         public string Fee { get; }
@@ -29,7 +21,7 @@ namespace XUMM.Net.Models.XrpLedger
         public int? Sequence { get; set; }
 
         [JsonPropertyName("AccountTxnID")]
-        public string? AccountTxnID { get; set; }
+        public string? AccountTxnId { get; set; }
 
         [JsonPropertyName("Flags")]
         public int? Flags { get; set; }
@@ -38,10 +30,10 @@ namespace XUMM.Net.Models.XrpLedger
         public int? LastLedgerSequence { get; set; }
 
         [JsonPropertyName("Memos")]
-        public List<TransactionMemoField>? Memos { get; set; }
+        public List<XrplTransactionMemoField>? Memos { get; set; }
 
         [JsonPropertyName("Signers")]
-        public List<TransactionSignerField>? Signers { get; set; }
+        public List<XrplTransactionSignerField>? Signers { get; set; }
 
         [JsonPropertyName("SourceTag")]
         public int? SourceTag { get; set; }

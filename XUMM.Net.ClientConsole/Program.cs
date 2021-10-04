@@ -5,8 +5,9 @@ using System.IO;
 using System.Text.Json;
 using System.Threading.Tasks;
 using XUMM.Net.ClientConsole.Configs;
+using XUMM.Net.Enums;
 using XUMM.Net.Models.Payload;
-using XUMM.Net.Models.XrpLedger;
+using XUMM.Net.Models.Transaction;
 
 namespace XUMM.Net.ClientConsole
 {
@@ -42,7 +43,14 @@ namespace XUMM.Net.ClientConsole
             await CallAndWriteResponseAsync(() => client.Misc.AppStorage.StoreAsync(miscellaneousConfig.AppStorageBody));
             await CallAndWriteResponseAsync(client.Misc.AppStorage.ClearAsync);
 
-            var payload = new XummPayload(new TransactionCommonFields(payloadConfig.TransactionType, payloadConfig.Destination, payloadConfig.Fee))
+            await ProcessTransaction(client, new XummPayloadTransaction(XummTransactionType.SignIn));
+            await ProcessTransaction(client, new XrplPaymentTransaction(payloadConfig.Destination, payloadConfig.DestinationTag, payloadConfig.Fee));
+            Console.ReadKey();
+        }
+
+        private static async Task ProcessTransaction(XummClient client, XummPayloadTransactionBase transaction)
+        {
+            var payload = new XummPayload(transaction)
             {
                 CustomMeta = new XummPayloadCustomMeta
                 {
@@ -52,7 +60,6 @@ namespace XUMM.Net.ClientConsole
 
             var payloadResult = await CallAndWriteResponseAsync(() => client.Payload.SubmitAsync(payload));
             await CallAndWriteResponseAsync(() => client.Payload.GetAsync(payloadResult.Uuid));
-            Console.ReadKey();
         }
 
         private static async Task<T> CallAndWriteResponseAsync<T>(Func<Task<T>> task)

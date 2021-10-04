@@ -1,13 +1,18 @@
 ﻿using System.Text.Json.Serialization;
-using XUMM.Net.Models.XrpLedger;
+using XUMM.Net.Models.Transaction;
 
 namespace XUMM.Net.Models.Payload
 {
     public class XummPayload
     {
-        public XummPayload(TransactionCommonFields transaction)
+        public XummPayload(XummPayloadTransactionBase transaction)
         {
-            TransactionCommonFields = transaction;
+            Transaction = transaction;
+        }
+
+        public XummPayload(string txBlob)
+        {
+            TxBlob = txBlob;
         }
 
         /// <summary>
@@ -20,13 +25,13 @@ namespace XUMM.Net.Models.Payload
         /// Mandatory JSON transaction template to sign. Alternatively a HEX string could be posted in a txblob field.
         /// </summary>
         [JsonPropertyName("txjson")]
-        public TransactionCommonFields TransactionCommonFields { get; }
+        public XummPayloadTransactionBase? Transaction { get; }
 
         /// <summary>
         /// You can provide a HEX transaction template instead of a JSON formatted one here.
         /// </summary>
         [JsonPropertyName("txblob")]
-        public string? TxBlob { get; set; }
+        public string? TxBlob { get; }
 
         /// <summary>
         /// Payload options (Optional)

@@ -1,8 +1,8 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.Net.Models.XrpLedger
+namespace XUMM.Net.Models.Transaction
 {
-    public class TransactionSignerField
+    public class XrplTransactionSignerField
     {
 
         [JsonPropertyName("Account")]

@@ -1,10 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.Net.Models.XrpLedger
+namespace XUMM.Net.Models.Transaction
 {
-    public class TransactionMemoField
+    public class XrplTransactionMemoField
     {
-
         [JsonPropertyName("MemoData")]
         public string MemoData { get; set; } = default!;
 
