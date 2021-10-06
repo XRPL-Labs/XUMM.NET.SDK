@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace XUMM.Net.Models.Transaction
+namespace XUMM.Net.Models.Payload.Xumm
 {
     public class XummPayloadTransactionBase
     {

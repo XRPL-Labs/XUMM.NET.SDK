@@ -1,6 +1,6 @@
 ﻿using XUMM.Net.Enums;
 
-namespace XUMM.Net.Models.Transaction
+namespace XUMM.Net.Models.Payload.Xumm
 {
     public class XummPayloadTransaction : XummPayloadTransactionBase
     {

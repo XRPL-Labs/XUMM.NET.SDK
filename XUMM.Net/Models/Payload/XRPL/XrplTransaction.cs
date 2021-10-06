@@ -2,17 +2,21 @@
 using System.Text.Json.Serialization;
 using XUMM.Net.Enums;
 
-namespace XUMM.Net.Models.Transaction
+namespace XUMM.Net.Models.Payload.XRPL
 {
-    public class XrplTransaction : XummPayloadTransactionBase
+    public class XrplTransaction
     {
-        public XrplTransaction(XrplTransactionType transactionType, int fee) : base(transactionType.ToString())
+        public XrplTransaction(XrplTransactionType transactionType, int fee)
         {
+            TransactionType = transactionType.ToString();
             Fee = fee.ToString();
         }
 
         [JsonPropertyName("Account")]
         public string? Account { get; set; }
+
+        [JsonPropertyName("TransactionType")]
+        public string TransactionType { get; set; }
 
         [JsonPropertyName("Fee")]
         public string Fee { get; }

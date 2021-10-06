@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.Net.Models.Transaction
+namespace XUMM.Net.Models.Payload.XRPL
 {
     public class XrplTransactionCurrencyAmount
     {

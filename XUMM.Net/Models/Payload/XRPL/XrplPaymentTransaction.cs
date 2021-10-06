@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
 using XUMM.Net.Enums;
 
-namespace XUMM.Net.Models.Transaction
+namespace XUMM.Net.Models.Payload.XRPL
 {
     public class XrplPaymentTransaction : XrplTransaction
     {
@@ -13,13 +13,19 @@ namespace XUMM.Net.Models.Transaction
         /// <param name="fee">Integer amount of XRP, in drops, to be destroyed as a cost for distributing this transaction to the network.</param>
         public XrplPaymentTransaction(string destination, int? destinationTag, int fee) : base(XrplTransactionType.Payment, fee)
         {
-            ExtensionData.Add("Destination", destination);
-
-            if (destinationTag.HasValue)
-            {
-                ExtensionData.Add("DestinationTag", destinationTag);
-            }
+            Destination = destination;
+            DestinationTag = destinationTag;
         }
+
+        /// <summary>
+        /// The unique address of the account receiving the payment.
+        /// </summary>
+        public string Destination { get; set; }
+
+        /// <summary>
+        /// (Optional) Arbitrary tag that identifies the reason for the payment to the destination, or a hosted recipient to pay.
+        /// </summary>
+        public int? DestinationTag { get; set; }
 
         /// <summary>
         /// (Optional) Arbitrary 256-bit hash representing a specific reason or identifier for this payment.
