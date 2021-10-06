@@ -25,7 +25,7 @@ namespace XUMM.Net
 
         public XummClientOptions ClientOptions { get; }
 
-        private JsonSerializerOptions _serializerOptions;
+        private readonly JsonSerializerOptions _serializerOptions;
 
         internal readonly ILogger? Logger;
 
