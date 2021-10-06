@@ -7,7 +7,8 @@ using System.Threading.Tasks;
 using XUMM.Net.ClientConsole.Configs;
 using XUMM.Net.Enums;
 using XUMM.Net.Models.Payload;
-using XUMM.Net.Models.Transaction;
+using XUMM.Net.Models.Payload.XRPL;
+using XUMM.Net.Models.Payload.Xumm;
 
 namespace XUMM.Net.ClientConsole
 {
@@ -28,8 +29,9 @@ namespace XUMM.Net.ClientConsole
             using var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
             using var client = new XummClient(options, loggerFactory);
 
+
+            // Miscellaneous example calls
             var miscellaneousConfig = config.GetSection("Miscellaneous").Get<MiscellaneousConfig>();
-            var payloadConfig = config.GetSection("Payload").Get<PayloadConfig>();
 
             await CallAndWriteResponseAsync(client.Misc.PingAsync);
             await CallAndWriteResponseAsync(client.Misc.GetCuratedAssetsAsync);
@@ -39,18 +41,24 @@ namespace XUMM.Net.ClientConsole
             await CallAndWriteResponseAsync(() => client.Misc.GetRatesAsync(miscellaneousConfig.CurrencyCode));
             Console.WriteLine($"Avatar URL: {client.Misc.GetAvatarUrl(miscellaneousConfig.Account, dimensions: 200, padding: 0)}");
 
+            // App Storage example calls
             await CallAndWriteResponseAsync(client.Misc.AppStorage.GetAsync);
             await CallAndWriteResponseAsync(() => client.Misc.AppStorage.StoreAsync(miscellaneousConfig.AppStorageBody));
             await CallAndWriteResponseAsync(client.Misc.AppStorage.ClearAsync);
 
-            await ProcessTransaction(client, new XummPayloadTransaction(XummTransactionType.SignIn));
-            await ProcessTransaction(client, new XrplPaymentTransaction(payloadConfig.Destination, payloadConfig.DestinationTag, payloadConfig.Fee));
+            // Payload example calls
+            var payloadConfig = config.GetSection("Payload").Get<PayloadConfig>();
+            var serializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
+            await ProcessTransaction(client, JsonSerializer.Serialize(new XummPayloadTransaction(XummTransactionType.SignIn), serializerOptions));
+            await ProcessTransaction(client, JsonSerializer.Serialize(new XrplPaymentTransaction(payloadConfig.Destination, payloadConfig.DestinationTag, payloadConfig.Fee), serializerOptions));
+            await ProcessTransaction(client, "{ \"TransactionType\": \"Payment\", \"Destination\": \"rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY\", \"DestinationTag\": 495, \"Amount\": \"1337\" }");
+
             Console.ReadKey();
         }
 
-        private static async Task ProcessTransaction(XummClient client, XummPayloadTransactionBase transaction)
+        private static async Task ProcessTransaction(XummClient client, string txJson)
         {
-            var payload = new XummPayload(transaction)
+            var payload = new XummPayload(txJson, default)
             {
                 CustomMeta = new XummPayloadCustomMeta
                 {
