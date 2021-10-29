@@ -22,6 +22,8 @@
             {
                 BaseUrl += "/";
             }
+
+            BaseUrl += "platform/";
         }
     }
 }

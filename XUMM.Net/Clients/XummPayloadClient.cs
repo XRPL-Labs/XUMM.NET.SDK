@@ -16,13 +16,13 @@ namespace XUMM.Net.Clients
         /// <inheritdoc />
         public async Task<XummPayloadResponse> SubmitAsync(XummPayload payload)
         {
-            return await _xummClient.PostAsync<XummPayloadResponse>("platform/payload", payload);
+            return await _xummClient.PostAsync<XummPayloadResponse>("payload", payload);
         }
 
         /// <inheritdoc />
         public async Task<XummPayloadDetails> GetAsync(string payloadUuid)
         {
-            return await _xummClient.GetAsync<XummPayloadDetails>($"platform/payload/{payloadUuid}");
+            return await _xummClient.GetAsync<XummPayloadDetails>($"payload/{payloadUuid}");
         }
     }
 }

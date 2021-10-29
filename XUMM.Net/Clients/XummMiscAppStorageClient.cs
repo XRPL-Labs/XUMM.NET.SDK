@@ -16,19 +16,19 @@ namespace XUMM.Net.Clients
         /// <inheritdoc />
         public async Task<XummStorage> GetAsync()
         {
-            return await _xummClient.GetAsync<XummStorage>("platform/app-storage");
+            return await _xummClient.GetAsync<XummStorage>("app-storage");
         }
 
         /// <inheritdoc />
         public async Task<XummStorageStore> StoreAsync(string json)
         {
-            return await _xummClient.PostAsync<XummStorageStore>("platform/app-storage", json);
+            return await _xummClient.PostAsync<XummStorageStore>("app-storage", json);
         }
 
         /// <inheritdoc />
         public async Task<XummStorageStore> ClearAsync()
         {
-            return await _xummClient.DeleteAsync<XummStorageStore>("platform/app-storage");
+            return await _xummClient.DeleteAsync<XummStorageStore>("app-storage");
         }
     }
 }

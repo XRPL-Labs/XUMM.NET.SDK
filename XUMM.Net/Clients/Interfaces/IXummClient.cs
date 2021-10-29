@@ -11,5 +11,10 @@
         /// Payload endpoints
         /// </summary>
         public IXummPayloadClient Payload { get; }
+
+        /// <summary>
+        /// xApp endpoints
+        /// </summary>
+        IXummXAppClient xApps { get; }
     }
 }

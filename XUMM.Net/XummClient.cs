@@ -23,6 +23,9 @@ namespace XUMM.Net
         /// <inheritdoc />
         public IXummPayloadClient Payload { get; }
 
+        /// <inheritdoc />
+        public IXummXAppClient xApps { get; }
+
         public XummClientOptions ClientOptions { get; }
 
         private readonly JsonSerializerOptions _serializerOptions;
@@ -38,6 +41,7 @@ namespace XUMM.Net
         {
             Misc = new XummMiscClient(this);
             Payload = new XummPayloadClient(this);
+            xApps = new XummXAppClient(this);
 
             ClientOptions = options ?? throw new ArgumentNullException($"{nameof(options)} cannot be null", nameof(options));
             Logger = loggerFactory?.CreateLogger<XummClient>();

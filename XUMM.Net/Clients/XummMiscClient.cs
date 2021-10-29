@@ -25,19 +25,19 @@ namespace XUMM.Net.Clients
         /// <inheritdoc />
         public async Task<XummPong> PingAsync()
         {
-            return await _xummClient.GetAsync<XummPong>("platform/ping");
+            return await _xummClient.GetAsync<XummPong>("ping");
         }
 
         /// <inheritdoc />
         public async Task<XummCuratedAssets> GetCuratedAssetsAsync()
         {
-            return await _xummClient.GetAsync<XummCuratedAssets>("platform/curated-assets");
+            return await _xummClient.GetAsync<XummCuratedAssets>("curated-assets");
         }
 
         /// <inheritdoc />
         public async Task<XummTransaction> GetTransactionAsync(string txHash)
         {
-            return await _xummClient.GetAsync<XummTransaction>($"platform/xrpl-tx/{txHash}");
+            return await _xummClient.GetAsync<XummTransaction>($"xrpl-tx/{txHash}");
         }
 
         /// <inheritdoc />
@@ -45,13 +45,13 @@ namespace XUMM.Net.Clients
         {
             if (userTokenOrAccount.IsAccountAddress())
             {
-                var kycInfo = await _xummClient.GetAsync<XummKycInfo>($"platform/kyc-status/{userTokenOrAccount}", isPublicEndpoint: true);
+                var kycInfo = await _xummClient.GetAsync<XummKycInfo>($"kyc-status/{userTokenOrAccount}", isPublicEndpoint: true);
                 return kycInfo.KycApproved ? XummKycStatus.Successful : XummKycStatus.None;
             }
             else
             {
                 var request = new XummKycStatusRequest { UserToken = userTokenOrAccount };
-                var kycInfo = await _xummClient.PostAsync<XummKycStatusInfo>("platform/kyc-status", request);
+                var kycInfo = await _xummClient.PostAsync<XummKycStatusInfo>("kyc-status", request);
                 return EnumHelper.GetValueFromName<XummKycStatus>(kycInfo.KycStatus);
             }
         }
@@ -59,7 +59,7 @@ namespace XUMM.Net.Clients
         /// <inheritdoc />
         public async Task<XummRates> GetRatesAsync(string currencyCode)
         {
-            return await _xummClient.GetAsync<XummRates>($"platform/rates/{currencyCode.Trim().ToUpperInvariant()}");
+            return await _xummClient.GetAsync<XummRates>($"rates/{currencyCode.Trim().ToUpperInvariant()}");
         }
 
         /// <inheritdoc />
