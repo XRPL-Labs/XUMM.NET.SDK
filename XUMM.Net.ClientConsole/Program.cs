@@ -3,15 +3,19 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.IO;
 using System.Text.Json;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using XUMM.Net.ClientConsole.Configs;
+using XUMM.Net.Enums;
 using XUMM.Net.Models.Payload;
+using XUMM.Net.Models.Payload.XRPL;
+using XUMM.Net.Models.Payload.Xumm;
 
 namespace XUMM.Net.ClientConsole
 {
     public class Program
     {
-        static async Task Main(string[] args)
+        static async Task Main()
         {
             var config = GetConfiguration();
 
@@ -26,28 +30,28 @@ namespace XUMM.Net.ClientConsole
             using var loggerFactory = LoggerFactory.Create(builder => builder.AddConsole());
             using var client = new XummClient(options, loggerFactory);
 
-            //// Miscellaneous example calls
-            //var miscellaneousConfig = config.GetSection("Miscellaneous").Get<MiscellaneousConfig>();
+            // Miscellaneous example calls
+            var miscellaneousConfig = config.GetSection("Miscellaneous").Get<MiscellaneousConfig>();
 
-            //await CallAndWriteResponseAsync(client.Misc.PingAsync);
-            //await CallAndWriteResponseAsync(client.Misc.GetCuratedAssetsAsync);
-            //await CallAndWriteResponseAsync(() => client.Misc.GetTransactionAsync(miscellaneousConfig.TxHash));
-            //await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(miscellaneousConfig.Account));
-            //await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(miscellaneousConfig.UserToken));
-            //await CallAndWriteResponseAsync(() => client.Misc.GetRatesAsync(miscellaneousConfig.CurrencyCode));
-            //Console.WriteLine($"Avatar URL: {client.Misc.GetAvatarUrl(miscellaneousConfig.Account, dimensions: 200, padding: 0)}");
+            await CallAndWriteResponseAsync(client.Misc.PingAsync);
+            await CallAndWriteResponseAsync(client.Misc.GetCuratedAssetsAsync);
+            await CallAndWriteResponseAsync(() => client.Misc.GetTransactionAsync(miscellaneousConfig.TxHash));
+            await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(miscellaneousConfig.Account));
+            await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(miscellaneousConfig.UserToken));
+            await CallAndWriteResponseAsync(() => client.Misc.GetRatesAsync(miscellaneousConfig.CurrencyCode));
+            Console.WriteLine($"Avatar URL: {client.Misc.GetAvatarUrl(miscellaneousConfig.Account, dimensions: 200, padding: 0)}");
 
-            //// App Storage example calls
-            //await CallAndWriteResponseAsync(client.Misc.AppStorage.GetAsync);
-            //await CallAndWriteResponseAsync(() => client.Misc.AppStorage.StoreAsync(miscellaneousConfig.AppStorageBody));
-            //await CallAndWriteResponseAsync(client.Misc.AppStorage.ClearAsync);
+            // App Storage example calls
+            await CallAndWriteResponseAsync(client.Misc.AppStorage.GetAsync);
+            await CallAndWriteResponseAsync(() => client.Misc.AppStorage.StoreAsync(miscellaneousConfig.AppStorageBody));
+            await CallAndWriteResponseAsync(client.Misc.AppStorage.ClearAsync);
 
-            //// Payload example calls
-            //var payloadConfig = config.GetSection("Payload").Get<PayloadConfig>();
-            //var serializerOptions = new JsonSerializerOptions { IgnoreNullValues = true };
-            //await ProcessTransaction(client, JsonSerializer.Serialize(new XummPayloadTransaction(XummTransactionType.SignIn), serializerOptions));
-            //await ProcessTransaction(client, JsonSerializer.Serialize(new XrplPaymentTransaction(payloadConfig.Destination, payloadConfig.DestinationTag, payloadConfig.Fee), serializerOptions));
-            //await ProcessTransaction(client, "{ \"TransactionType\": \"Payment\", \"Destination\": \"rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY\", \"DestinationTag\": 495, \"Amount\": \"1337\" }");
+            // Payload example calls
+            var payloadConfig = config.GetSection("Payload").Get<PayloadConfig>();
+            var serializerOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
+            await ProcessTransaction(client, JsonSerializer.Serialize(new XummPayloadTransaction(XummTransactionType.SignIn), serializerOptions));
+            await ProcessTransaction(client, JsonSerializer.Serialize(new XrplPaymentTransaction(payloadConfig.Destination, payloadConfig.DestinationTag, payloadConfig.Fee), serializerOptions));
+            await ProcessTransaction(client, "{ \"TransactionType\": \"Payment\", \"Destination\": \"rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY\", \"DestinationTag\": 495, \"Amount\": \"1337\" }");
 
             // xApp example calls
             var xAppConfig = config.GetSection("xApp").Get<XAppConfig>();

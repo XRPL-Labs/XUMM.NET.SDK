@@ -43,12 +43,12 @@ namespace XUMM.Net
             Payload = new XummPayloadClient(this);
             xApps = new XummXAppClient(this);
 
-            ClientOptions = options ?? throw new ArgumentNullException($"{nameof(options)} cannot be null", nameof(options));
+            ClientOptions = options ?? throw new ArgumentNullException(nameof(options), $"{nameof(options)} cannot be null");
             Logger = loggerFactory?.CreateLogger<XummClient>();
 
             _serializerOptions = new JsonSerializerOptions
             {
-                IgnoreNullValues = true,
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
                 Converters = { new JsonStringEnumConverter() }
             };
         }
@@ -145,6 +145,7 @@ namespace XUMM.Net
         public virtual void Dispose()
         {
             ClientOptions.Credentials.Dispose();
+            GC.SuppressFinalize(this);
         }
     }
 }
