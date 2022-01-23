@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
@@ -8,6 +7,7 @@ using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using XUMM.Net.Clients;
 using XUMM.Net.Clients.Interfaces;
 using XUMM.Net.Extensions;
@@ -24,7 +24,7 @@ namespace XUMM.Net
         public IXummPayloadClient Payload { get; }
 
         /// <inheritdoc />
-        public IXummXAppClient xApps { get; }
+        public IXummXAppClient XApps { get; }
 
         public XummClientOptions ClientOptions { get; }
 
@@ -41,7 +41,7 @@ namespace XUMM.Net
         {
             Misc = new XummMiscClient(this);
             Payload = new XummPayloadClient(this);
-            xApps = new XummXAppClient(this);
+            XApps = new XummXAppClient(this);
 
             ClientOptions = options ?? throw new ArgumentNullException(nameof(options), $"{nameof(options)} cannot be null");
             Logger = loggerFactory?.CreateLogger<XummClient>();
@@ -89,7 +89,7 @@ namespace XUMM.Net
                 using var response = await client.SendAsync(requestMessage);
                 if (!response.IsSuccessStatusCode)
                 {
-                    throw await GetHttpRequestException(response);
+                    throw await GetHttpRequestExceptionAsync(response);
                 }
 
                 return (T)await response.Content.ReadFromJsonAsync(typeof(T));
@@ -101,7 +101,7 @@ namespace XUMM.Net
             }
         }
 
-        private async Task<HttpRequestException> GetHttpRequestException(HttpResponseMessage response)
+        private async Task<HttpRequestException> GetHttpRequestExceptionAsync(HttpResponseMessage response)
         {
             HttpRequestException? exception = null;
             try

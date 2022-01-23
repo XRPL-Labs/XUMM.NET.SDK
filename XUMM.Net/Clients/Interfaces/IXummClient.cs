@@ -15,6 +15,6 @@
         /// <summary>
         /// xApp endpoints
         /// </summary>
-        IXummXAppClient xApps { get; }
+        IXummXAppClient XApps { get; }
     }
 }
