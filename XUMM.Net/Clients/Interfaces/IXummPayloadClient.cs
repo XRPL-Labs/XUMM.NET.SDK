@@ -12,19 +12,22 @@ public interface IXummPayloadClient
     /// Submit a payload containing a sign request to the XUMM platform.
     /// </summary>
     /// <param name="payload">Payload to create.</param>
-    Task<XummPayloadResponse> CreateAsync(XummPayload payload);
+    /// <param name="throwError">Throws an exception if an error occurred; otherwise errors are ignored..</param>
+    Task<XummPayloadResponse?> CreateAsync(XummPayload payload, bool throwError = false);
 
     /// <summary>
     /// Get payload details or payload resolve status and result data.
     /// </summary>
     /// <param name="payloadUuid">Payload UUID as received from the Payload POST endpoint.</param>
-    Task<XummPayloadDetails> GetAsync(string payloadUuid);
+    /// <param name="throwError">Throws an exception if an error occurred; otherwise errors are ignored..</param>
+    Task<XummPayloadDetails?> GetAsync(string payloadUuid, bool throwError = false);
 
     /// <summary>
     /// Cancel a payload, so a user cannot open it anymore
     /// </summary>
     /// <param name="payloadUuid">Payload UUID as received from the Payload POST endpoint.</param>
-    Task<XummDeletePayload> CancelAsync(string payloadUuid);
+    /// <param name="throwError">Throws an exception if an error occurred; otherwise errors are ignored..</param>
+    Task<XummDeletePayload?> CancelAsync(string payloadUuid, bool throwError = false);
 
     /// <summary>
     /// You can get, or wait, for payload status updates using websockets to the xumm API.

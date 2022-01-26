@@ -2,5 +2,5 @@
 
 public class XummPayloadSubscription
 {
-    public XummPayloadDetails Payload { get; set; } = default!;
+    public XummPayloadDetails? Payload { get; set; } = default!;
 }

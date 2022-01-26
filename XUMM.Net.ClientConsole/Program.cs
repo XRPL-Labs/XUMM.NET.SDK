@@ -36,23 +36,26 @@ public class Program
         // Miscellaneous example calls
         var miscellaneousConfig = config.GetSection("Miscellaneous").Get<MiscellaneousConfig>();
 
-        await CallAndWriteResponseAsync(client.Misc.PingAsync);
-        await CallAndWriteResponseAsync(client.Misc.GetCuratedAssetsAsync);
-        await CallAndWriteResponseAsync(() => client.Misc.GetTransactionAsync(miscellaneousConfig.TxHash));
-        await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(miscellaneousConfig.Account));
-        await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(miscellaneousConfig.UserToken));
-        await CallAndWriteResponseAsync(() => client.Misc.GetRatesAsync(miscellaneousConfig.CurrencyCode));
-        Console.WriteLine($"Avatar URL: {client.Misc.GetAvatarUrl(miscellaneousConfig.Account, 200, 0)}");
+        //await CallAndWriteResponseAsync(client.Misc.PingAsync);
+        //await CallAndWriteResponseAsync(client.Misc.GetCuratedAssetsAsync);
+        //await CallAndWriteResponseAsync(() => client.Misc.GetTransactionAsync(miscellaneousConfig.TxHash));
+        //await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(miscellaneousConfig.Account));
+        //await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(miscellaneousConfig.UserToken));
+        //await CallAndWriteResponseAsync(() => client.Misc.GetRatesAsync(miscellaneousConfig.CurrencyCode));
+        //Console.WriteLine($"Avatar URL: {client.Misc.GetAvatarUrl(miscellaneousConfig.Account, 200, 0)}");
 
-        // App Storage example calls
-        await CallAndWriteResponseAsync(client.Misc.AppStorage.GetAsync);
-        await CallAndWriteResponseAsync(() => client.Misc.AppStorage.StoreAsync(miscellaneousConfig.AppStorageBody));
-        await CallAndWriteResponseAsync(client.Misc.AppStorage.ClearAsync);
+        //// App Storage example calls
+        //await CallAndWriteResponseAsync(client.Misc.AppStorage.GetAsync);
+        //await CallAndWriteResponseAsync(() => client.Misc.AppStorage.StoreAsync(miscellaneousConfig.AppStorageBody));
+        //await CallAndWriteResponseAsync(client.Misc.AppStorage.ClearAsync);
 
         //Payload example calls
         var payloadConfig = config.GetSection("Payload").Get<PayloadConfig>();
         var serializerOptions =
-            new JsonSerializerOptions {DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull};
+            new JsonSerializerOptions
+            {
+                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
+            };
         await ProcessTransactionAsync(client,
             JsonSerializer.Serialize(
                 new XrplPaymentTransaction(payloadConfig.Destination, payloadConfig.DestinationTag, payloadConfig.Fee),
@@ -75,7 +78,11 @@ public class Program
 
         if (config.OpenSubscriptionQrCodeInBrowser)
         {
-            var ps = new ProcessStartInfo {FileName = payloadResult.Refs.QrPng, UseShellExecute = true};
+            var ps = new ProcessStartInfo
+            {
+                FileName = payloadResult.Refs.QrPng,
+                UseShellExecute = true
+            };
 
             Process.Start(ps);
         }
@@ -112,7 +119,10 @@ public class Program
     {
         var payload = new XummPayload(txJson, default)
         {
-            CustomMeta = new XummPayloadCustomMeta {Instruction = "Test payload created with the XUMM.Net Wrapper."}
+            CustomMeta = new XummPayloadCustomMeta
+            {
+                Instruction = "Test payload created with the XUMM.Net Wrapper."
+            }
         };
 
         return await CallAndWriteResponseAsync(() => client.Payload.CreateAsync(payload));
@@ -123,7 +133,10 @@ public class Program
         var start = DateTime.UtcNow;
         var result = await task();
 
-        Console.WriteLine(JsonSerializer.Serialize(result, new JsonSerializerOptions {WriteIndented = true}));
+        Console.WriteLine(JsonSerializer.Serialize(result, new JsonSerializerOptions
+        {
+            WriteIndented = true
+        }));
         Console.WriteLine($"Response time: {Math.Round((DateTime.UtcNow - start).TotalMilliseconds)}ms.");
         return result;
     }

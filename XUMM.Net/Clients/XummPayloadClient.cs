@@ -18,21 +18,21 @@ public class XummPayloadClient : IXummPayloadClient
     }
 
     /// <inheritdoc />
-    public async Task<XummPayloadResponse> CreateAsync(XummPayload payload)
+    public async Task<XummPayloadResponse?> CreateAsync(XummPayload payload, bool throwError = false)
     {
-        return await _xummClient.PostAsync<XummPayloadResponse>("payload", payload);
+        return await _xummClient.PostAsync<XummPayloadResponse>("payload", payload, throwError);
     }
 
     /// <inheritdoc />
-    public async Task<XummPayloadDetails> GetAsync(string payloadUuid)
+    public async Task<XummPayloadDetails?> GetAsync(string payloadUuid, bool throwError = false)
     {
-        return await _xummClient.GetAsync<XummPayloadDetails>($"payload/{payloadUuid}");
+        return await _xummClient.GetAsync<XummPayloadDetails>($"payload/{payloadUuid}", throwError);
     }
 
     /// <inheritdoc />
-    public async Task<XummDeletePayload> CancelAsync(string payloadUuid)
+    public async Task<XummDeletePayload?> CancelAsync(string payloadUuid, bool throwError = false)
     {
-        return await _xummClient.DeleteAsync<XummDeletePayload>($"payload/{payloadUuid}");
+        return await _xummClient.DeleteAsync<XummDeletePayload>($"payload/{payloadUuid}", throwError);
     }
 
     /// <inheritdoc />
@@ -43,17 +43,20 @@ public class XummPayloadClient : IXummPayloadClient
         var source = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
         var payload = await _xummClient.Payload.GetAsync(payloadUuid);
-        var webSocket = new XummWebSocket($"wss://xumm.app/sign/{payloadUuid}");
-        await foreach (var message in webSocket.SubscribeAsync(source.Token))
+        if (payload != null)
         {
-            eventHandler(this,
-                new XummSubscriptionEventArgs
-                {
-                    Uuid = payloadUuid,
-                    Payload = payload,
-                    Data = JsonDocument.Parse(message),
-                    CloseConnectionAsync = () => source.Cancel()
-                });
+            var webSocket = new XummWebSocket($"wss://xumm.app/sign/{payloadUuid}");
+            await foreach (var message in webSocket.SubscribeAsync(source.Token))
+            {
+                eventHandler(this,
+                    new XummSubscriptionEventArgs
+                    {
+                        Uuid = payloadUuid,
+                        Payload = payload,
+                        Data = JsonDocument.Parse(message),
+                        CloseConnectionAsync = () => source.Cancel()
+                    });
+            }
         }
 
         return new XummPayloadSubscription
@@ -67,6 +70,11 @@ public class XummPayloadClient : IXummPayloadClient
         CancellationToken cancellationToken)
     {
         var createdPayload = await CreateAsync(payload);
+        if (createdPayload == null)
+        {
+            throw new Exception("Error creating payload or subscribing to created payload");
+        }
+
         return await SubscribeAsync(createdPayload.Uuid, eventHandler, cancellationToken);
     }
 }

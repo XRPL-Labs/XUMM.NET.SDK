@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Net.Http.Json;
@@ -38,7 +37,10 @@ public class XummClient : IXummClient, IDisposable
         _serializerOptions = new JsonSerializerOptions
         {
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-            Converters = {new JsonStringEnumConverter()}
+            Converters =
+            {
+                new JsonStringEnumConverter()
+            }
         };
     }
 
@@ -59,27 +61,28 @@ public class XummClient : IXummClient, IDisposable
     /// <inheritdoc />
     public IXummXAppClient XApps { get; }
 
-    internal async Task<T> GetAsync<T>(string endpoint, bool isPublicEndpoint = false)
+    internal async Task<T> GetAsync<T>(string endpoint, bool throwError = true, bool isPublicEndpoint = false)
     {
-        return await SendAsync<T>(HttpMethod.Get, endpoint, !isPublicEndpoint, default);
+        return await SendAsync<T>(HttpMethod.Get, endpoint, !isPublicEndpoint, default, throwError);
     }
 
-    internal async Task<T> PostAsync<T>(string endpoint, object content)
+    internal async Task<T> PostAsync<T>(string endpoint, object content, bool throwError = true)
     {
-        return await PostAsync<T>(endpoint, JsonSerializer.Serialize(content, _serializerOptions));
+        return await PostAsync<T>(endpoint, JsonSerializer.Serialize(content, _serializerOptions), throwError);
     }
 
-    internal async Task<T> PostAsync<T>(string endpoint, string json)
+    internal async Task<T> PostAsync<T>(string endpoint, string json, bool throwError = true)
     {
-        return await SendAsync<T>(HttpMethod.Post, endpoint, true, json);
+        return await SendAsync<T>(HttpMethod.Post, endpoint, true, json, throwError);
     }
 
-    internal async Task<T> DeleteAsync<T>(string endpoint)
+    internal async Task<T> DeleteAsync<T>(string endpoint, bool throwError = true)
     {
-        return await SendAsync<T>(HttpMethod.Delete, endpoint, true, default);
+        return await SendAsync<T>(HttpMethod.Delete, endpoint, true, default, throwError);
     }
 
-    private async Task<T> SendAsync<T>(HttpMethod method, string endpoint, bool setCredentials, string? json)
+    private async Task<T> SendAsync<T>(HttpMethod method, string endpoint, bool setCredentials, string? json,
+        bool throwError)
     {
         try
         {
@@ -103,7 +106,12 @@ public class XummClient : IXummClient, IDisposable
         catch (Exception ex)
         {
             Logger?.LogError(ex, $"Unexpected response from XUMM API [GET:{endpoint}]");
-            throw;
+            if (throwError)
+            {
+                throw;
+            }
+
+            return default;
         }
     }
 
@@ -112,15 +120,16 @@ public class XummClient : IXummClient, IDisposable
         HttpRequestException? exception = null;
         try
         {
-            if (response.StatusCode == HttpStatusCode.InternalServerError &&
-                await response.Content.ReadFromJsonAsync(typeof(XummFatalApiError)) is XummFatalApiError fatalApiError)
+            if (await response.Content.ReadFromJsonAsync(typeof(XummFatalApiError)) is XummFatalApiError fatalApiError)
             {
                 if (!string.IsNullOrWhiteSpace(fatalApiError.Message))
                 {
                     exception = new HttpRequestException(fatalApiError.Message, null, response.StatusCode);
                 }
             }
-            else if (await response.Content.ReadFromJsonAsync(typeof(XummApiError)) is XummApiError apiError)
+
+            if (exception == null &&
+                await response.Content.ReadFromJsonAsync(typeof(XummApiError)) is XummApiError apiError)
             {
                 exception = new HttpRequestException(
                     $"Error code: '{apiError.Error.Code}' with message: '{apiError.Error.Message}', see XUMM Dev Console, reference: '{apiError.Error.Reference}'.",
