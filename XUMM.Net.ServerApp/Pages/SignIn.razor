@@ -1,0 +1,115 @@
+﻿@page "/signin"
+@using XUMM.Net.ServerApp.Configs
+@using System.Text.Json
+@using System.Text.Json.Serialization
+@using XUMM.Net.Enums
+@using XUMM.Net.EventArgs
+@using XUMM.Net.Models.Payload
+@using XUMM.Net.Models.Payload.Xumm
+
+@inject HttpClient HttpClient
+@inject NavigationManager NavigationManager
+
+<PageTitle>SignIn</PageTitle>
+
+<h1>SignIn</h1>
+<table>
+    <tr>
+        <td class="align-top">
+            @if (_qrCodeUrl != null)
+            {
+                <div>
+                    <h2>Scan QR Code</h2>
+                    <img src="@_qrCodeUrl"/>
+                </div>
+
+                <button class="btn btn-primary" @onclick="CancelSubscription">Cancel payload subscription</button>
+            }
+            else
+            {
+                <button class="btn btn-primary" @onclick="CreatePayloadAndSubscribe">Create payload and subscribe</button>
+            }
+        </td>
+        <td class="align-top">
+            @if (_messages.Count != 0)
+            {
+                <ul>
+                    @foreach (var message in _messages)
+                    {
+                        <li>@message</li>
+                    }
+                </ul>
+            }
+        </td>
+    </tr>
+</table>
+
+@code {
+    private readonly CancellationTokenSource _cts = new();
+    private readonly List<string> _messages = new();
+    private string? _qrCodeUrl;
+
+    private async Task CreatePayloadAndSubscribe()
+    {
+        var apiConfig = await HttpClient.GetFromJsonAsync<ApiConfig>(NavigationManager.BaseUri + "configuration/api");
+        var credentials = new XummApiCredentials(apiConfig!.Key, apiConfig!.Secret);
+        var options = new XummClientOptions(credentials);
+
+        using var client = new XummClient(options, default);
+        var serializerOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
+
+        var payload = new XummPayload(JsonSerializer.Serialize(new XummPayloadTransaction(XummTransactionType.SignIn), serializerOptions), default)
+            {
+                CustomMeta = new XummPayloadCustomMeta { Instruction = "Test payload created with the XUMM.Net Wrapper." }
+            };
+
+        var payloadResult = await client.Payload.SubmitAsync(payload);
+        _qrCodeUrl = payloadResult.Refs.QrPng;
+        _messages.Clear();
+
+        StateHasChanged();
+
+        await client.Payload.SubscribeAsync(payloadResult.Uuid, Subscription_EventArgs,_cts.Token);
+    }
+    
+    private void CancelSubscription()
+    {
+        _cts.Cancel();
+        _messages.Clear();
+        _qrCodeUrl = null;
+        StateHasChanged();
+    }
+
+    private void Subscription_EventArgs(object? sender, XummSubscriptionEventArgs e)
+    {
+        if (e.Data.RootElement.TryGetProperty("message", out var messageElement))
+        {
+            _messages.Add($"Connected: {messageElement.GetString()}");
+        }
+        else if (e.Data.RootElement.TryGetProperty("expires_in_seconds", out var expiresElement))
+        {
+            var ts = TimeSpan.FromSeconds(expiresElement.GetInt32());
+            _messages.Add($"Expires in {ts}");
+        }
+        else if (e.Data.RootElement.TryGetProperty("opened", out var _))
+        {
+            _messages.Add("User received the payload, eg. push notification, deeplink or QR scan.");
+        }
+        else if (e.Data.RootElement.TryGetProperty("devapp_fetched", out var _))
+        {
+            _messages.Add("XUMM API fetched the payload details");
+        }
+        else if (e.Data.RootElement.TryGetProperty("expired", out var _))
+        {
+            _messages.Add("Payload has expired");
+        }
+        else if (e.Data.RootElement.TryGetProperty("signed", out var payloadElement))
+        {
+            _messages.Add($"Signed: {(payloadElement.GetBoolean() ? "Yes" : "No")}");
+            e.CloseConnectionAsync();
+            _qrCodeUrl = null;
+        }
+
+        StateHasChanged();
+    }
+}

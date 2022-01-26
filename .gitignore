@@ -350,3 +350,4 @@ MigrationBackup/
 .ionide/
 
 /XUMM.Net.ClientConsole/appsettings.Development.json
+/XUMM.Net.ServerApp/appsettings.Development.json
