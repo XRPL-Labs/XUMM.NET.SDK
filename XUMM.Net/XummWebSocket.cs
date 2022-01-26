@@ -7,55 +7,50 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace XUMM.Net
+namespace XUMM.Net;
+
+public class XummWebSocket : IAsyncDisposable
 {
-    public class XummWebSocket : IAsyncDisposable
+    private readonly Uri _uri;
+    private readonly ClientWebSocket _webSocket = new();
+
+    internal XummWebSocket(string uri)
     {
-        private ClientWebSocket _webSocket = new();
-        private readonly Uri _uri;
+        _uri = new Uri(uri);
+    }
 
-        internal XummWebSocket(string uri)
+    public async ValueTask DisposeAsync()
+    {
+        await _webSocket.CloseAsync(WebSocketCloseStatus.Empty, string.Empty, CancellationToken.None);
+    }
+
+    public async IAsyncEnumerable<string> SubscribeAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+    {
+        cancellationToken.ThrowIfCancellationRequested();
+
+        await _webSocket.ConnectAsync(_uri, CancellationToken.None);
+
+        var buffer = new ArraySegment<byte>(new byte[1024]);
+        while (_webSocket.State == WebSocketState.Open)
         {
-            _uri = new Uri(uri);
-        }
+            await using var ms = new MemoryStream();
+            WebSocketReceiveResult? result;
 
-        public async IAsyncEnumerable<string> SubscribeAsync([EnumeratorCancellation] CancellationToken cancellationToken)
-        {
-            cancellationToken.ThrowIfCancellationRequested();
-
-            await _webSocket.ConnectAsync(_uri, CancellationToken.None);
-
-            var buffer = new ArraySegment<byte>(new byte[1024]);
-            while (_webSocket.State == WebSocketState.Open)
+            try
             {
-                using var ms = new MemoryStream();
-                WebSocketReceiveResult? result = null;
-
-                try
+                do
                 {
-                    do
-                    {
-                        result = await _webSocket.ReceiveAsync(buffer, cancellationToken);
-                        ms.Write(buffer.Array!, buffer.Offset, result.Count);
-                    }
-                    while (!result.EndOfMessage && !cancellationToken.IsCancellationRequested);
-                }
-                catch (OperationCanceledException)
-                {
-                    break;
-                }
-
-                if (result != null)
-                {
-                    ms.Seek(0, SeekOrigin.Begin);
-                    yield return Encoding.UTF8.GetString(buffer.Array!, 0, result.Count);
-                }
+                    result = await _webSocket.ReceiveAsync(buffer, cancellationToken);
+                    ms.Write(buffer.Array!, buffer.Offset, result.Count);
+                } while (!result.EndOfMessage && !cancellationToken.IsCancellationRequested);
             }
-        }
+            catch (OperationCanceledException)
+            {
+                break;
+            }
 
-        public async ValueTask DisposeAsync()
-        {
-            await _webSocket.CloseAsync(WebSocketCloseStatus.Empty, string.Empty, CancellationToken.None);
+            ms.Seek(0, SeekOrigin.Begin);
+            yield return Encoding.UTF8.GetString(buffer.Array!, 0, result.Count);
         }
     }
 }

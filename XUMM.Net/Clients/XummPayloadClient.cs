@@ -6,58 +6,59 @@ using XUMM.Net.Clients.Interfaces;
 using XUMM.Net.EventArgs;
 using XUMM.Net.Models.Payload;
 
-namespace XUMM.Net.Clients
+namespace XUMM.Net.Clients;
+
+public class XummPayloadClient : IXummPayloadClient
 {
-    public class XummPayloadClient : IXummPayloadClient
+    private readonly XummClient _xummClient;
+
+    internal XummPayloadClient(XummClient xummClient)
     {
-        private readonly XummClient _xummClient;
+        _xummClient = xummClient;
+    }
 
-        internal XummPayloadClient(XummClient xummClient)
+    /// <inheritdoc />
+    public async Task<XummPayloadResponse> SubmitAsync(XummPayload payload)
+    {
+        return await _xummClient.PostAsync<XummPayloadResponse>("payload", payload);
+    }
+
+    /// <inheritdoc />
+    public async Task<XummPayloadDetails> GetAsync(string payloadUuid)
+    {
+        return await _xummClient.GetAsync<XummPayloadDetails>($"payload/{payloadUuid}");
+    }
+
+    /// <inheritdoc />
+    public async Task<XummPayloadSubscription?> SubscribeAsync(string payloadUuid,
+        EventHandler<XummSubscriptionEventArgs> eventHandler,
+        CancellationToken cancellationToken)
+    {
+        XummPayloadSubscription? result = null;
+        var payload = await _xummClient.Payload.GetAsync(payloadUuid);
+
+        if (payload != null)
         {
-            _xummClient = xummClient;
-        }
+            var source = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
 
-        /// <inheritdoc />
-        public async Task<XummPayloadResponse> SubmitAsync(XummPayload payload)
-        {
-            return await _xummClient.PostAsync<XummPayloadResponse>("payload", payload);
-        }
-
-        /// <inheritdoc />
-        public async Task<XummPayloadDetails> GetAsync(string payloadUuid)
-        {
-            return await _xummClient.GetAsync<XummPayloadDetails>($"payload/{payloadUuid}");
-        }
-
-        /// <inheritdoc />
-        public async Task<XummPayloadSubscription?> SubscribeAsync(string payloadUuid, EventHandler<XummSubscriptionEventArgs> eventHandler)
-        {
-            XummPayloadSubscription? result = null;
-            var payload = await _xummClient.Payload.GetAsync(payloadUuid);
-
-            if (payload != null)
+            result = new XummPayloadSubscription
             {
-                var source = new CancellationTokenSource();
+                Payload = payload, WebSocket = new XummWebSocket($"wss://xumm.app/sign/{payloadUuid}")
+            };
 
-                result = new XummPayloadSubscription
-                {
-                    Payload = payload,
-                    WebSocket = new XummWebSocket($"wss://xumm.app/sign/{payloadUuid}")
-                };
-
-                await foreach (var message in result.WebSocket.SubscribeAsync(source.Token))
-                {
-                    eventHandler(this, new XummSubscriptionEventArgs
+            await foreach (var message in result.WebSocket.SubscribeAsync(source.Token))
+            {
+                eventHandler(this,
+                    new XummSubscriptionEventArgs
                     {
                         Uuid = payloadUuid,
                         Payload = payload,
                         Data = JsonDocument.Parse(message),
                         CloseConnectionAsync = () => source.Cancel()
                     });
-                }
             }
-
-            return result;
         }
+
+        return result;
     }
 }
