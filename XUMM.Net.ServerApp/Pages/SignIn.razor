@@ -20,14 +20,20 @@
             {
                 <div>
                     <h2>Scan QR Code</h2>
-                    <img src="@_qrCodeUrl"/>
+                    <img src="@_qrCodeUrl" alt="" />
                 </div>
 
-                <button class="btn btn-primary" @onclick="CancelSubscription">Cancel payload subscription</button>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-primary" @onclick="CancelSubscription">Cancel payload subscription</button>
+
+                    <button class="btn btn-secondary" @onclick="CancelPayload">Cancel Payload</button>
+                </div>
             }
             else
             {
-                <button class="btn btn-primary" @onclick="CreatePayloadAndSubscribe">Create payload and subscribe</button>
+                <div class="btn-group" role="group">
+                    <button class="btn btn-primary" @onclick="CreatePayloadAndSubscribe">Create payload and subscribe</button>
+                </div>
             }
         </td>
         <td class="align-top">
@@ -48,14 +54,20 @@
     private readonly CancellationTokenSource _cts = new();
     private readonly List<string> _messages = new();
     private string? _qrCodeUrl;
+    private string? _payloadUuid;
 
-    private async Task CreatePayloadAndSubscribe()
+    private async Task<XummClient> GetXummClient()
     {
         var apiConfig = await HttpClient.GetFromJsonAsync<ApiConfig>(NavigationManager.BaseUri + "configuration/api");
         var credentials = new XummApiCredentials(apiConfig!.Key, apiConfig!.Secret);
         var options = new XummClientOptions(credentials);
 
-        using var client = new XummClient(options, default);
+        return  new XummClient(options, default);
+    }
+
+    private async Task CreatePayloadAndSubscribe()
+    {
+        using var client = await GetXummClient();
         var serializerOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
 
         var payload = new XummPayload(JsonSerializer.Serialize(new XummPayloadTransaction(XummTransactionType.SignIn), serializerOptions), default)
@@ -63,20 +75,36 @@
                 CustomMeta = new XummPayloadCustomMeta { Instruction = "Test payload created with the XUMM.Net Wrapper." }
             };
 
-        var payloadResult = await client.Payload.SubmitAsync(payload);
+        var payloadResult = await client.Payload.CreateAsync(payload);
         _qrCodeUrl = payloadResult.Refs.QrPng;
+        _payloadUuid = payloadResult.Uuid;
+
         _messages.Clear();
 
         StateHasChanged();
 
-        await client.Payload.SubscribeAsync(payloadResult.Uuid, Subscription_EventArgs,_cts.Token);
+        await client.Payload.SubscribeAsync(payloadResult.Uuid, Subscription_EventArgs, _cts.Token);
     }
-    
+
     private void CancelSubscription()
     {
         _cts.Cancel();
         _messages.Clear();
         _qrCodeUrl = null;
+        StateHasChanged();
+    }
+    
+    private async Task CancelPayload()
+    {
+        if (_payloadUuid == null)
+        {
+            return;
+        }
+
+        using var client = await GetXummClient();
+        var payloadResult = await client.Payload.CancelAsync(_payloadUuid);
+        _messages.Add($"Payload cancel {(payloadResult.Result.Cancelled ? "succeeded" : "failed")} with reason: \"{payloadResult.Result.Reason}\".");
+
         StateHasChanged();
     }
 

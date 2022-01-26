@@ -13,139 +13,140 @@ using XUMM.Net.Clients.Interfaces;
 using XUMM.Net.Extensions;
 using XUMM.Net.Models;
 
-namespace XUMM.Net
+namespace XUMM.Net;
+
+public class XummClient : IXummClient, IDisposable
 {
-    public class XummClient : IXummClient, IDisposable
+    private readonly JsonSerializerOptions _serializerOptions;
+
+    internal readonly ILogger? Logger;
+
+    public XummClient(XummClientOptions options) : this(options, default)
     {
-        /// <inheritdoc />
-        public IXummMiscClient Misc { get; }
+    }
 
-        /// <inheritdoc />
-        public IXummPayloadClient Payload { get; }
+    public XummClient(XummClientOptions options, ILoggerFactory? loggerFactory)
+    {
+        Misc = new XummMiscClient(this);
+        Payload = new XummPayloadClient(this);
+        XApps = new XummXAppClient(this);
 
-        /// <inheritdoc />
-        public IXummXAppClient XApps { get; }
+        ClientOptions =
+            options ?? throw new ArgumentNullException(nameof(options), $"{nameof(options)} cannot be null");
+        Logger = loggerFactory?.CreateLogger<XummClient>();
 
-        public XummClientOptions ClientOptions { get; }
-
-        private readonly JsonSerializerOptions _serializerOptions;
-
-        internal readonly ILogger? Logger;
-
-        public XummClient(XummClientOptions options) : this(options, default)
+        _serializerOptions = new JsonSerializerOptions
         {
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            Converters = {new JsonStringEnumConverter()}
+        };
+    }
 
-        }
+    public XummClientOptions ClientOptions { get; }
 
-        public XummClient(XummClientOptions options, ILoggerFactory? loggerFactory)
+    public virtual void Dispose()
+    {
+        ClientOptions.Credentials.Dispose();
+        GC.SuppressFinalize(this);
+    }
+
+    /// <inheritdoc />
+    public IXummMiscClient Misc { get; }
+
+    /// <inheritdoc />
+    public IXummPayloadClient Payload { get; }
+
+    /// <inheritdoc />
+    public IXummXAppClient XApps { get; }
+
+    internal async Task<T> GetAsync<T>(string endpoint, bool isPublicEndpoint = false)
+    {
+        return await SendAsync<T>(HttpMethod.Get, endpoint, !isPublicEndpoint, default);
+    }
+
+    internal async Task<T> PostAsync<T>(string endpoint, object content)
+    {
+        return await PostAsync<T>(endpoint, JsonSerializer.Serialize(content, _serializerOptions));
+    }
+
+    internal async Task<T> PostAsync<T>(string endpoint, string json)
+    {
+        return await SendAsync<T>(HttpMethod.Post, endpoint, true, json);
+    }
+
+    internal async Task<T> DeleteAsync<T>(string endpoint)
+    {
+        return await SendAsync<T>(HttpMethod.Delete, endpoint, true, default);
+    }
+
+    private async Task<T> SendAsync<T>(HttpMethod method, string endpoint, bool setCredentials, string? json)
+    {
+        try
         {
-            Misc = new XummMiscClient(this);
-            Payload = new XummPayloadClient(this);
-            XApps = new XummXAppClient(this);
+            using var client = GetHttpClient(setCredentials);
+            using var requestMessage = new HttpRequestMessage(method, $"{ClientOptions.BaseUrl}{endpoint}");
 
-            ClientOptions = options ?? throw new ArgumentNullException(nameof(options), $"{nameof(options)} cannot be null");
-            Logger = loggerFactory?.CreateLogger<XummClient>();
-
-            _serializerOptions = new JsonSerializerOptions
+            if (json != null)
             {
-                DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-                Converters = { new JsonStringEnumConverter() }
-            };
-        }
-
-        internal async Task<T> GetAsync<T>(string endpoint, bool isPublicEndpoint = false)
-        {
-            return await SendAsync<T>(HttpMethod.Get, endpoint, !isPublicEndpoint, default);
-        }
-
-        internal async Task<T> PostAsync<T>(string endpoint, object content)
-        {
-            return await PostAsync<T>(endpoint, JsonSerializer.Serialize(content, _serializerOptions));
-        }
-
-        internal async Task<T> PostAsync<T>(string endpoint, string json)
-        {
-            return await SendAsync<T>(HttpMethod.Post, endpoint, true, json);
-        }
-
-        internal async Task<T> DeleteAsync<T>(string endpoint)
-        {
-            return await SendAsync<T>(HttpMethod.Delete, endpoint, true, default);
-        }
-
-        private async Task<T> SendAsync<T>(HttpMethod method, string endpoint, bool setCredentials, string? json)
-        {
-            try
-            {
-                using var client = GetHttpClient(setCredentials);
-                using var requestMessage = new HttpRequestMessage(method, $"{ClientOptions.BaseUrl}{endpoint}");
-
-                if (json != null)
-                {
-                    requestMessage.Content = new StringContent(json, Encoding.UTF8, "application/json");
-                    requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
-                }
-
-                using var response = await client.SendAsync(requestMessage);
-                if (!response.IsSuccessStatusCode)
-                {
-                    throw await GetHttpRequestExceptionAsync(response);
-                }
-
-                return (T)await response.Content.ReadFromJsonAsync(typeof(T));
+                requestMessage.Content = new StringContent(json, Encoding.UTF8, "application/json");
+                requestMessage.Content.Headers.ContentType = new MediaTypeHeaderValue("application/json");
             }
-            catch (Exception ex)
-            {
-                Logger?.LogError(ex, $"Unexpected response from XUMM API [GET:{endpoint}]");
-                throw;
-            }
-        }
 
-        private async Task<HttpRequestException> GetHttpRequestExceptionAsync(HttpResponseMessage response)
-        {
-            HttpRequestException? exception = null;
-            try
+            using var response = await client.SendAsync(requestMessage);
+            if (!response.IsSuccessStatusCode)
             {
-                if (response.StatusCode == HttpStatusCode.InternalServerError &&
-                    await response.Content.ReadFromJsonAsync(typeof(XummFatalApiError)) is XummFatalApiError fatalApiError)
+                throw await GetHttpRequestExceptionAsync(response);
+            }
+
+            return (T)await response.Content.ReadFromJsonAsync(typeof(T));
+        }
+        catch (Exception ex)
+        {
+            Logger?.LogError(ex, $"Unexpected response from XUMM API [GET:{endpoint}]");
+            throw;
+        }
+    }
+
+    private async Task<HttpRequestException> GetHttpRequestExceptionAsync(HttpResponseMessage response)
+    {
+        HttpRequestException? exception = null;
+        try
+        {
+            if (response.StatusCode == HttpStatusCode.InternalServerError &&
+                await response.Content.ReadFromJsonAsync(typeof(XummFatalApiError)) is XummFatalApiError fatalApiError)
+            {
+                if (!string.IsNullOrWhiteSpace(fatalApiError.Message))
                 {
-                    if (!string.IsNullOrWhiteSpace(fatalApiError.Message))
-                    {
-                        exception = new HttpRequestException(fatalApiError.Message, null, response.StatusCode);
-                    }
-                }
-                else if (await response.Content.ReadFromJsonAsync(typeof(XummApiError)) is XummApiError apiError)
-                {
-                    exception = new HttpRequestException($"Error code: '{apiError.Error.Code}' with message: '{apiError.Error.Message}', see XUMM Dev Console, reference: '{apiError.Error.Reference}'.",
-                        null, response.StatusCode);
+                    exception = new HttpRequestException(fatalApiError.Message, null, response.StatusCode);
                 }
             }
-            catch (Exception ex)
+            else if (await response.Content.ReadFromJsonAsync(typeof(XummApiError)) is XummApiError apiError)
             {
-                Logger?.LogTrace(ex, $"No {nameof(XummFatalApiError)} available in unsuccessful response body of request: {response.RequestMessage?.RequestUri}");
+                exception = new HttpRequestException(
+                    $"Error code: '{apiError.Error.Code}' with message: '{apiError.Error.Message}', see XUMM Dev Console, reference: '{apiError.Error.Reference}'.",
+                    null, response.StatusCode);
             }
-
-            return exception ??= new HttpRequestException(response.ReasonPhrase, null, response.StatusCode);
         }
-
-        private HttpClient GetHttpClient(bool setCredentials)
+        catch (Exception ex)
         {
-            var client = new HttpClient();
-            if (setCredentials)
-            {
-                client.DefaultRequestHeaders.Add("X-API-Key", ClientOptions.Credentials.ApiKey.GetString());
-                client.DefaultRequestHeaders.Add("X-API-Secret", ClientOptions.Credentials.ApiSecret.GetString());
-            }
-
-            client.DefaultRequestHeaders.Add("Accept", "application/json");
-            client.DefaultRequestHeaders.Add("User-Agent", "XUMM-Net");
-            return client;
+            Logger?.LogTrace(ex,
+                $"No {nameof(XummFatalApiError)} available in unsuccessful response body of request: {response.RequestMessage?.RequestUri}");
         }
 
-        public virtual void Dispose()
+        return exception ??= new HttpRequestException(response.ReasonPhrase, null, response.StatusCode);
+    }
+
+    private HttpClient GetHttpClient(bool setCredentials)
+    {
+        var client = new HttpClient();
+        if (setCredentials)
         {
-            ClientOptions.Credentials.Dispose();
-            GC.SuppressFinalize(this);
+            client.DefaultRequestHeaders.Add("X-API-Key", ClientOptions.Credentials.ApiKey.GetString());
+            client.DefaultRequestHeaders.Add("X-API-Secret", ClientOptions.Credentials.ApiSecret.GetString());
         }
+
+        client.DefaultRequestHeaders.Add("Accept", "application/json");
+        client.DefaultRequestHeaders.Add("User-Agent", "XUMM-Net");
+        return client;
     }
 }

@@ -18,7 +18,7 @@ public class XummPayloadClient : IXummPayloadClient
     }
 
     /// <inheritdoc />
-    public async Task<XummPayloadResponse> SubmitAsync(XummPayload payload)
+    public async Task<XummPayloadResponse> CreateAsync(XummPayload payload)
     {
         return await _xummClient.PostAsync<XummPayloadResponse>("payload", payload);
     }
@@ -27,6 +27,12 @@ public class XummPayloadClient : IXummPayloadClient
     public async Task<XummPayloadDetails> GetAsync(string payloadUuid)
     {
         return await _xummClient.GetAsync<XummPayloadDetails>($"payload/{payloadUuid}");
+    }
+
+    /// <inheritdoc />
+    public async Task<XummDeletePayload> CancelAsync(string payloadUuid)
+    {
+        return await _xummClient.DeleteAsync<XummDeletePayload>($"payload/{payloadUuid}");
     }
 
     /// <inheritdoc />

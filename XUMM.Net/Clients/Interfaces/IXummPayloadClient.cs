@@ -9,18 +9,24 @@ namespace XUMM.Net.Clients.Interfaces;
 public interface IXummPayloadClient
 {
     /// <summary>
-    ///     Submit a payload containing a sign request to the XUMM platform.
+    /// Submit a payload containing a sign request to the XUMM platform.
     /// </summary>
-    Task<XummPayloadResponse> SubmitAsync(XummPayload payload);
+    Task<XummPayloadResponse> CreateAsync(XummPayload payload);
 
     /// <summary>
-    ///     Get payload details or payload resolve status and result data.
+    /// Get payload details or payload resolve status and result data.
     /// </summary>
     /// <param name="payloadUuid">Payload UUID as received from the Payload POST endpoint.</param>
     Task<XummPayloadDetails> GetAsync(string payloadUuid);
 
     /// <summary>
-    ///     You can get, or wait, for payload status updates using websockets to the xumm API.
+    /// Cancel a payload, so a user cannot open it anymore
+    /// </summary>
+    /// <param name="payloadUuid">Payload UUID as received from the Payload POST endpoint.</param>
+    Task<XummDeletePayload> CancelAsync(string payloadUuid);
+
+    /// <summary>
+    /// You can get, or wait, for payload status updates using websockets to the xumm API.
     /// </summary>
     /// <param name="payloadUuid">Payload UUID as received from the Payload POST endpoint.</param>
     /// <param name="eventHandler">Event handler to receive subscription messages.</param>

@@ -115,7 +115,7 @@ public class Program
             CustomMeta = new XummPayloadCustomMeta {Instruction = "Test payload created with the XUMM.Net Wrapper."}
         };
 
-        return await CallAndWriteResponseAsync(() => client.Payload.SubmitAsync(payload));
+        return await CallAndWriteResponseAsync(() => client.Payload.CreateAsync(payload));
     }
 
     private static async Task<T> CallAndWriteResponseAsync<T>(Func<Task<T>> task)
