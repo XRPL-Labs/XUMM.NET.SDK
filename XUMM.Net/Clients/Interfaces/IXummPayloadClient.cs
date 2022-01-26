@@ -11,6 +11,7 @@ public interface IXummPayloadClient
     /// <summary>
     /// Submit a payload containing a sign request to the XUMM platform.
     /// </summary>
+    /// <param name="payload">Payload to create.</param>
     Task<XummPayloadResponse> CreateAsync(XummPayload payload);
 
     /// <summary>
@@ -32,6 +33,16 @@ public interface IXummPayloadClient
     /// <param name="eventHandler">Event handler to receive subscription messages.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken">CancellationToken</see> to observe.</param>
     /// <returns></returns>
-    Task<XummPayloadSubscription?> SubscribeAsync(string payloadUuid,
+    Task<XummPayloadSubscription> SubscribeAsync(string payloadUuid,
+        EventHandler<XummSubscriptionEventArgs> eventHandler, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// You can get, or wait, for payload status updates using websockets to the xumm API.
+    /// </summary>
+    /// <param name="payload">Payload to create.</param>
+    /// <param name="eventHandler">Event handler to receive subscription messages.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken">CancellationToken</see> to observe.</param>
+    /// <returns></returns>
+    Task<XummPayloadSubscription> CreateAndSubscribeAsync(XummPayload payload,
         EventHandler<XummSubscriptionEventArgs> eventHandler, CancellationToken cancellationToken);
 }
