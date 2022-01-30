@@ -20,19 +20,55 @@ public class XummPayloadClient : IXummPayloadClient
     /// <inheritdoc />
     public async Task<XummPayloadResponse?> CreateAsync(XummPayload payload, bool throwError = false)
     {
-        return await _xummClient.PostAsync<XummPayloadResponse>("payload", payload, throwError);
+        try
+        {
+            return await _xummClient.PostAsync<XummPayloadResponse>("payload", payload);
+        }
+        catch
+        {
+            if (!throwError)
+            {
+                return default;
+            }
+
+            throw;
+        }
     }
 
     /// <inheritdoc />
     public async Task<XummPayloadDetails?> GetAsync(string payloadUuid, bool throwError = false)
     {
-        return await _xummClient.GetAsync<XummPayloadDetails>($"payload/{payloadUuid}", throwError);
+        try
+        {
+            return await _xummClient.GetAsync<XummPayloadDetails>($"payload/{payloadUuid}");
+        }
+        catch
+        {
+            if (!throwError)
+            {
+                return default;
+            }
+
+            throw;
+        }
     }
 
     /// <inheritdoc />
     public async Task<XummDeletePayload?> CancelAsync(string payloadUuid, bool throwError = false)
     {
-        return await _xummClient.DeleteAsync<XummDeletePayload>($"payload/{payloadUuid}", throwError);
+        try
+        {
+            return await _xummClient.DeleteAsync<XummDeletePayload>($"payload/{payloadUuid}");
+        }
+        catch
+        {
+            if (!throwError)
+            {
+                return default;
+            }
+
+            throw;
+        }
     }
 
     /// <inheritdoc />
@@ -45,7 +81,7 @@ public class XummPayloadClient : IXummPayloadClient
         var payload = await _xummClient.Payload.GetAsync(payloadUuid);
         if (payload != null)
         {
-            var webSocket = new XummWebSocket($"wss://xumm.app/sign/{payloadUuid}");
+            var webSocket = new XummWebSocket(payloadUuid, _xummClient.Logger);
             await foreach (var message in webSocket.SubscribeAsync(source.Token))
             {
                 eventHandler(this,

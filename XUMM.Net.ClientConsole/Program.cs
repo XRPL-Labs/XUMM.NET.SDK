@@ -36,18 +36,18 @@ public class Program
         // Miscellaneous example calls
         var miscellaneousConfig = config.GetSection("Miscellaneous").Get<MiscellaneousConfig>();
 
-        //await CallAndWriteResponseAsync(client.Misc.PingAsync);
-        //await CallAndWriteResponseAsync(client.Misc.GetCuratedAssetsAsync);
-        //await CallAndWriteResponseAsync(() => client.Misc.GetTransactionAsync(miscellaneousConfig.TxHash));
-        //await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(miscellaneousConfig.Account));
-        //await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(miscellaneousConfig.UserToken));
-        //await CallAndWriteResponseAsync(() => client.Misc.GetRatesAsync(miscellaneousConfig.CurrencyCode));
-        //Console.WriteLine($"Avatar URL: {client.Misc.GetAvatarUrl(miscellaneousConfig.Account, 200, 0)}");
+        await CallAndWriteResponseAsync(client.Misc.PingAsync);
+        await CallAndWriteResponseAsync(client.Misc.GetCuratedAssetsAsync);
+        await CallAndWriteResponseAsync(() => client.Misc.GetTransactionAsync(miscellaneousConfig.TxHash));
+        await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(miscellaneousConfig.Account));
+        await CallAndWriteResponseAsync(() => client.Misc.GetKycStatusAsync(miscellaneousConfig.UserToken));
+        await CallAndWriteResponseAsync(() => client.Misc.GetRatesAsync(miscellaneousConfig.CurrencyCode));
+        Console.WriteLine($"Avatar URL: {client.Misc.GetAvatarUrl(miscellaneousConfig.Account, 200, 0)}");
 
-        //// App Storage example calls
-        //await CallAndWriteResponseAsync(client.Misc.AppStorage.GetAsync);
-        //await CallAndWriteResponseAsync(() => client.Misc.AppStorage.StoreAsync(miscellaneousConfig.AppStorageBody));
-        //await CallAndWriteResponseAsync(client.Misc.AppStorage.ClearAsync);
+        // App Storage example calls
+        await CallAndWriteResponseAsync(client.Misc.AppStorage.GetAsync);
+        await CallAndWriteResponseAsync(() => client.Misc.AppStorage.StoreAsync(miscellaneousConfig.AppStorageBody));
+        await CallAndWriteResponseAsync(client.Misc.AppStorage.ClearAsync);
 
         //Payload example calls
         var payloadConfig = config.GetSection("Payload").Get<PayloadConfig>();
@@ -102,6 +102,18 @@ public class Program
             var ts = TimeSpan.FromSeconds(expiresElement.GetInt32());
             Console.WriteLine("Expires in {0}", ts);
         }
+        else if (e.Data.RootElement.TryGetProperty("opened", out var _))
+        {
+            Console.WriteLine("User received the payload, eg. push notification, deeplink or QR scan.");
+        }
+        else if (e.Data.RootElement.TryGetProperty("devapp_fetched", out var _))
+        {
+            Console.WriteLine("XUMM API fetched the payload details");
+        }
+        else if (e.Data.RootElement.TryGetProperty("expired", out var _))
+        {
+            Console.WriteLine("Payload has expired");
+        }
         else if (e.Data.RootElement.TryGetProperty("signed", out var payloadElement))
         {
             Console.WriteLine("Signed: {0}", payloadElement.GetBoolean() ? "Yes" : "No");
@@ -112,7 +124,7 @@ public class Program
     private static async Task ProcessTransactionAsync(XummClient client, string txJson)
     {
         var payloadResult = await GetPayloadAsync(client, txJson);
-        await CallAndWriteResponseAsync(() => client.Payload.GetAsync(payloadResult.Uuid + "a"));
+        await CallAndWriteResponseAsync(() => client.Payload.GetAsync(payloadResult.Uuid));
     }
 
     private static async Task<XummPayloadResponse> GetPayloadAsync(XummClient client, string txJson)

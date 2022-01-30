@@ -61,28 +61,27 @@ public class XummClient : IXummClient, IDisposable
     /// <inheritdoc />
     public IXummXAppClient XApps { get; }
 
-    internal async Task<T> GetAsync<T>(string endpoint, bool throwError = true, bool isPublicEndpoint = false)
+    internal async Task<T> GetAsync<T>(string endpoint, bool isPublicEndpoint = false)
     {
-        return await SendAsync<T>(HttpMethod.Get, endpoint, !isPublicEndpoint, default, throwError);
+        return await SendAsync<T>(HttpMethod.Get, endpoint, !isPublicEndpoint, default);
     }
 
-    internal async Task<T> PostAsync<T>(string endpoint, object content, bool throwError = true)
+    internal async Task<T> PostAsync<T>(string endpoint, object content)
     {
-        return await PostAsync<T>(endpoint, JsonSerializer.Serialize(content, _serializerOptions), throwError);
+        return await PostAsync<T>(endpoint, JsonSerializer.Serialize(content, _serializerOptions));
     }
 
-    internal async Task<T> PostAsync<T>(string endpoint, string json, bool throwError = true)
+    internal async Task<T> PostAsync<T>(string endpoint, string json)
     {
-        return await SendAsync<T>(HttpMethod.Post, endpoint, true, json, throwError);
+        return await SendAsync<T>(HttpMethod.Post, endpoint, true, json);
     }
 
-    internal async Task<T> DeleteAsync<T>(string endpoint, bool throwError = true)
+    internal async Task<T> DeleteAsync<T>(string endpoint)
     {
-        return await SendAsync<T>(HttpMethod.Delete, endpoint, true, default, throwError);
+        return await SendAsync<T>(HttpMethod.Delete, endpoint, true, default);
     }
 
-    private async Task<T> SendAsync<T>(HttpMethod method, string endpoint, bool setCredentials, string? json,
-        bool throwError)
+    private async Task<T> SendAsync<T>(HttpMethod method, string endpoint, bool setCredentials, string? json)
     {
         try
         {
@@ -101,17 +100,18 @@ public class XummClient : IXummClient, IDisposable
                 throw await GetHttpRequestExceptionAsync(response);
             }
 
-            return (T)await response.Content.ReadFromJsonAsync(typeof(T));
+            var result = (T?)await response.Content.ReadFromJsonAsync(typeof(T));
+            if (result == null)
+            {
+                throw new Exception($"Unexpected response for {endpoint} response.");
+            }
+
+            return result;
         }
         catch (Exception ex)
         {
-            Logger?.LogError(ex, $"Unexpected response from XUMM API [GET:{endpoint}]");
-            if (throwError)
-            {
-                throw;
-            }
-
-            return default;
+            Logger?.LogError(ex, $"Unexpected response from XUMM API [{method}:{endpoint}]");
+            throw;
         }
     }
 

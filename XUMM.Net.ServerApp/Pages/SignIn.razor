@@ -76,14 +76,18 @@
             };
 
         var payloadResult = await client.Payload.CreateAsync(payload);
-        _qrCodeUrl = payloadResult.Refs.QrPng;
-        _payloadUuid = payloadResult.Uuid;
 
-        _messages.Clear();
+        if (payloadResult != null)
+        {
+            _qrCodeUrl = payloadResult.Refs.QrPng;
+            _payloadUuid = payloadResult.Uuid;
 
-        StateHasChanged();
+            _messages.Clear();
 
-        await client.Payload.SubscribeAsync(payloadResult.Uuid, Subscription_EventArgs, _cts.Token);
+            StateHasChanged();
+
+            await client.Payload.SubscribeAsync(payloadResult.Uuid, Subscription_EventArgs, _cts.Token);
+        }
     }
 
     private void CancelSubscription()
@@ -103,9 +107,12 @@
 
         using var client = await GetXummClient();
         var payloadResult = await client.Payload.CancelAsync(_payloadUuid);
-        _messages.Add($"Payload cancel {(payloadResult.Result.Cancelled ? "succeeded" : "failed")} with reason: \"{payloadResult.Result.Reason}\".");
 
-        StateHasChanged();
+        if (payloadResult != null)
+        {
+            _messages.Add($"Payload cancel {(payloadResult.Result.Cancelled ? "succeeded" : "failed")} with reason: \"{payloadResult.Result.Reason}\".");
+            StateHasChanged();
+        }
     }
 
     private void Subscription_EventArgs(object? sender, XummSubscriptionEventArgs e)
