@@ -32,6 +32,26 @@ public interface IXummPayloadClient
     /// <summary>
     /// You can get, or wait, for payload status updates using websockets to the xumm API.
     /// </summary>
+    /// <param name="payload">The <see cref="XummPayloadDetails" /> return value of <see cref="GetAsync" />.</param>
+    /// <param name="eventHandler">Event handler to receive subscription messages.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken">CancellationToken</see> to observe.</param>
+    /// <returns></returns>
+    Task<XummPayloadSubscription> SubscribeAsync(XummPayloadDetails payload,
+        EventHandler<XummSubscriptionEventArgs> eventHandler, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// You can get, or wait, for payload status updates using websockets to the xumm API.
+    /// </summary>
+    /// <param name="payload">The <see cref="XummPayloadResponse" /> return value of <see cref="CreateAsync" />.</param>
+    /// <param name="eventHandler">Event handler to receive subscription messages.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken">CancellationToken</see> to observe.</param>
+    /// <returns></returns>
+    Task<XummPayloadSubscription> SubscribeAsync(XummPayloadResponse payload,
+        EventHandler<XummSubscriptionEventArgs> eventHandler, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// You can get, or wait, for payload status updates using websockets to the xumm API.
+    /// </summary>
     /// <param name="payloadUuid">Payload UUID as received from the Payload POST endpoint.</param>
     /// <param name="eventHandler">Event handler to receive subscription messages.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken">CancellationToken</see> to observe.</param>

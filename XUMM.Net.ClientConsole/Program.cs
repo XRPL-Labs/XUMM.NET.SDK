@@ -88,7 +88,7 @@ public class Program
         }
 
         CancellationTokenSource cts = new();
-        await client.Payload.SubscribeAsync(payloadResult.Uuid, Subscription_EventArgs, cts.Token);
+        await client.Payload.SubscribeAsync(payloadResult, Subscription_EventArgs, cts.Token);
     }
 
     private static void Subscription_EventArgs(object sender, XummSubscriptionEventArgs e)

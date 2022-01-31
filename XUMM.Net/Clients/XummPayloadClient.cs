@@ -72,11 +72,31 @@ public class XummPayloadClient : IXummPayloadClient
     }
 
     /// <inheritdoc />
+    public async Task<XummPayloadSubscription> SubscribeAsync(XummPayloadDetails payload,
+        EventHandler<XummSubscriptionEventArgs> eventHandler,
+        CancellationToken cancellationToken)
+    {
+        return await SubscribeAsync(payload.Meta.Uuid, eventHandler, cancellationToken);
+    }
+
+    /// <inheritdoc />
+    public async Task<XummPayloadSubscription> SubscribeAsync(XummPayloadResponse payload,
+        EventHandler<XummSubscriptionEventArgs> eventHandler,
+        CancellationToken cancellationToken)
+    {
+        return await SubscribeAsync(payload.Uuid, eventHandler, cancellationToken);
+    }
+
+    /// <inheritdoc />
     public async Task<XummPayloadSubscription> SubscribeAsync(string payloadUuid,
         EventHandler<XummSubscriptionEventArgs> eventHandler,
         CancellationToken cancellationToken)
     {
         var source = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
+
+        //This is ugly, but there's a small chance a created XUMM payload has not been distributed
+        //across the load balanced XUMM backend, so wait a bit.
+        await Task.Delay(75, cancellationToken);
 
         var payload = await _xummClient.Payload.GetAsync(payloadUuid);
         if (payload != null)

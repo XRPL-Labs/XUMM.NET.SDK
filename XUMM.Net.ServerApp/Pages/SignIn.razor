@@ -86,7 +86,7 @@
 
             StateHasChanged();
 
-            await client.Payload.SubscribeAsync(payloadResult.Uuid, Subscription_EventArgs, _cts.Token);
+            await client.Payload.SubscribeAsync(payloadResult, Subscription_EventArgs, _cts.Token);
         }
     }
 
