@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using XUMM.Net.EventArgs;
 using XUMM.Net.Models.Payload;
+using XUMM.Net.WebSocket.EventArgs;
 
 namespace XUMM.Net.Clients.Interfaces;
 

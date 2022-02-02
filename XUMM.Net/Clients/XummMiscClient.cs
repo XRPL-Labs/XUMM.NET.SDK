@@ -11,33 +11,29 @@ namespace XUMM.Net.Clients;
 public class XummMiscClient : IXummMiscClient
 {
     private const int MinimumAvatarDimensions = 200;
-    private readonly XummClient _xummClient;
+    private readonly IXummHttpClient _httpClient;
 
-    internal XummMiscClient(XummClient xummClient)
+    public XummMiscClient(IXummHttpClient httpClient)
     {
-        AppStorage = new XummMiscAppStorageClient(xummClient);
-        _xummClient = xummClient;
+        _httpClient = httpClient;
     }
-
-    /// <inheritdoc />
-    public IXummMiscAppStorageClient AppStorage { get; }
 
     /// <inheritdoc />
     public async Task<XummPong> PingAsync()
     {
-        return await _xummClient.GetAsync<XummPong>("ping");
+        return await _httpClient.GetAsync<XummPong>("ping");
     }
 
     /// <inheritdoc />
     public async Task<XummCuratedAssets> GetCuratedAssetsAsync()
     {
-        return await _xummClient.GetAsync<XummCuratedAssets>("curated-assets");
+        return await _httpClient.GetAsync<XummCuratedAssets>("curated-assets");
     }
 
     /// <inheritdoc />
     public async Task<XummTransaction> GetTransactionAsync(string txHash)
     {
-        return await _xummClient.GetAsync<XummTransaction>($"xrpl-tx/{txHash}");
+        return await _httpClient.GetAsync<XummTransaction>($"xrpl-tx/{txHash}");
     }
 
     /// <inheritdoc />
@@ -46,7 +42,7 @@ public class XummMiscClient : IXummMiscClient
         if (userTokenOrAccount.IsAccountAddress())
         {
             var kycInfo =
-                await _xummClient.GetAsync<XummKycInfo>($"kyc-status/{userTokenOrAccount}", true);
+                await _httpClient.GetAsync<XummKycInfo>($"kyc-status/{userTokenOrAccount}", true);
             return kycInfo.KycApproved ? XummKycStatus.Successful : XummKycStatus.None;
         }
         else
@@ -55,7 +51,7 @@ public class XummMiscClient : IXummMiscClient
             {
                 UserToken = userTokenOrAccount
             };
-            var kycInfo = await _xummClient.PostAsync<XummKycStatusInfo>("kyc-status", request);
+            var kycInfo = await _httpClient.PostAsync<XummKycStatusInfo>("kyc-status", request);
             return EnumHelper.GetValueFromName<XummKycStatus>(kycInfo.KycStatus);
         }
     }
@@ -63,7 +59,7 @@ public class XummMiscClient : IXummMiscClient
     /// <inheritdoc />
     public async Task<XummRates> GetRatesAsync(string currencyCode)
     {
-        return await _xummClient.GetAsync<XummRates>($"rates/{currencyCode.Trim().ToUpperInvariant()}");
+        return await _httpClient.GetAsync<XummRates>($"rates/{currencyCode.Trim().ToUpperInvariant()}");
     }
 
     /// <inheritdoc />

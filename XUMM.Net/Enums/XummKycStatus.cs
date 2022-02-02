@@ -1,19 +1,18 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace XUMM.Net.Enums
+namespace XUMM.Net.Enums;
+
+public enum XummKycStatus
 {
-    public enum XummKycStatus
-    {
-        [Display(Name = "NONE")]
-        None,
+    [Display(Name = "NONE")]
+    None,
 
-        [Display(Name = "IN_PROGRESS")]
-        InProgress,
+    [Display(Name = "IN_PROGRESS")]
+    InProgress,
 
-        [Display(Name = "REJECTED")]
-        Rejected,
+    [Display(Name = "REJECTED")]
+    Rejected,
 
-        [Display(Name = "SUCCESSFUL")]
-        Successful
-    }
+    [Display(Name = "SUCCESSFUL")]
+    Successful
 }

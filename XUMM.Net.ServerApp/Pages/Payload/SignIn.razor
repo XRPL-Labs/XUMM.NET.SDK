@@ -1,18 +1,36 @@
 ﻿@page "/signin"
-@using XUMM.Net.ServerApp.Configs
 @using System.Text.Json
 @using System.Text.Json.Serialization
+@using XUMM.Net.Clients.Interfaces
 @using XUMM.Net.Enums
-@using XUMM.Net.EventArgs
+@using XUMM.Net.WebSocket.EventArgs
 @using XUMM.Net.Models.Payload
 @using XUMM.Net.Models.Payload.Xumm
 
-@inject HttpClient HttpClient
-@inject NavigationManager NavigationManager
+@inject IXummPayloadClient _payloadClient
 
 <PageTitle>SignIn</PageTitle>
 
 <h1>SignIn</h1>
+
+@if (_signed.HasValue)
+{
+    if (_signed.Value)
+    {
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Signed!</h4>
+            The user signed the payload.
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            <h4 class="alert-heading">Not signed!</h4>
+            The user did not sign the payload.
+        </div>
+    }
+}
+
 <table>
     <tr>
         <td class="align-top">
@@ -39,6 +57,7 @@
         <td class="align-top">
             @if (_messages.Count != 0)
             {
+                <h2>Messages</h2>
                 <ul>
                     @foreach (var message in _messages)
                     {
@@ -55,19 +74,10 @@
     private readonly List<string> _messages = new();
     private string? _qrCodeUrl;
     private string? _payloadUuid;
-
-    private async Task<XummClient> GetXummClient()
-    {
-        var apiConfig = await HttpClient.GetFromJsonAsync<ApiConfig>(NavigationManager.BaseUri + "configuration/api");
-        var credentials = new XummApiCredentials(apiConfig!.Key, apiConfig!.Secret);
-        var options = new XummClientOptions(credentials);
-
-        return  new XummClient(options, default);
-    }
+    private bool? _signed;
 
     private async Task CreatePayloadAndSubscribe()
     {
-        using var client = await GetXummClient();
         var serializerOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
 
         var payload = new XummPayload(JsonSerializer.Serialize(new XummPayloadTransaction(XummTransactionType.SignIn), serializerOptions), default)
@@ -75,18 +85,19 @@
                 CustomMeta = new XummPayloadCustomMeta { Instruction = "Test payload created with the XUMM.Net Wrapper." }
             };
 
-        var payloadResult = await client.Payload.CreateAsync(payload);
+        var payloadResult = await _payloadClient.CreateAsync(payload);
 
         if (payloadResult != null)
         {
             _qrCodeUrl = payloadResult.Refs.QrPng;
             _payloadUuid = payloadResult.Uuid;
 
+            _signed = null;
             _messages.Clear();
 
             StateHasChanged();
 
-            await client.Payload.SubscribeAsync(payloadResult, Subscription_EventArgs, _cts.Token);
+            await _payloadClient.SubscribeAsync(payloadResult, Subscription_EventArgs, _cts.Token);
         }
     }
 
@@ -95,9 +106,10 @@
         _cts.Cancel();
         _messages.Clear();
         _qrCodeUrl = null;
+        _signed = null;
         StateHasChanged();
     }
-    
+
     private async Task CancelPayload()
     {
         if (_payloadUuid == null)
@@ -105,8 +117,7 @@
             return;
         }
 
-        using var client = await GetXummClient();
-        var payloadResult = await client.Payload.CancelAsync(_payloadUuid);
+        var payloadResult = await _payloadClient.CancelAsync(_payloadUuid);
 
         if (payloadResult != null)
         {
@@ -140,7 +151,8 @@
         }
         else if (e.Data.RootElement.TryGetProperty("signed", out var payloadElement))
         {
-            _messages.Add($"Signed: {(payloadElement.GetBoolean() ? "Yes" : "No")}");
+            _signed = payloadElement.GetBoolean();
+            _messages.Add($"Signed: {(_signed.Value ? "Yes" : "No")}");
             e.CloseConnectionAsync();
             _qrCodeUrl = null;
         }

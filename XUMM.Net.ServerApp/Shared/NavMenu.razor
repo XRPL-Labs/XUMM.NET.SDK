@@ -1,6 +1,6 @@
 ﻿<div class="top-row ps-3 navbar navbar-dark">
     <div class="container-fluid">
-        <a class="navbar-brand" href="">XUMM.Net.ServerApp</a>
+        <a class="navbar-brand" href="">XUMM.Net Blazor App</a>
         <button title="Navigation menu" class="navbar-toggler" @onclick="ToggleNavMenu">
             <span class="navbar-toggler-icon"></span>
         </button>
@@ -15,16 +15,34 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" href="signin">
-                <span class="oi oi-plus" aria-hidden="true"></span> SignIn
+            <NavLink class="nav-link" @onclick="() => _expandMiscSubNav = !_expandMiscSubNav">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Misc
             </NavLink>
+            @if (_expandMiscSubNav)
+            {
+                <NavLink class="nav-link" href="/pingpong">
+                    <span class="oi oi-signal" aria-hidden="true"></span> Ping
+                </NavLink>
+            }
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" @onclick="() => _expandPayloadSubNav = !_expandPayloadSubNav">
+                <span class="oi oi-list-rich" aria-hidden="true"></span> Payload
+            </NavLink>
+            @if (_expandPayloadSubNav)
+            {
+                <NavLink class="nav-link" href="/signin">
+                    <span class="oi oi-account-login" aria-hidden="true"></span> SignIn
+                </NavLink>
+            }
         </div>
     </nav>
 </div>
 
 @code {
     private bool collapseNavMenu = true;
-
+    private bool _expandMiscSubNav;
+    private bool _expandPayloadSubNav;
     private string? NavMenuCssClass => collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()

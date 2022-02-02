@@ -8,7 +8,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 
-namespace XUMM.Net;
+namespace XUMM.Net.WebSocket;
 
 public class XummWebSocket : IAsyncDisposable
 {

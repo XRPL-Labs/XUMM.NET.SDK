@@ -2,19 +2,24 @@
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 using XUMM.Net.Clients.Interfaces;
-using XUMM.Net.EventArgs;
 using XUMM.Net.Models.Payload;
+using XUMM.Net.WebSocket;
+using XUMM.Net.WebSocket.EventArgs;
 
 namespace XUMM.Net.Clients;
 
 public class XummPayloadClient : IXummPayloadClient
 {
-    private readonly XummClient _xummClient;
+    private readonly IXummHttpClient _httpClient;
+    private readonly ILogger<IXummPayloadClient> _logger;
 
-    internal XummPayloadClient(XummClient xummClient)
+    public XummPayloadClient(IXummHttpClient httpClient,
+        ILogger<IXummPayloadClient> logger)
     {
-        _xummClient = xummClient;
+        _httpClient = httpClient;
+        _logger = logger;
     }
 
     /// <inheritdoc />
@@ -22,7 +27,7 @@ public class XummPayloadClient : IXummPayloadClient
     {
         try
         {
-            return await _xummClient.PostAsync<XummPayloadResponse>("payload", payload);
+            return await _httpClient.PostAsync<XummPayloadResponse>("payload", payload);
         }
         catch
         {
@@ -40,7 +45,7 @@ public class XummPayloadClient : IXummPayloadClient
     {
         try
         {
-            return await _xummClient.GetAsync<XummPayloadDetails>($"payload/{payloadUuid}");
+            return await _httpClient.GetAsync<XummPayloadDetails>($"payload/{payloadUuid}");
         }
         catch
         {
@@ -58,7 +63,7 @@ public class XummPayloadClient : IXummPayloadClient
     {
         try
         {
-            return await _xummClient.DeleteAsync<XummDeletePayload>($"payload/{payloadUuid}");
+            return await _httpClient.DeleteAsync<XummDeletePayload>($"payload/{payloadUuid}");
         }
         catch
         {
@@ -98,10 +103,10 @@ public class XummPayloadClient : IXummPayloadClient
         //across the load balanced XUMM backend, so wait a bit.
         await Task.Delay(75, cancellationToken);
 
-        var payload = await _xummClient.Payload.GetAsync(payloadUuid);
+        var payload = await GetAsync(payloadUuid);
         if (payload != null)
         {
-            var webSocket = new XummWebSocket(payloadUuid, _xummClient.Logger);
+            var webSocket = new XummWebSocket(payloadUuid, _logger);
             await foreach (var message in webSocket.SubscribeAsync(source.Token))
             {
                 eventHandler(this,

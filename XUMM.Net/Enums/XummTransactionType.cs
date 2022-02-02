@@ -1,7 +1,6 @@
-﻿namespace XUMM.Net.Enums
+﻿namespace XUMM.Net.Enums;
+
+public enum XummTransactionType
 {
-    public enum XummTransactionType
-    {
-        SignIn
-    }
+    SignIn
 }

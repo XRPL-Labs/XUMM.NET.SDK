@@ -13,7 +13,12 @@ public static class EnumHelper
             var attribute = Attribute.GetCustomAttribute(field, typeof(DisplayAttribute)) as DisplayAttribute;
             if (attribute?.Name == name || field.Name == name)
             {
-                return (T)field.GetValue(null);
+                if (field.GetValue(null) is not T value)
+                {
+                    throw new NullReferenceException("Unexpected null value for: " + name);
+                }
+
+                return value;
             }
         }
 
