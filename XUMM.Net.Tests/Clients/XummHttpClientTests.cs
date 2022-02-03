@@ -16,10 +16,14 @@ public class XummHttpClientTests
     [SetUp]
     public void SetUp()
     {
-        _httpMessageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+        _httpMessageHandlerMock = new Mock<HttpMessageHandler>();
+        _httpClientFactory = new Mock<IHttpClientFactory>();
+        _httpClientFactory.Setup(_ => _.CreateClient(It.IsAny<string>()))
+            .Returns(new HttpClient(_httpMessageHandlerMock.Object));
     }
 
     private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
+    private Mock<IHttpClientFactory> _httpClientFactory = default!;
 
     [Test]
     [TestCase("f6c4a1c7-d00b-4592-9eb9-f6e90ee836a0", "430ab92a-ccf8-4e8f-bd88-e65e1033acc3")]
@@ -28,7 +32,7 @@ public class XummHttpClientTests
     {
         //Arrange
         var xummHttpClient = new XummHttpClient(
-            new HttpClient(_httpMessageHandlerMock.Object),
+            _httpClientFactory.Object,
             Options.Create(new ApiConfig
             {
                 ApiKey = apiKey,
@@ -53,7 +57,7 @@ public class XummHttpClientTests
         var ex = Assert.Throws<Exception>(() =>
         {
             var client = new XummHttpClient(
-                new HttpClient(_httpMessageHandlerMock.Object),
+                _httpClientFactory.Object,
                 Options.Create(new ApiConfig
                 {
                     ApiKey = apiKey,

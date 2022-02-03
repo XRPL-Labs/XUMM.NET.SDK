@@ -17,10 +17,14 @@ public class XummMiscClientTests
     [SetUp]
     public void SetUp()
     {
-        _httpMessageHandlerMock = new Mock<HttpMessageHandler>(MockBehavior.Strict);
+        _httpMessageHandlerMock = new Mock<HttpMessageHandler>();
+
+        _httpClientFactory = new Mock<IHttpClientFactory>();
+        _httpClientFactory.Setup(_ => _.CreateClient(It.IsAny<string>()))
+            .Returns(new HttpClient(_httpMessageHandlerMock.Object));
 
         _xummHttpClient = new XummHttpClient(
-            new HttpClient(_httpMessageHandlerMock.Object),
+            _httpClientFactory.Object,
             Options.Create(new ApiConfig
             {
                 ApiKey = "00000000-0000-0000-0000-000000000000",
@@ -34,6 +38,7 @@ public class XummMiscClientTests
     private XummHttpClient _xummHttpClient = default!;
     private XummMiscClient _xummMiscClient = default!;
     private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
+    private Mock<IHttpClientFactory> _httpClientFactory = default!;
 
     [Test]
     public async Task WhenValidCredentialsAreProvided_ShouldReturnAppNameAsync()

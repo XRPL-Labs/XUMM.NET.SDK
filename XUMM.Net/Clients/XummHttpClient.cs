@@ -17,16 +17,17 @@ namespace XUMM.Net.Clients;
 public class XummHttpClient : IXummHttpClient
 {
     private readonly ApiConfig _config;
-    private readonly HttpClient _httpClient;
+    private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<XummHttpClient> _logger;
     private readonly JsonSerializerOptions _serializerOptions;
 
-    public XummHttpClient(HttpClient httpClient,
+    public XummHttpClient(
+        IHttpClientFactory httpClientFactory,
         IOptions<ApiConfig> options,
         ILogger<XummHttpClient> logger)
     {
-        _httpClient = httpClient;
         _config = options.Value;
+        _httpClientFactory = httpClientFactory;
         _logger = logger;
 
         _serializerOptions = new JsonSerializerOptions
@@ -61,24 +62,25 @@ public class XummHttpClient : IXummHttpClient
 
     public HttpClient GetHttpClient(bool setCredentials)
     {
-        _httpClient.DefaultRequestHeaders.Clear();
+        var httpClient = _httpClientFactory.CreateClient();
+        httpClient.DefaultRequestHeaders.Clear();
 
         if (setCredentials)
         {
-            _httpClient.DefaultRequestHeaders.Add("X-API-Key", _config.ApiKey);
-            _httpClient.DefaultRequestHeaders.Add("X-API-Secret", _config.ApiSecret);
+            httpClient.DefaultRequestHeaders.Add("X-API-Key", _config.ApiKey);
+            httpClient.DefaultRequestHeaders.Add("X-API-Secret", _config.ApiSecret);
         }
 
-        _httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-        _httpClient.DefaultRequestHeaders.Add("User-Agent", "XUMM-Net");
-        return _httpClient;
+        httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
+        httpClient.DefaultRequestHeaders.Add("User-Agent", "XUMM-Net");
+        return httpClient;
     }
 
     private async Task<T> SendAsync<T>(HttpMethod method, string endpoint, bool setCredentials, string? json)
     {
         try
         {
-            var client = GetHttpClient(setCredentials);
+            using var client = GetHttpClient(setCredentials);
             using var requestMessage = new HttpRequestMessage(method, GetRequestUrl(endpoint));
 
             if (json != null)
