@@ -16,18 +16,21 @@
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" @onclick="() => _expandMiscSubNav = !_expandMiscSubNav">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Misc
+                <span class="oi oi-expand-down" aria-hidden="true"></span> Misc
             </NavLink>
             @if (_expandMiscSubNav)
             {
                 <NavLink class="nav-link" href="/pingpong">
                     <span class="oi oi-signal" aria-hidden="true"></span> Ping
                 </NavLink>
+                <NavLink class="nav-link" href="/curatedassets">
+                    <span class="oi oi-check" aria-hidden="true"></span> Curated Assets
+                </NavLink>
             }
         </div>
         <div class="nav-item px-3">
             <NavLink class="nav-link" @onclick="() => _expandPayloadSubNav = !_expandPayloadSubNav">
-                <span class="oi oi-list-rich" aria-hidden="true"></span> Payload
+                <span class="oi oi-expand-down" aria-hidden="true"></span> Payload
             </NavLink>
             @if (_expandPayloadSubNav)
             {
