@@ -1,0 +1,48 @@
+﻿@if (_success.HasValue)
+{
+    if (_success.Value)
+    {
+        <div class="alert alert-success" role="alert">
+            <h4 class="alert-heading">Retrieved @Name!</h4>
+            Response Time: @_responseTime ms
+        </div>
+    }
+    else
+    {
+        <div class="alert alert-danger" role="alert">
+            <h4 class="alert-heading">Failed to retrieve @Name!</h4>
+            Response Time: @_responseTime ms
+        </div>
+    }
+}
+
+@code {
+    public string Name { get; set; } = default!;
+    private bool? _success;
+    private double _responseTime;
+
+    public async Task<T?> GetResponseAndSetAlertAsync<T>(Func<Task<T>> task)
+    {
+        var result = default(T?);
+        var start = DateTime.UtcNow;
+        try
+        {
+
+            result = await task();
+        }
+        catch
+        {
+            // Ignored for now
+        }
+
+        _responseTime = Math.Round((DateTime.UtcNow - start).TotalMilliseconds);
+        return result;
+    }
+
+    public void SetAlert(string name, bool success)
+    {
+        _success = success;
+        Name = name;
+        StateHasChanged();
+    }
+}

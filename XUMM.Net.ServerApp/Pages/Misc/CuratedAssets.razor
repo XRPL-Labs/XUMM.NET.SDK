@@ -6,44 +6,31 @@
 
 <PageTitle>Curated Assets</PageTitle>
 
+<ResponseAlertBox @ref="_responseAlertBox"></ResponseAlertBox>
+
 <h1>Curated Assets</h1>
 
 @if (_details != null)
 {
-    if (_details.Any())
-    {
-        <div class="alert alert-success" role="alert">
-            <h4 class="alert-heading">Retrieved curated assets!</h4>
-            Response Time: @_responseTime ms
-        </div>
-
-        <table class="table">
-            <thead>
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">Id</th>
+                <th scope="col">Name</th>
+                <th scope="col">Currencies</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var assetDetails in _details.OrderBy(x => x.Name))
+            {
                 <tr>
-                    <th scope="col">Id</th>
-                    <th scope="col">Name</th>
-                    <th scope="col">Currencies</th>
+                    <th scope="row">@assetDetails.Id</th>
+                    <td>@assetDetails.Name</td>
+                    <td>@string.Join(", ", assetDetails.Currencies.Select(x=>x.Key).OrderBy(x=>x))</td>
                 </tr>
-            </thead>
-            <tbody>
-                @foreach (var assetDetails in _details.OrderBy(x => x.Name))
-                {
-                    <tr>
-                        <th scope="row">@assetDetails.Id</th>
-                        <td>@assetDetails.Name</td>
-                        <td>@string.Join(", ", assetDetails.Currencies.Select(x=>x.Key).OrderBy(x=>x))</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
-    }
-    else
-    {
-        <div class="alert alert-info" role="alert">
-            <h4 class="alert-heading">No curated assets found!</h4>
-            Response Time: @_responseTime ms
-        </div>
-    }
+            }
+        </tbody>
+    </table>
 }
 else
 {
@@ -53,14 +40,13 @@ else
 }
 
 @code {
+    private ResponseAlertBox _responseAlertBox = default!;
     private List<XummCuratedAssetsDetails>? _details;
-    private double? _responseTime;
 
     private async Task GetCuratedAssetsAsync()
     {
-        var start = DateTime.UtcNow;
-        var result = await _miscClient.GetCuratedAssetsAsync();
-        _details = new List<XummCuratedAssetsDetails>(result.Details.Values);
-        _responseTime = Math.Round((DateTime.UtcNow - start).TotalMilliseconds);
+        var curatedAssets = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetCuratedAssetsAsync());
+        _details = curatedAssets != null ? new List<XummCuratedAssetsDetails>(curatedAssets.Details.Values) : default;
+        _responseAlertBox.SetAlert("Curated Assets", curatedAssets != null);
     }
 }

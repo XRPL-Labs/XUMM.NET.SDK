@@ -1,45 +1,26 @@
 ﻿@page "/pingpong"
 @using XUMM.Net.Clients.Interfaces
+@using XUMM.Net.Models.Misc
 
 @inject IXummMiscClient _miscClient
 
 <PageTitle>Ping</PageTitle>
 
+<ResponseAlertBox @ref="_responseAlertBox"></ResponseAlertBox>
+
 <h1>Ping</h1>
 
-@if (_pong.HasValue)
-{
-    if (_pong.Value)
-    {
-        <div class="alert alert-success" role="alert">
-            <h4 class="alert-heading">Pong!</h4>
-            Response Time: @_responseTime ms
-        </div>
-    }
-    else
-    {
-        <div class="alert alert-danger" role="alert">
-            <h4 class="alert-heading">Pong failed!</h4>
-            Response Time: @_responseTime ms
-        </div>
-    }
-}
-else
-{
-    <div class="btn-group" role="group">
-        <button class="btn btn-primary" @onclick="CreatePayloadAndSubscribe">Ping</button>
-    </div>
-}
+<div class="btn-group" role="group">
+    <button class="btn btn-primary" @onclick="CreatePayloadAndSubscribe">Ping</button>
+</div>
 
 @code {
-    private bool? _pong;
-    private double? _responseTime;
+    private ResponseAlertBox _responseAlertBox = default!;
+    private XummPong? _pong;
 
     private async Task CreatePayloadAndSubscribe()
     {
-        var start = DateTime.UtcNow;
-        var result = await _miscClient.PingAsync();
-        _responseTime = Math.Round((DateTime.UtcNow - start).TotalMilliseconds);
-        _pong = result.Pong;
+        _pong = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.PingAsync());
+        _responseAlertBox.SetAlert("Pong", _pong != null);
     }
 }

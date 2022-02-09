@@ -1,0 +1,43 @@
+﻿@page "/transaction"
+@using XUMM.Net.Clients.Interfaces
+@using XUMM.Net.Models.Misc
+
+@inject IXummMiscClient _miscClient
+
+<PageTitle>Transaction</PageTitle>
+
+<ResponseAlertBox @ref="_responseAlertBox"></ResponseAlertBox>
+
+<h1>Transaction</h1>
+
+@if (_transaction != null)
+{
+    <dl class="row">
+        @foreach (var transactionDetails in _transaction.Transaction.OrderBy(x => x.Key))
+        {
+            <dt class="col-sm-3">@transactionDetails.Key</dt>
+            <dd class="col-sm-9 text-break">@transactionDetails.Value</dd>
+        }
+    </dl>
+}
+else
+{
+    <div class="input-group mb-3">
+        <input type="text" class="form-control" placeholder="The transaction hash (64 hexadecimal characters)" aria-label="Transaction Hash" aria-describedby="basic-addon2" @bind="_txHash">
+        <div class="input-group-append">
+            <button class="btn btn-primary" type="button" @onclick="GetTransactionAsync">Fetch transaction</button>
+        </div>
+    </div>
+}
+
+@code {
+    private ResponseAlertBox _responseAlertBox = default!;
+    private string _txHash = default!;
+    private XummTransaction? _transaction;
+
+    private async Task GetTransactionAsync()
+    {
+        _transaction = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetTransactionAsync(_txHash));
+        _responseAlertBox.SetAlert("Transaction Details", _transaction != null);
+    }
+}
