@@ -1,0 +1,47 @@
+﻿@page "/kyc-status"
+@using XUMM.Net.Clients.Interfaces
+@using XUMM.Net.Enums
+@using XUMM.Net.Extensions
+
+@inject IXummMiscClient _miscClient
+
+<PageTitle>KycStatus</PageTitle>
+
+<ResponseAlertBox @ref="_responseAlertBox"></ResponseAlertBox>
+
+<h1>KYC Status</h1>
+
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="User Token or Account address, eg. rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB" aria-label="User token or account" aria-describedby="basic-addon2" @bind="_userTokenOrAccount">
+    <div class="input-group-append">
+        <button class="btn btn-primary" type="button" @onclick="GetKycStatusAsync">Fetch KYC Status</button>
+    </div>
+</div>
+
+@if (_kycStatus != null)
+{
+    <h2>Result</h2>
+
+    <dl class="row">
+        <dt class="col-sm-3">Type</dt>
+        <dd class="col-sm-9 text-break">@_userTokenOrAccountType</dd>
+    </dl>
+    <dl class="row">
+        <dt class="col-sm-3">KYC Status</dt>
+        <dd class="col-sm-9 text-break">@_kycStatus</dd>
+    </dl>
+}
+
+@code {
+    private ResponseAlertBox _responseAlertBox = default!;
+    private string _userTokenOrAccount = default!;
+    private string _userTokenOrAccountType = default!;
+    private XummKycStatus? _kycStatus;
+
+    private async Task GetKycStatusAsync()
+    {
+        _kycStatus = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetKycStatusAsync(_userTokenOrAccount));
+        _userTokenOrAccountType = _userTokenOrAccount.IsAccountAddress() ? "Account" : _userTokenOrAccount.IsValidUuid() ? "User token" : "Invalid";
+        _responseAlertBox.SetAlert("KYC Status", _kycStatus != null && _userTokenOrAccountType != "Invalid");
+    }
+}

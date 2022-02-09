@@ -45,7 +45,8 @@ public class XummMiscClient : IXummMiscClient
                 await _httpClient.GetAsync<XummKycInfo>($"kyc-status/{userTokenOrAccount}", true);
             return kycInfo.KycApproved ? XummKycStatus.Successful : XummKycStatus.None;
         }
-        else
+
+        if (userTokenOrAccount.IsValidUuid())
         {
             var request = new XummKycStatusRequest
             {
@@ -54,6 +55,8 @@ public class XummMiscClient : IXummMiscClient
             var kycInfo = await _httpClient.PostAsync<XummKycStatusInfo>("kyc-status", request);
             return EnumHelper.GetValueFromName<XummKycStatus>(kycInfo.KycStatus);
         }
+
+        return XummKycStatus.None;
     }
 
     /// <inheritdoc />
