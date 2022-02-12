@@ -1,0 +1,44 @@
+﻿@page "/rates"
+@using XUMM.Net.Clients.Interfaces
+@using XUMM.Net.Models.Misc
+
+@inject IXummMiscClient _miscClient
+
+<PageTitle>Rates</PageTitle>
+
+<ResponseAlertBox @ref="_responseAlertBox"></ResponseAlertBox>
+
+<h1>Rates</h1>
+
+<div class="input-group mb-3">
+    <input type="text" class="form-control" placeholder="The 3 alpha char currency code, eg. INR" aria-label="Currency" aria-describedby="basic-addon2" @bind="_currency">
+    <div class="input-group-append">
+        <button class="btn btn-primary" type="button" @onclick="GetRatesAsync">Fetch transaction</button>
+    </div>
+</div>
+
+@if (_rates != null)
+{
+    <h2>Result</h2>
+
+    <dl class="row">
+        <dt class="col-sm-2">Name</dt>
+        <dd class="col-sm-10 text-break">@_rates.Meta.Currency.En</dd>
+        <dt class="col-sm-2">USD</dt>
+        <dd class="col-sm-10 text-break">$ @_rates.USD</dd>
+        <dt class="col-sm-2">XRP</dt>
+        <dd class="col-sm-10 text-break">@_rates.XRP XRP</dd>
+    </dl>
+}
+
+@code {
+    private ResponseAlertBox _responseAlertBox = default!;
+    private string _currency = default!;
+    private XummRates? _rates;
+
+    private async Task GetRatesAsync()
+    {
+        _rates = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetRatesAsync(_currency));
+        _responseAlertBox.SetAlert("Rates", _rates != null);
+    }
+}
