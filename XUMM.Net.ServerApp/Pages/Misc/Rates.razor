@@ -10,26 +10,29 @@
 
 <h1>Rates</h1>
 
-<div class="input-group mb-3">
-    <input type="text" class="form-control" placeholder="The 3 alpha char currency code, eg. INR" aria-label="Currency" aria-describedby="basic-addon2" @bind="_currency">
-    <div class="input-group-append">
-        <button class="btn btn-primary" type="button" @onclick="GetRatesAsync">Fetch transaction</button>
+<div class="row align-items-start">
+    <div class="col">
+        <div class="mb-3">
+            <label for="currency" class="form-label">Currency</label>
+            <input id="currency" class="form-control" placeholder="The 3 alpha char currency code" aria-label="Currency" aria-describedby="basic-addon2" @bind="_currency">
+            <small id="currencyhelp" class="form-text text-muted">eg. INR</small>
+        </div>
+        <button class="btn btn-primary" type="button" @onclick="GetRatesAsync">Fetch Rates</button>
+    </div>
+    <div class="col">
+        @if (_rates != null)
+        {
+            <dl class="row">
+                <dt class="col-sm-2">Name</dt>
+                <dd class="col-sm-10 text-break">@_rates.Meta.Currency.En</dd>
+                <dt class="col-sm-2">USD</dt>
+                <dd class="col-sm-10 text-break">$ @_rates.USD</dd>
+                <dt class="col-sm-2">XRP</dt>
+                <dd class="col-sm-10 text-break">@_rates.XRP XRP</dd>
+            </dl>
+        }
     </div>
 </div>
-
-@if (_rates != null)
-{
-    <h2>Result</h2>
-
-    <dl class="row">
-        <dt class="col-sm-2">Name</dt>
-        <dd class="col-sm-10 text-break">@_rates.Meta.Currency.En</dd>
-        <dt class="col-sm-2">USD</dt>
-        <dd class="col-sm-10 text-break">$ @_rates.USD</dd>
-        <dt class="col-sm-2">XRP</dt>
-        <dd class="col-sm-10 text-break">@_rates.XRP XRP</dd>
-    </dl>
-}
 
 @code {
     private ResponseAlertBox _responseAlertBox = default!;
@@ -38,6 +41,11 @@
 
     private async Task GetRatesAsync()
     {
+        if (string.IsNullOrWhiteSpace(_currency))
+        {
+            _currency = "INR";
+        }
+
         _rates = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetRatesAsync(_currency));
         _responseAlertBox.SetAlert("Rates", _rates != null);
     }
