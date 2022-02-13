@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Net;
+﻿using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -65,37 +64,6 @@ public class XummMiscClientTests
         var result = await _xummMiscClient.GetCuratedAssetsAsync();
 
         // Assert
-        CollectionAssert.AreEqual(new List<string>
-            {
-                "Bitstamp",
-                "Wietse"
-            },
-            result.Issuers);
-
-        CollectionAssert.AreEqual(new List<string>
-            {
-                "USD",
-                "BTC",
-                "ETH",
-                "WIE"
-            },
-            result.Currencies);
-
-        CollectionAssert.AreEqual(new List<string>
-            {
-                "WIE"
-            },
-            result.Details["Wietse"].Currencies.Keys);
-
-        CollectionAssert.DoesNotContain(result.Details["Wietse"].Currencies.Keys, "USD");
-
-        CollectionAssert.AreEqual(new List<string>
-            {
-                "USD",
-                "BTC"
-            },
-            result.Details["Bitstamp"].Currencies.Keys);
-
-        CollectionAssert.DoesNotContain(result.Details["Bitstamp"].Currencies.Keys, "WIE");
+        AssertExtensions.AreEqual(MiscFixtures.XummCuratedAssets, result);
     }
 }
