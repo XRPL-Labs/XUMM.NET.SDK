@@ -40,18 +40,22 @@
 
 @code {
     private ResponseAlertBox _responseAlertBox = default!;
-    private string _json = default!;
+    private string? _json;
     private object? _storedData;
 
     protected override async Task OnAfterRenderAsync(bool firstRender)
     {
-        await GetStorageAsync();
+        if (firstRender)
+        {
+            await GetStorageAsync();
+        }
     }
 
     private async Task GetStorageAsync()
     {
         var storage = await _miscAppStorageClient.GetAsync();
         _storedData = storage?.Data;
+        StateHasChanged();
     }
 
     private async Task StoreAsync()
@@ -67,6 +71,7 @@
 
         if (success)
         {
+            _json = null;
             await GetStorageAsync();
         }
     }
