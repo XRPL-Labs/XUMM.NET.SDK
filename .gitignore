@@ -351,3 +351,4 @@ MigrationBackup/
 
 /XUMM.Net.ClientConsole/appsettings.Development.json
 /XUMM.Net.ServerApp/appsettings.Development.json
+/XUMM.Net.ServerApp/Properties/ServiceDependencies/
