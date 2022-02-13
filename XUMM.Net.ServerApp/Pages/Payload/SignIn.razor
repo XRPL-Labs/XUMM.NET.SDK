@@ -9,9 +9,9 @@
 
 @inject IXummPayloadClient _payloadClient
 
-<PageTitle>SignIn</PageTitle>
+<PageTitle>Sign In</PageTitle>
 
-<h1>SignIn</h1>
+<h1>Sign In</h1>
 
 @if (_signed.HasValue)
 {
@@ -30,47 +30,57 @@
         </div>
     }
 }
+<div class="row">
+    <div class="mb-3">
+        @if (_qrCodeUrl != null)
+        {
+            <div class="btn-group" role="group">
+                <button class="btn btn-primary" @onclick="CancelSubscription">Cancel payload subscription</button>
+                <button class="btn btn-secondary" @onclick="CancelPayload">Cancel Payload</button>
+            </div>
+        }
+        else
+        {
+            <div class="btn-group" role="group">
+                <button class="btn btn-primary" @onclick="CreatePayloadAndSubscribe">Create payload and subscribe</button>
+            </div>
+        }
+    </div>
+</div>
 
-<table>
-    <tr>
-        <td class="align-top">
-            @if (_qrCodeUrl != null)
-            {
-                <div>
-                    <h2>Scan QR Code</h2>
-                    <img src="@_qrCodeUrl" alt="" />
+<div class="row align-items-start">
+    <div class="col">
+        @if (_qrCodeUrl != null)
+        {
+            <div>
+                <h2>Scan QR Code</h2>
+
+                <div class="input-group mb-3">
+                    <figure class="figure">
+                        <img src="@_qrCodeUrl" class="figure-img img-fluid rounded" alt="QR Code of @_payloadUuid" />
+                        <figcaption class="figure-caption">@_payloadUuid</figcaption>
+                    </figure>
                 </div>
 
-                <div class="btn-group" role="group">
-                    <button class="btn btn-primary" @onclick="CancelSubscription">Cancel payload subscription</button>
-
-                    <button class="btn btn-secondary" @onclick="CancelPayload">Cancel Payload</button>
-                </div>
-            }
-            else
-            {
-                <div class="btn-group" role="group">
-                    <button class="btn btn-primary" @onclick="CreatePayloadAndSubscribe">Create payload and subscribe</button>
-                </div>
-            }
-        </td>
-        <td class="align-top">
-            @if (_messages.Count != 0)
-            {
-                <h2>Messages</h2>
-                <ul>
-                    @foreach (var message in _messages)
-                    {
-                        <li>@message</li>
-                    }
-                </ul>
-            }
-        </td>
-    </tr>
-</table>
+            </div>
+        }
+    </div>
+    <div class="col">
+        @if (_messages.Any())
+        {
+            <h2>Messages</h2>
+            <ul>
+                @foreach (var message in _messages)
+                {
+                    <li>@message</li>
+                }
+            </ul>
+        }
+    </div>
+</div>
 
 @code {
-    private readonly CancellationTokenSource _cts = new();
+    private CancellationTokenSource _cts = default!;
     private readonly List<string> _messages = new();
     private string? _qrCodeUrl;
     private string? _payloadUuid;
@@ -80,7 +90,8 @@
     {
         var serializerOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
 
-        var payload = new XummPayload(JsonSerializer.Serialize(new XummPayloadTransaction(XummTransactionType.SignIn), serializerOptions), default)
+        var payload = new XummPayload(JsonSerializer.Serialize(
+            new XummPayloadTransaction(XummTransactionType.SignIn), serializerOptions), default)
             {
                 CustomMeta = new XummPayloadCustomMeta { Instruction = "Test payload created with the XUMM.Net Wrapper." }
             };
@@ -89,14 +100,14 @@
 
         if (payloadResult != null)
         {
+            _signed = null;
+
             _qrCodeUrl = payloadResult.Refs.QrPng;
             _payloadUuid = payloadResult.Uuid;
 
-            _signed = null;
-            _messages.Clear();
-
             StateHasChanged();
 
+            _cts = new CancellationTokenSource();
             await _payloadClient.SubscribeAsync(payloadResult, Subscription_EventArgs, _cts.Token);
         }
     }
@@ -104,9 +115,8 @@
     private void CancelSubscription()
     {
         _cts.Cancel();
-        _messages.Clear();
         _qrCodeUrl = null;
-        _signed = null;
+            _messages.Add($"Payload {_payloadUuid} subscription cancelled.");
         StateHasChanged();
     }
 
@@ -118,10 +128,9 @@
         }
 
         var payloadResult = await _payloadClient.CancelAsync(_payloadUuid);
-
         if (payloadResult != null)
         {
-            _messages.Add($"Payload cancel {(payloadResult.Result.Cancelled ? "succeeded" : "failed")} with reason: \"{payloadResult.Result.Reason}\".");
+            _messages.Add($"Payload {_payloadUuid} cancel {(payloadResult.Result.Cancelled ? "succeeded" : "failed")} with reason: \"{payloadResult.Result.Reason}\".");
             StateHasChanged();
         }
     }
