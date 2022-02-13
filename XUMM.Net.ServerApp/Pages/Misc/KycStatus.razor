@@ -12,24 +12,26 @@
 <h1>KYC Status</h1>
 
 <div class="row align-items-start">
-    <div class="col">
-        <div class="mb-3">
-            <label for="usertokenoraccount" class="form-label">User token or account</label>
-            <input id="usertokenoraccount" type="text" class="form-control" placeholder="User Token or Account address" aria-label="User token or account" aria-describedby="basic-addon2" @bind="_userTokenOrAccount">
-            <small id="usertokenoraccounthelp" class="form-text text-muted">eg. @ExampleAccount</small>
-        </div>
-        <div class="btn-group" role="group">
-            <button class="btn btn-primary" type="button" @onclick="GetKycStatusAsync">Fetch KYC Status</button>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="mb-3">
+                <label for="usertokenoraccount" class="form-label">User token or account</label>
+                <input id="usertokenoraccount" type="text" class="form-control" placeholder="User Token or Account address" aria-label="User token or account" aria-describedby="basic-addon2" @bind="_userTokenOrAccount">
+                <small id="usertokenoraccounthelp" class="form-text text-muted">eg. @ExampleAccount</small>
+            </div>
+            <div class="btn-group mb-3" role="group">
+                <button class="btn btn-primary" type="button" @onclick="GetKycStatusAsync">Fetch KYC Status</button>
+            </div>
         </div>
     </div>
-    <div class="col">
+    <div class="col-md-6">
         @if (_kycStatus != null)
         {
             <dl class="row">
-                <dt class="col-sm-2">KYC Status</dt>
-                <dd class="col-sm-10">@_kycStatus</dd>
-                <dt class="col-sm-2">Type</dt>
-                <dd class="col-sm-10">@_userTokenOrAccountType</dd>
+                <dt class="col-6">KYC Status</dt>
+                <dd class="col-6">@_kycStatus</dd>
+                <dt class="col-6">Type</dt>
+                <dd class="col-6">@_userTokenOrAccountType</dd>
             </dl>
         }
     </div>

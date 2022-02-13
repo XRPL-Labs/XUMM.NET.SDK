@@ -9,7 +9,7 @@
 <h1>Avatar</h1>
 
 <div class="row align-items-start">
-    <div class="col">
+    <div class="col-md-6">
         <div class="mb-3">
             <label for="dimensions" class="form-label">Dimensions</label>
             <input id="dimensions" type="number" min="200" class="form-control" placeholder="Dimensions, eg. 200" aria-label="Dimensions" aria-describedby="basic-addon2" @bind="_dimensions">
@@ -25,17 +25,17 @@
             <input id="accountaddress" type="text" class="form-control" placeholder="Account address" aria-label="Account Address" aria-describedby="basic-addon2" @bind="_account">
             <small id="accountaddressHelp" class="form-text text-muted">eg. @ExampleAccount</small>
         </div>
-        <div class="btn-group" role="group">
+        <div class="btn-group mb-3" role="group">
             <button class="btn btn-primary" type="button" @onclick="GetAvatarUrl">Get Avatar</button>
         </div>
     </div>
-    <div class="col text-center">
+    <div class="col-md-6 text-center">
         @if (_avatarUrl != null)
         {
             <div class="input-group mb-3">
                 <figure class="figure">
                     <img src="@_avatarUrl" class="figure-img img-fluid rounded" alt="Avatar of account @_account">
-                    <figcaption class="figure-caption">@_avatarUrl</figcaption>
+                    <figcaption class="figure-caption text-break">@_avatarUrl</figcaption>
                 </figure>
             </div>
         }

@@ -11,26 +11,28 @@
 <h1>Rates</h1>
 
 <div class="row align-items-start">
-    <div class="col">
-        <div class="mb-3">
-            <label for="currency" class="form-label">Currency</label>
-            <input id="currency" class="form-control" placeholder="The 3 alpha char currency code" aria-label="Currency" aria-describedby="basic-addon2" @bind="_currency">
-            <small id="currencyhelp" class="form-text text-muted">eg. INR</small>
-        </div>
-        <div class="btn-group" role="group">
-            <button class="btn btn-primary" type="button" @onclick="GetRatesAsync">Fetch Rates</button>
+    <div class="col-md-6">
+        <div class="row">
+            <div class="mb-3">
+                <label for="currency" class="form-label">Currency</label>
+                <input id="currency" class="form-control" placeholder="The 3 alpha char currency code" aria-label="Currency" aria-describedby="basic-addon2" @bind="_currency">
+                <small id="currencyhelp" class="form-text text-muted">eg. INR</small>
+            </div>
+            <div class="btn-group mb-3" role="group">
+                <button class="btn btn-primary" type="button" @onclick="GetRatesAsync">Fetch Rates</button>
+            </div>
         </div>
     </div>
-    <div class="col">
+    <div class="col-md-6">
         @if (_rates != null)
         {
             <dl class="row">
-                <dt class="col-sm-2">Name</dt>
-                <dd class="col-sm-10 text-break">@_rates.Meta.Currency.En</dd>
-                <dt class="col-sm-2">USD</dt>
-                <dd class="col-sm-10 text-break">$ @_rates.USD</dd>
-                <dt class="col-sm-2">XRP</dt>
-                <dd class="col-sm-10 text-break">@_rates.XRP XRP</dd>
+                <dt class="col-6">Name</dt>
+                <dd class="col-6 text-break">@_rates.Meta.Currency.En</dd>
+                <dt class="col-6">USD</dt>
+                <dd class="col-6 text-break">$ @_rates.USD</dd>
+                <dt class="col-6">XRP</dt>
+                <dd class="col-6 text-break">@_rates.XRP XRP</dd>
             </dl>
         }
     </div>
