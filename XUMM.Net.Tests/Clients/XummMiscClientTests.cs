@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -43,13 +44,13 @@ public class XummMiscClientTests
     [Test]
     public async Task WhenValidCredentialsAreProvided_ShouldReturnAppNameAsync()
     {
-        //Arrange
+        // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "pong");
 
-        //Act
+        // Act
         var result = await _xummMiscClient.PingAsync();
 
-        ////Assert
+        // Assert
         Assert.AreEqual(true, result.Pong);
         Assert.AreEqual(0, result.Auth.Application.Disabled);
         Assert.AreEqual("SomeApplication", result.Auth.Application.Name);
@@ -57,5 +58,49 @@ public class XummMiscClientTests
         Assert.AreEqual("https://webhook.site/00000000-0000-4e34-8112-c4391247a8ee",
             result.Auth.Application.WebhookUrl);
         Assert.AreEqual("2904b05f-5b37-4f3e-a624-940ad817943c", result.Auth.Call.Uuidv4);
+    }
+
+    [Test]
+    public async Task WhenCuratedAssetsAreRequested_ShouldReturnCuratedAssetsAsync()
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "curatedassets");
+
+        // Act
+        var result = await _xummMiscClient.GetCuratedAssetsAsync();
+
+        // Assert
+        CollectionAssert.AreEqual(new List<string>
+            {
+                "Bitstamp",
+                "Wietse"
+            },
+            result.Issuers);
+
+        CollectionAssert.AreEqual(new List<string>
+            {
+                "USD",
+                "BTC",
+                "ETH",
+                "WIE"
+            },
+            result.Currencies);
+
+        CollectionAssert.AreEqual(new List<string>
+            {
+                "WIE"
+            },
+            result.Details["Wietse"].Currencies.Keys);
+
+        CollectionAssert.DoesNotContain(result.Details["Wietse"].Currencies.Keys, "USD");
+
+        CollectionAssert.AreEqual(new List<string>
+            {
+                "USD",
+                "BTC"
+            },
+            result.Details["Bitstamp"].Currencies.Keys);
+
+        CollectionAssert.DoesNotContain(result.Details["Bitstamp"].Currencies.Keys, "WIE");
     }
 }
