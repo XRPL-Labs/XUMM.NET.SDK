@@ -7,7 +7,7 @@
     </div>
 </div>
 
-<div class="@NavMenuCssClass" @onclick="ToggleNavMenu">
+<div class="@NavMenuCssClass">
     <nav class="flex-column">
         <div class="nav-item px-3">
             <NavLink class="nav-link" href="" Match="NavLinkMatch.All">
@@ -73,6 +73,7 @@
     private void ToggleNavMenu()
     {
         _collapseNavMenu = !_collapseNavMenu;
+        _expandedSubNavMenu = null;
     }
 
     private void ToggleSubNavMenu(string subNavMenu)
@@ -85,6 +86,8 @@
         {
             _expandedSubNavMenu = null;
         }
+
+        _collapseNavMenu = false;
     }
 
     private bool IsSubNavMenuExpanded(string subNavMenu)
