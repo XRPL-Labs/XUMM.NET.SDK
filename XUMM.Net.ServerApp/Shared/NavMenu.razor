@@ -15,39 +15,50 @@
             </NavLink>
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" @onclick="() => _expandMiscSubNav = !_expandMiscSubNav">
-                <span class="oi oi-chevron-@(_expandMiscSubNav? "bottom": "right")" aria-hidden="true"></span> Misc
+            <NavLink class="nav-link" @onclick='(() => ToggleSubNavMenu("Misc"))'>
+                <span class="oi oi-chevron-@(IsSubNavMenuExpanded("Misc") ? "bottom": "right")" aria-hidden="true"></span> Misc
             </NavLink>
-            @if (_expandMiscSubNav)
+            @if (IsSubNavMenuExpanded("Misc"))
             {
-                <NavLink class="nav-link" href="/pingpong">
+                <NavLink class="nav-link ps-4" href="/pingpong">
                     <span class="oi oi-signal" aria-hidden="true"></span> Ping
                 </NavLink>
-                <NavLink class="nav-link" href="/curatedassets">
+                <NavLink class="nav-link ps-4" href="/curatedassets">
                     <span class="oi oi-check" aria-hidden="true"></span> Curated Assets
                 </NavLink>
-                <NavLink class="nav-link" href="/transaction">
+                <NavLink class="nav-link ps-4" href="/transaction">
                     <span class="oi oi-document" aria-hidden="true"></span> Transaction
                 </NavLink>
-                <NavLink class="nav-link" href="/kyc-status">
+                <NavLink class="nav-link ps-4" href="/kyc-status">
                     <span class="oi oi-person" aria-hidden="true"></span> KYC Status
                 </NavLink>
-                <NavLink class="nav-link" href="/rates">
+                <NavLink class="nav-link ps-4" href="/rates">
                     <span class="oi oi-bar-chart" aria-hidden="true"></span> Rates
                 </NavLink>
-                <NavLink class="nav-link" href="/avatar">
+                <NavLink class="nav-link ps-4" href="/avatar">
                     <span class="oi oi-image" aria-hidden="true"></span> Avatar
                 </NavLink>
             }
         </div>
         <div class="nav-item px-3">
-            <NavLink class="nav-link" @onclick="() => _expandPayloadSubNav = !_expandPayloadSubNav">
-                <span class="oi oi-chevron-@(_expandPayloadSubNav? "bottom": "right")" aria-hidden="true"></span> Payload
+            <NavLink class="nav-link" @onclick='(() => ToggleSubNavMenu("Storage"))'>
+                <span class="oi oi-chevron-@(IsSubNavMenuExpanded("Storage") ? "bottom": "right")" aria-hidden="true"></span> Storage
             </NavLink>
-            @if (_expandPayloadSubNav)
+            @if (IsSubNavMenuExpanded("Storage"))
             {
-                <NavLink class="nav-link" href="/signin">
-                    <span class="oi oi-account-login" aria-hidden="true"></span> SignIn
+                <NavLink class="nav-link ps-4" href="/storage">
+                    <span class="oi oi-box" aria-hidden="true"></span> Storage
+                </NavLink>
+            }
+        </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" @onclick='(() => ToggleSubNavMenu("Payload"))'>
+                <span class="oi oi-chevron-@(IsSubNavMenuExpanded("Payload") ? "bottom": "right")" aria-hidden="true"></span> Payload
+            </NavLink>
+            @if (IsSubNavMenuExpanded("Payload"))
+            {
+                <NavLink class="nav-link ps-4" href="/signin">
+                    <span class="oi oi-account-login" aria-hidden="true"></span> Sign In
                 </NavLink>
             }
         </div>
@@ -56,12 +67,28 @@
 
 @code {
     private bool _collapseNavMenu = true;
-    private bool _expandMiscSubNav;
-    private bool _expandPayloadSubNav;
+    private string? _expandedSubNavMenu;
     private string? NavMenuCssClass => _collapseNavMenu ? "collapse" : null;
 
     private void ToggleNavMenu()
     {
         _collapseNavMenu = !_collapseNavMenu;
+    }
+
+    private void ToggleSubNavMenu(string subNavMenu)
+    {
+        if (_expandedSubNavMenu != subNavMenu)
+        {
+            _expandedSubNavMenu = subNavMenu;
+        }
+        else
+        {
+            _expandedSubNavMenu = null;
+        }
+    }
+
+    private bool IsSubNavMenuExpanded(string subNavMenu)
+    {
+        return _expandedSubNavMenu == subNavMenu;
     }
 }
