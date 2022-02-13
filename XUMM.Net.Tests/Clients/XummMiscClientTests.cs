@@ -9,6 +9,7 @@ using NUnit.Framework;
 using XUMM.Net.Clients;
 using XUMM.Net.Configs;
 using XUMM.Net.Tests.Extensions;
+using XUMM.Net.Tests.Fixtures;
 
 namespace XUMM.Net.Tests.Clients;
 
@@ -42,7 +43,7 @@ public class XummMiscClientTests
     private Mock<IHttpClientFactory> _httpClientFactory = default!;
 
     [Test]
-    public async Task WhenValidCredentialsAreProvided_ShouldReturnAppNameAsync()
+    public async Task WhenPingIsRequested_ShouldReturnPongAsync()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "pong");
@@ -51,13 +52,7 @@ public class XummMiscClientTests
         var result = await _xummMiscClient.PingAsync();
 
         // Assert
-        Assert.AreEqual(true, result.Pong);
-        Assert.AreEqual(0, result.Auth.Application.Disabled);
-        Assert.AreEqual("SomeApplication", result.Auth.Application.Name);
-        Assert.AreEqual("00000000-0000-4839-af2f-f794874a80b0", result.Auth.Application.Uuidv4);
-        Assert.AreEqual("https://webhook.site/00000000-0000-4e34-8112-c4391247a8ee",
-            result.Auth.Application.WebhookUrl);
-        Assert.AreEqual("2904b05f-5b37-4f3e-a624-940ad817943c", result.Auth.Call.Uuidv4);
+        AssertExtensions.AreEqual(MiscFixtures.XummPong, result);
     }
 
     [Test]
