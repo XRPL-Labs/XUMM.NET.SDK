@@ -25,7 +25,9 @@
             <input id="accountaddress" type="text" class="form-control" placeholder="Account address" aria-label="Account Address" aria-describedby="basic-addon2" @bind="_account">
             <small id="accountaddressHelp" class="form-text text-muted">eg. @ExampleAccount</small>
         </div>
-        <button class="btn btn-primary" type="button" @onclick="GetAvatarUrl">Get Avatar</button>
+        <div class="btn-group" role="group">
+            <button class="btn btn-primary" type="button" @onclick="GetAvatarUrl">Get Avatar</button>
+        </div>
     </div>
     <div class="col text-center">
         @if (_avatarUrl != null)

@@ -12,30 +12,38 @@
 
 @if (_details != null)
 {
-    <table class="table">
-        <thead>
-            <tr>
-                <th scope="col">Id</th>
-                <th scope="col">Name</th>
-                <th scope="col">Currencies</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var assetDetails in _details.OrderBy(x => x.Name))
-            {
-                <tr>
-                    <th scope="row">@assetDetails.Id</th>
-                    <td>@assetDetails.Name</td>
-                    <td>@string.Join(", ", assetDetails.Currencies.Select(x=>x.Key).OrderBy(x=>x))</td>
-                </tr>
-            }
-        </tbody>
-    </table>
+    <div class="row">
+        <div class="mb-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Currencies</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var assetDetails in _details.OrderBy(x => x.Name))
+                    {
+                        <tr>
+                            <th scope="row">@assetDetails.Id</th>
+                            <td>@assetDetails.Name</td>
+                            <td>@string.Join(", ", assetDetails.Currencies.Select(x=>x.Key).OrderBy(x=>x))</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
 }
 else
 {
-    <div class="btn-group" role="group">
-        <button class="btn btn-primary" @onclick="GetCuratedAssetsAsync">Get Curated Assets</button>
+    <div class="row">
+        <div class="mb-3">
+            <div class="btn-group" role="group">
+                <button class="btn btn-primary" @onclick="GetCuratedAssetsAsync">Get Curated Assets</button>
+            </div>
+        </div>
     </div>
 }
 

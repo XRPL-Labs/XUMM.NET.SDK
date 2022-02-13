@@ -18,7 +18,9 @@
             <input id="usertokenoraccount" type="text" class="form-control" placeholder="User Token or Account address" aria-label="User token or account" aria-describedby="basic-addon2" @bind="_userTokenOrAccount">
             <small id="usertokenoraccounthelp" class="form-text text-muted">eg. @ExampleAccount</small>
         </div>
-        <button class="btn btn-primary" type="button" @onclick="GetKycStatusAsync">Fetch KYC Status</button>
+        <div class="btn-group" role="group">
+            <button class="btn btn-primary" type="button" @onclick="GetKycStatusAsync">Fetch KYC Status</button>
+        </div>
     </div>
     <div class="col">
         @if (_kycStatus != null)
@@ -49,6 +51,6 @@
 
         _kycStatus = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetKycStatusAsync(_userTokenOrAccount));
         _userTokenOrAccountType = _userTokenOrAccount.IsAccountAddress() ? "Account" : "User token";
-        _responseAlertBox.SetAlert("KYC Status",  _kycStatus != null);
+        _responseAlertBox.SetAlert("KYC Status", _kycStatus != null);
     }
 }

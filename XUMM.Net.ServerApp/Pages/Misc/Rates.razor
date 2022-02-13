@@ -17,7 +17,9 @@
             <input id="currency" class="form-control" placeholder="The 3 alpha char currency code" aria-label="Currency" aria-describedby="basic-addon2" @bind="_currency">
             <small id="currencyhelp" class="form-text text-muted">eg. INR</small>
         </div>
-        <button class="btn btn-primary" type="button" @onclick="GetRatesAsync">Fetch Rates</button>
+        <div class="btn-group" role="group">
+            <button class="btn btn-primary" type="button" @onclick="GetRatesAsync">Fetch Rates</button>
+        </div>
     </div>
     <div class="col">
         @if (_rates != null)
