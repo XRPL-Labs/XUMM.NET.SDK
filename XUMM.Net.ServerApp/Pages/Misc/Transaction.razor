@@ -1,6 +1,8 @@
 ﻿@page "/transaction"
 @using XUMM.Net.Clients.Interfaces
 @using XUMM.Net.Models.Misc
+@using System.Text.Json
+@using XUMM.Net.Extensions
 
 @inject IXummMiscClient _miscClient
 
@@ -24,13 +26,9 @@
     <div class="row">
         <div class="mb-3">
             <h2>Transaction details</h2>
-            <dl class="row">
-                @foreach (var transactionDetails in _transaction.Transaction.OrderBy(x => x.Key))
-                {
-                    <dt class="col-sm-2">@transactionDetails.Key</dt>
-                    <dd class="col-sm-10 text-break">@transactionDetails.Value</dd>
-                }
-            </dl>
+            <div class="text-break">
+                <code>@_transaction.Transaction.ToJsonString()</code>
+            </div>
         </div>
     </div>
 }
