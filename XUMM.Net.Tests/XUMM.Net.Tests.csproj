@@ -10,16 +10,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Content Include="Fixtures\curatedassets.json">
+    <Content Include="Data\curatedassets.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Fixtures\kycstatus.json">
+    <Content Include="Data\kycstatus.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Fixtures\pong.json">
+    <Content Include="Data\pong.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Fixtures\xrpltx.json">
+    <Content Include="Data\xrpltx.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
   </ItemGroup>

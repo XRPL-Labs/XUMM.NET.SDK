@@ -21,7 +21,7 @@ internal static class HttpMessageHandlerExtensions
             throw new DirectoryNotFoundException("Can't get the directory name of the executing assembly.");
         }
 
-        var fixtureFile = Path.Combine(directoryName, "Fixtures", $"{fixture}.json");
+        var fixtureFile = Path.Combine(directoryName, "Data", $"{fixture}.json");
         var content = File.ReadAllText(fixtureFile);
 
         httpMessageHandler
