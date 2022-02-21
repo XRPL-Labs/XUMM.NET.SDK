@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Text.Json;
 using XUMM.Net.Models.Misc;
 
 namespace XUMM.Net.Tests.Fixtures;
@@ -104,5 +105,40 @@ internal static class MiscFixtures
                 }
             }
         }
+    };
+
+    public static XummTransaction XummTransaction => new()
+    {
+        Txid = "A17E4DEAD62BF705D9B73B4EAD2832F1C55C6C5A0067327A45E497FD8D31C0E3",
+        BalanceChanges = new Dictionary<string, List<XummTransactionBalanceChanges>>
+        {
+            {
+                "r4bA4uZgXadPMzURqGLCvCmD48FmXJWHCG", new List<XummTransactionBalanceChanges>
+                {
+                    new()
+                    {
+                        CounterParty = string.Empty,
+                        Currency = "XRP",
+                        Value = "-1.000012"
+                    }
+                }
+            },
+            {
+                "rPdvC6ccq8hCdPKSPJkPmyZ4Mi1oG2FFkT", new List<XummTransactionBalanceChanges>
+                {
+                    new()
+                    {
+                        CounterParty = string.Empty,
+                        Currency = "XRP",
+                        Value = "1"
+                    }
+                }
+            }
+        },
+        Node = "wss://xrplcluster.com",
+        Transaction = JsonDocument.Parse(
+            "{\"Account\":\"r4bA4uZgXadPMzURqGLCvCmD48FmXJWHCG\",\"Amount\":\"1000000\",\"Destination\":\"rPdvC6ccq8hCdPKSPJkPmyZ4Mi1oG2FFkT\"," +
+            "\"Fee\":\"12\",\"Flags\":2147483648,\"Sequence\":58549314,\"SigningPubKey\":\"0260F06C0590C470E7E7FA9DE3D9E85B1825E19196D8893DD84431F6E9491739AC\"," +
+            "\"TransactionType\":\"Payment\",\"meta\":{\"TransactionIndex\":0,\"TransactionResult\":\"tesSUCCESS\",\"delivered_amount\":\"1000000\"},\"validated\":true}")
     };
 }
