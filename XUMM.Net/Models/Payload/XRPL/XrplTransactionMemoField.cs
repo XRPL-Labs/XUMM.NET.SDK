@@ -14,4 +14,3 @@ namespace XUMM.Net.Models.Payload.XRPL
         public string MemoType { get; set; } = default!;
     }
 }
-    
