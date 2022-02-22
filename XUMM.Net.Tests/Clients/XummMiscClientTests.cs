@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -119,5 +120,49 @@ public class XummMiscClientTests
 
         // Assert
         AssertExtensions.AreEqual(MiscFixtures.XummTransaction, result);
+    }
+
+    [Test]
+    [TestCase(50)]
+    [TestCase(100)]
+    [TestCase(199)]
+    public void WhenInvalidAvatarDimensionsAreProvided_ShouldThrowException(int dimensions)
+    {
+        // Assert
+        var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
+        {
+            _xummMiscClient.GetAvatarUrl(It.IsAny<string>(), dimensions, It.IsAny<int>());
+        });
+
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("The minimum (square) dimensions are 200. (Parameter 'dimensions')"));
+    }
+
+    [Test]
+    [TestCase(-50)]
+    [TestCase(-1)]
+    public void WhenInvalidAvatarPaddingIsProvided_ShouldThrowException(int padding)
+    {
+        // Assert
+        var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
+        {
+            _xummMiscClient.GetAvatarUrl(It.IsAny<string>(), 200, padding);
+        });
+
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("The padding should be equal or greater than zero. (Parameter 'padding')"));
+    }
+
+    [Test]
+    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 200, 5, "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_200_5.png")]
+    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 250, 0, "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_250_0.png")]
+    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 500, 2, "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_500_2.png")]
+    public void WhenValidAvatarDetailsAreProvided_ShouldReturnTheAvatarUrl(string account, int dimensions, int padding, string expected)
+    {
+        // Act
+        var result = _xummMiscClient.GetAvatarUrl(account, dimensions, padding);
+
+        // Assert
+        AssertExtensions.AreEqual(expected, result);
     }
 }

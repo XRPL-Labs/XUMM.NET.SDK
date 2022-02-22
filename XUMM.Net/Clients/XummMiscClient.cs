@@ -70,8 +70,7 @@ public class XummMiscClient : IXummMiscClient
     {
         if (dimensions < MinimumAvatarDimensions)
         {
-            throw new ArgumentOutOfRangeException(nameof(dimensions),
-                $"The minimum (square) dimensions are {MinimumAvatarDimensions}.");
+            throw new ArgumentOutOfRangeException(nameof(dimensions), $"The minimum (square) dimensions are {MinimumAvatarDimensions}.");
         }
 
         if (padding < 0)
