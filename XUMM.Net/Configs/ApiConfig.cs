@@ -5,8 +5,8 @@ namespace XUMM.Net.Configs;
 
 public class ApiConfig
 {
-    internal static readonly string DefaultRestClientAddress = "https://xumm.app/api/v1";
-    internal static readonly string DefaultSectionKey = "Xumm";
+    internal const string DefaultRestClientAddress = "https://xumm.app/api/v1";
+    internal const string DefaultSectionKey = "Xumm";
 
     private string _apiKey = default!;
     private string _apiSecret = default!;
