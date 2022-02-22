@@ -41,8 +41,7 @@ public class XummMiscClient : IXummMiscClient
     {
         if (userTokenOrAccount.IsAccountAddress())
         {
-            var kycInfo =
-                await _httpClient.GetAsync<XummKycInfo>($"kyc-status/{userTokenOrAccount}", true);
+            var kycInfo = await _httpClient.GetAsync<XummKycInfo>($"kyc-status/{userTokenOrAccount}", true);
             return kycInfo.KycApproved ? XummKycStatus.Successful : XummKycStatus.None;
         }
 
@@ -52,6 +51,7 @@ public class XummMiscClient : IXummMiscClient
             {
                 UserToken = userTokenOrAccount
             };
+
             var kycInfo = await _httpClient.PostAsync<XummKycStatusInfo>("kyc-status", request);
             return EnumHelper.GetValueFromName<XummKycStatus>(kycInfo.KycStatus);
         }

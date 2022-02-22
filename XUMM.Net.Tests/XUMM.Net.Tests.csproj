@@ -13,7 +13,10 @@
     <Content Include="Data\curatedassets.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-    <Content Include="Data\kycstatus.json">
+    <Content Include="Data\kycstatus-account.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\kycstatus-usertoken.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\pong.json">

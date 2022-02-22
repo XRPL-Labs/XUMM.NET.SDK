@@ -73,13 +73,39 @@ public class XummMiscClientTests
     public async Task WhenKycStatusIsRequestedWithUserToken_ShouldReturnInProgressKycStatusAsync(string userToken)
     {
         // Arrange
-        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "kycstatus");
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "kycstatus-usertoken");
 
         // Act
         var result = await _xummMiscClient.GetKycStatusAsync(userToken);
 
         // Assert
         AssertExtensions.AreEqual(XummKycStatus.InProgress, result);
+    }
+
+    [Test]
+    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB")]
+    public async Task WhenKycStatusIsRequestedWithAccount_ShouldReturnInProgressKycStatusAsync(string account)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "kycstatus-account");
+
+        // Act
+        var result = await _xummMiscClient.GetKycStatusAsync(account);
+
+        // Assert
+        AssertExtensions.AreEqual(XummKycStatus.Successful, result);
+    }
+
+    [Test]
+    [TestCase("2557f69c661740dc9d1ea34487cb3f90")]
+    [TestCase("qrDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB")]
+    public async Task WhenKycStatusIsRequestedWithInvalidUserTokenAndAccount_ShouldReturnNoneKycStatusAsync(string userTokenOrAccount)
+    {
+        // Act
+        var result = await _xummMiscClient.GetKycStatusAsync(userTokenOrAccount);
+
+        // Assert
+        AssertExtensions.AreEqual(XummKycStatus.None, result);
     }
 
     [Test]
