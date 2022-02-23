@@ -13,6 +13,9 @@ namespace XUMM.Net.Tests.Clients;
 [TestFixture]
 public class XummHttpClientTests
 {
+    private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
+    private Mock<IHttpClientFactory> _httpClientFactory = default!;
+
     [SetUp]
     public void SetUp()
     {
@@ -21,9 +24,6 @@ public class XummHttpClientTests
         _httpClientFactory.Setup(_ => _.CreateClient(It.IsAny<string>()))
             .Returns(new HttpClient(_httpMessageHandlerMock.Object));
     }
-
-    private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
-    private Mock<IHttpClientFactory> _httpClientFactory = default!;
 
     [Test]
     [TestCase("f6c4a1c7-d00b-4592-9eb9-f6e90ee836a0", "430ab92a-ccf8-4e8f-bd88-e65e1033acc3")]

@@ -17,6 +17,11 @@ namespace XUMM.Net.Tests.Clients;
 [TestFixture]
 public class XummMiscClientTests
 {
+    private XummHttpClient _xummHttpClient = default!;
+    private XummMiscClient _xummMiscClient = default!;
+    private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
+    private Mock<IHttpClientFactory> _httpClientFactory = default!;
+
     [SetUp]
     public void SetUp()
     {
@@ -37,11 +42,6 @@ public class XummMiscClientTests
 
         _xummMiscClient = new XummMiscClient(_xummHttpClient);
     }
-
-    private XummHttpClient _xummHttpClient = default!;
-    private XummMiscClient _xummMiscClient = default!;
-    private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
-    private Mock<IHttpClientFactory> _httpClientFactory = default!;
 
     [Test]
     public async Task WhenPingIsRequested_ShouldReturnPongAsync()

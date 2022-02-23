@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace XUMM.Net.Models.Misc.AppStorage
 {
@@ -8,6 +9,6 @@ namespace XUMM.Net.Models.Misc.AppStorage
         public XummStorageApplication Application { get; set; } = default!;
 
         [JsonPropertyName("data")]
-        public object? Data { get; set; }
+        public JsonDocument? Data { get; set; }
     }
 }

@@ -10,7 +10,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Data\storage-delete.json" />
+    <None Remove="Data\storage-get.json" />
+    <None Remove="Data\storage-set.json" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Content Include="Data\curatedassets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\storage-delete.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\storage-set.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\storage-get.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\kycstatus-account.json">

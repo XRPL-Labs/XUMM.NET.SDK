@@ -16,5 +16,5 @@ public class XummTransaction
     public string Node { get; set; } = default!;
 
     [JsonPropertyName("transaction")]
-    public JsonDocument Transaction { get; set; } = default!;
+    public JsonDocument? Transaction { get; set; }
 }

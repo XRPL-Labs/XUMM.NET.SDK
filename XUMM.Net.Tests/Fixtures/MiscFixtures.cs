@@ -6,7 +6,7 @@ namespace XUMM.Net.Tests.Fixtures;
 
 internal static class MiscFixtures
 {
-    public static XummPong XummPong => new()
+    internal static XummPong XummPong => new()
     {
         Pong = true,
         Auth = new XummAuth
@@ -26,7 +26,7 @@ internal static class MiscFixtures
         }
     };
 
-    public static XummCuratedAssets XummCuratedAssets => new()
+    internal static XummCuratedAssets XummCuratedAssets => new()
     {
         Issuers = new List<string>
         {
@@ -107,7 +107,7 @@ internal static class MiscFixtures
         }
     };
 
-    public static XummTransaction XummTransaction => new()
+    internal static XummTransaction XummTransaction => new()
     {
         Txid = "A17E4DEAD62BF705D9B73B4EAD2832F1C55C6C5A0067327A45E497FD8D31C0E3",
         BalanceChanges = new Dictionary<string, List<XummTransactionBalanceChanges>>
