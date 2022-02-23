@@ -60,7 +60,7 @@ public class XummMiscClientTests
     public async Task WhenCuratedAssetsAreRequested_ShouldReturnCuratedAssetsAsync()
     {
         // Arrange
-        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "curatedassets");
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "curated-assets");
 
         // Act
         var result = await _xummMiscClient.GetCuratedAssetsAsync();

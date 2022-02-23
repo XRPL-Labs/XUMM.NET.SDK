@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Net.Http;
 using System.Net.Http.Headers;
-using System.Net.Http.Json;
 using System.Text;
 using System.Text.Json;
 using System.Text.Json.Serialization;
@@ -90,12 +89,14 @@ public class XummHttpClient : IXummHttpClient
             }
 
             using var response = await client.SendAsync(requestMessage);
+            var responseText = await response.Content.ReadAsStringAsync();
+
             if (!response.IsSuccessStatusCode)
             {
-                throw await GetHttpRequestExceptionAsync(response);
+                throw GetHttpRequestException(response, responseText);
             }
 
-            var result = (T?)await response.Content.ReadFromJsonAsync(typeof(T));
+            var result = JsonSerializer.Deserialize<T>(responseText);
             if (result == null)
             {
                 throw new Exception($"Unexpected response for {endpoint} response.");
@@ -110,31 +111,41 @@ public class XummHttpClient : IXummHttpClient
         }
     }
 
-    private async Task<HttpRequestException> GetHttpRequestExceptionAsync(HttpResponseMessage response)
+    private HttpRequestException GetHttpRequestException(HttpResponseMessage response, string responseText)
     {
         HttpRequestException? exception = null;
+
         try
         {
-            if (await response.Content.ReadFromJsonAsync(typeof(XummFatalApiError)) is XummFatalApiError fatalApiError)
+            var fatalApiError = JsonSerializer.Deserialize<XummFatalApiError>(responseText);
+            if (fatalApiError != null)
             {
                 if (!string.IsNullOrWhiteSpace(fatalApiError.Message))
                 {
                     exception = new HttpRequestException(fatalApiError.Message, null, response.StatusCode);
                 }
             }
+        }
+        catch (Exception ex)
+        {
+            _logger.LogTrace(ex, $"No {nameof(XummFatalApiError)} available in unsuccessful response body of request: {response.RequestMessage?.RequestUri}");
+        }
 
-            if (exception == null &&
-                await response.Content.ReadFromJsonAsync(typeof(XummApiError)) is XummApiError apiError)
+        try
+        {
+            if (exception == null)
             {
-                exception = new HttpRequestException(
-                    $"Error code: '{apiError.Error.Code}' with message: '{apiError.Error.Message}', see XUMM Dev Console, reference: '{apiError.Error.Reference}'.",
-                    null, response.StatusCode);
+                var apiError = JsonSerializer.Deserialize<XummApiError>(responseText);
+                if (apiError != null)
+                {
+                    exception = new HttpRequestException(
+                        $"Error code {apiError.Error.Code}, see XUMM Dev Console, reference: '{apiError.Error.Reference}'.", null, response.StatusCode);
+                }
             }
         }
         catch (Exception ex)
         {
-            _logger.LogTrace(ex,
-                $"No {nameof(XummFatalApiError)} available in unsuccessful response body of request: {response.RequestMessage?.RequestUri}");
+            _logger.LogTrace(ex, $"No {nameof(XummApiError)} available in unsuccessful response body of request: {response.RequestMessage?.RequestUri}");
         }
 
         return exception ??= new HttpRequestException(response.ReasonPhrase, null, response.StatusCode);

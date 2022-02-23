@@ -1,4 +1,4 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
@@ -10,13 +10,10 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Data\storage-delete.json" />
-    <None Remove="Data\storage-get.json" />
-    <None Remove="Data\storage-set.json" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Data\curatedassets.json">
+    <Content Include="Data\curated-assets.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\invalid-credentials.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\storage-delete.json">

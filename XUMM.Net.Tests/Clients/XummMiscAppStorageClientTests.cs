@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -78,5 +79,53 @@ public class XummMiscAppStorageClientTests
 
         // Assert
         AssertExtensions.AreEqual(MiscAppStorageFixtures.XummStorageDelete, result);
+    }
+    
+    [Test]
+    public void WhenAppStorageIsRequestedAndInvalidCredentialsAreProvided_ShouldThrowException()
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.Forbidden, "invalid-credentials");
+
+        // Act & Assert
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () =>
+        {
+            var result = await _xummMiscAppStorageClient.GetAsync();
+        });
+
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Error code 813, see XUMM Dev Console, reference: '26279bfe-c7e1-4b12-a680-26119d8f5062'."));
+    }
+
+    [Test]
+    public void WhenAppStorageIsStoredAndInvalidCredentialsAreProvided_ShouldReturnAppStorageStoreAsync()
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.Forbidden, "invalid-credentials");
+
+        // Act & Assert
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () =>
+        {
+            var result = await _xummMiscAppStorageClient.StoreAsync(It.IsAny<string>());
+        });
+
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Error code 813, see XUMM Dev Console, reference: '26279bfe-c7e1-4b12-a680-26119d8f5062'."));
+    }
+
+    [Test]
+    public void WhenAppStorageIsClearedAndInvalidCredentialsAreProvided_ShouldReturnAppStorageStoreWithoutDataAsync()
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.Forbidden, "invalid-credentials");
+
+        // Act & Assert
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () =>
+        {
+            var result = await _xummMiscAppStorageClient.ClearAsync();
+        });
+
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Error code 813, see XUMM Dev Console, reference: '26279bfe-c7e1-4b12-a680-26119d8f5062'."));
     }
 }
