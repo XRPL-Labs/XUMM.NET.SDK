@@ -11,18 +11,10 @@ namespace XUMM.Net.Tests.Extensions;
 
 internal static class HttpMessageHandlerExtensions
 {
-    internal static void SetFixtureMessage(this Mock<HttpMessageHandler> httpMessageHandler,
-        HttpStatusCode statusCode,
-        string fixture)
+    internal static void SetFixtureMessage(this Mock<HttpMessageHandler> httpMessageHandler, HttpStatusCode statusCode, string fixture)
     {
         var directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
-        if (directoryName == null)
-        {
-            throw new DirectoryNotFoundException("Can't get the directory name of the executing assembly.");
-        }
-
-        var fixtureFile = Path.Combine(directoryName, "Data", $"{fixture}.json");
-        var content = File.ReadAllText(fixtureFile);
+        var fixtureFile = Path.Combine(directoryName!, "Data", $"{fixture}.json");
 
         httpMessageHandler
             .Protected()
@@ -33,7 +25,7 @@ internal static class HttpMessageHandlerExtensions
             .ReturnsAsync(new HttpResponseMessage
             {
                 StatusCode = statusCode,
-                Content = new StringContent(content)
+                Content = new StringContent(File.ReadAllText(fixtureFile))
             })
             .Verifiable();
     }

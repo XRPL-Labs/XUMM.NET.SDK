@@ -128,12 +128,10 @@ public class XummMiscClientTests
     [TestCase(199)]
     public void WhenInvalidAvatarDimensionsAreProvided_ShouldThrowException(int dimensions)
     {
-        // Assert
-        var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
-        {
-            _xummMiscClient.GetAvatarUrl(It.IsAny<string>(), dimensions, It.IsAny<int>());
-        });
+        // Act
+        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _xummMiscClient.GetAvatarUrl(It.IsAny<string>(), dimensions, It.IsAny<int>()));
 
+        // Assert
         Assert.IsNotNull(ex);
         Assert.That(ex!.Message, Is.EqualTo("The minimum (square) dimensions are 200. (Parameter 'dimensions')"));
     }
@@ -143,12 +141,10 @@ public class XummMiscClientTests
     [TestCase(-1)]
     public void WhenInvalidAvatarPaddingIsProvided_ShouldThrowException(int padding)
     {
-        // Assert
-        var ex = Assert.Throws<ArgumentOutOfRangeException>(() =>
-        {
-            _xummMiscClient.GetAvatarUrl(It.IsAny<string>(), 200, padding);
-        });
+        // Act
+        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _xummMiscClient.GetAvatarUrl(It.IsAny<string>(), 200, padding));
 
+        // Asert
         Assert.IsNotNull(ex);
         Assert.That(ex!.Message, Is.EqualTo("The padding should be equal or greater than zero. (Parameter 'padding')"));
     }
