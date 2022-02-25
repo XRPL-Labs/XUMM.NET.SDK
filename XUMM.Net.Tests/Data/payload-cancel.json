@@ -1,0 +1,31 @@
+﻿{
+  "result": {
+    "cancelled": true,
+    "reason": "OK"
+  },
+  "meta": {
+    "exists": true,
+    "uuid": "00000000-0000-4839-af2f-f794874a80b0",
+    "multisign": false,
+    "submit": false,
+    "destination": "",
+    "resolved_destination": "",
+    "resolved": false,
+    "signed": false,
+    "cancelled": false,
+    "expired": true,
+    "pushed": false,
+    "app_opened": false,
+    "opened_by_deeplink": false,
+    "return_url_app": "https://xumm.dev/beta/test?payloadId=00000000-0000-4839-af2f-f794874a80b0&customIdent=&txid=&hex=",
+    "return_url_web": "https://xumm.dev/beta/test?payloadId=00000000-0000-4839-af2f-f794874a80b0&customIdent=&txid=&hex=",
+    "is_xapp": false
+  },
+  "custom_meta": {
+    "identifier": null,
+    "blob": {
+      "location": "Amersfoort"
+    },
+    "instruction": null
+  }
+}

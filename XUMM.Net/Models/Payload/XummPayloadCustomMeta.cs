@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace XUMM.Net.Models.Payload
 {
@@ -14,7 +15,7 @@ namespace XUMM.Net.Models.Payload
         /// A custom JSON object containing metadata, attached to this specific payload (stringified max 1500 positions)
         /// </summary>
         [JsonPropertyName("blob")]
-        public string? Blob { get; set; }
+        public JsonDocument? Blob { get; set; }
 
         /// <summary>
         /// A message (instruction, reason for signing) to display to the XUMM (signing) user (max 280 positions)
