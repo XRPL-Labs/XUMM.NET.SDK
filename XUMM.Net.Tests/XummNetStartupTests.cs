@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Configuration;
+﻿using System;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
@@ -19,8 +20,9 @@ namespace XUMM.Net.Tests
         {
             _serviceCollectionMock = new Mock<IServiceCollection>();
 
-            // TODO: Add unit test to test invalid appsettings values because no exception will be thrown when invalid or no ApiKey/ApiSecret are provided
-            var apiConfig = "{\"RestClientAddress\":\"https://xumm.asdfapp/api/v1\",\"ApiKey\":\"00000000-0000-0000-000-000000000000\",\"ApiSecret\":\"00000000-0000-0000-000-000000000000\"}";
+            // TODO: Add unit test to test invalid appsettings values because no exception will be thrown when invalid or no ApiKey/ApiSecret are set
+            //       The setter is being called after the first use of the ApiConfig.
+            var apiConfig = "{\"RestClientAddress\":\"https://xumm.app/api/v1\",\"ApiKey\":\"00000000-0000-0000-000-000000000000\",\"ApiSecret\":\"00000000-0000-0000-000-000000000000\"}";
             _configurationSectionMock = new Mock<IConfigurationSection>();
             _configurationSectionMock.Setup(x => x.Value).Returns(apiConfig);
 
@@ -29,47 +31,58 @@ namespace XUMM.Net.Tests
         }
 
         [Test]
-        public void WhenXummNetIsAdded_ShouldAddXummMiscAppStorageClient()
+        public void WhenXummNetIsAddedWithDefaultConfigurationSection_ShouldAddXummClients()
         {
+            // Arrange 
+            _configurationMock.Setup(x => x.GetSection(It.Is<string>(k => k == "Xumm"))).Returns(_configurationSectionMock.Object);
+
             // Act
             _serviceCollectionMock.Object.AddXummNet(_configurationMock.Object);
 
             // Assert
             _serviceCollectionMock.Verify(sc => sc.Add(
-              It.Is<ServiceDescriptor>(x => x.Is<IXummMiscAppStorageClient, XummMiscAppStorageClient>(ServiceLifetime.Singleton))));
+                It.Is<ServiceDescriptor>(x => x.Is<IXummMiscAppStorageClient, XummMiscAppStorageClient>(ServiceLifetime.Singleton))));
+            _serviceCollectionMock.Verify(sc => sc.Add(
+                It.Is<ServiceDescriptor>(x => x.Is<IXummMiscClient, XummMiscClient>(ServiceLifetime.Singleton))));
+            _serviceCollectionMock.Verify(sc => sc.Add(
+                It.Is<ServiceDescriptor>(x => x.Is<IXummPayloadClient, XummPayloadClient>(ServiceLifetime.Singleton))));
+            _serviceCollectionMock.Verify(sc => sc.Add(
+                It.Is<ServiceDescriptor>(x => x.Is<IXummHttpClient, XummHttpClient>(ServiceLifetime.Singleton))));
         }
 
         [Test]
-        public void WhenXummNetIsAdded_ShouldAddXummMiscClient()
+        public void WhenXummNetIsAddedWithManualConfiguration_ShouldAddXummClients()
         {
             // Act
-            _serviceCollectionMock.Object.AddXummNet(_configurationMock.Object);
+            _serviceCollectionMock.Object.AddXummNet(o =>
+            {
+                o.ApiKey = "00000000-0000-0000-000-000000000000";
+                o.ApiSecret = "00000000-0000-0000-000-000000000000";
+            });
 
             // Assert
             _serviceCollectionMock.Verify(sc => sc.Add(
-              It.Is<ServiceDescriptor>(x => x.Is<IXummMiscClient, XummMiscClient>(ServiceLifetime.Singleton))));
+               It.Is<ServiceDescriptor>(x => x.Is<IXummMiscAppStorageClient, XummMiscAppStorageClient>(ServiceLifetime.Singleton))));
+            _serviceCollectionMock.Verify(sc => sc.Add(
+                It.Is<ServiceDescriptor>(x => x.Is<IXummMiscClient, XummMiscClient>(ServiceLifetime.Singleton))));
+            _serviceCollectionMock.Verify(sc => sc.Add(
+                It.Is<ServiceDescriptor>(x => x.Is<IXummPayloadClient, XummPayloadClient>(ServiceLifetime.Singleton))));
+            _serviceCollectionMock.Verify(sc => sc.Add(
+                It.Is<ServiceDescriptor>(x => x.Is<IXummHttpClient, XummHttpClient>(ServiceLifetime.Singleton))));
         }
 
         [Test]
-        public void WhenXummNetIsAdded_ShouldAddXummPayloadClient()
+        public void WhenXummNetIsAddedWithoutSectionFound_ShouldThrowException()
         {
+            // Arrange 
+            _configurationMock.Setup(x => x.GetSection(It.Is<string>(k => k == "Xumm"))).Returns((IConfigurationSection)null);
+
             // Act
-            _serviceCollectionMock.Object.AddXummNet(_configurationMock.Object);
+            var ex = Assert.Throws<Exception>(() => _serviceCollectionMock.Object.AddXummNet(_configurationMock.Object));
 
             // Assert
-            _serviceCollectionMock.Verify(sc => sc.Add(
-              It.Is<ServiceDescriptor>(x => x.Is<IXummPayloadClient, XummPayloadClient>(ServiceLifetime.Singleton))));
-        }
-
-        [Test]
-        public void WhenXummNetIsAdded_ShouldAddXummHttpClient()
-        {
-            // Act
-            _serviceCollectionMock.Object.AddXummNet(_configurationMock.Object);
-
-            // Assert
-            _serviceCollectionMock.Verify(sc => sc.Add(
-              It.Is<ServiceDescriptor>(x => x.Is<IXummHttpClient, XummHttpClient>(ServiceLifetime.Singleton))));
+            Assert.IsNotNull(ex);
+            Assert.That(ex!.Message, Is.EqualTo("Failed to find configuration section with key 'Xumm'"));
         }
     }
 }
