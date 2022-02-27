@@ -25,6 +25,20 @@ public interface IXummPayloadClient
     /// <summary>
     /// Cancel a payload, so a user cannot open it anymore
     /// </summary>
+    /// <param name="payloadResponse">The <see cref="XummPayloadResponse" /> return value of <see cref="CreateAsync" />.</param>
+    /// <param name="throwError">Throws an exception if an error occurred; otherwise errors are ignored..</param>
+    Task<XummDeletePayload?> CancelAsync(XummPayloadResponse payloadResponse, bool throwError = false);
+
+    /// <summary>
+    /// Cancel a payload, so a user cannot open it anymore
+    /// </summary>
+    /// <param name="payloadDetails">The <see cref="XummPayloadDetails" /> return value of <see cref="GetAsync" />.</param>
+    /// <param name="throwError">Throws an exception if an error occurred; otherwise errors are ignored..</param>
+    Task<XummDeletePayload?> CancelAsync(XummPayloadDetails payloadDetails, bool throwError = false);
+
+    /// <summary>
+    /// Cancel a payload, so a user cannot open it anymore
+    /// </summary>
     /// <param name="payloadUuid">Payload UUID as received from the Payload POST endpoint.</param>
     /// <param name="throwError">Throws an exception if an error occurred; otherwise errors are ignored..</param>
     Task<XummDeletePayload?> CancelAsync(string payloadUuid, bool throwError = false);

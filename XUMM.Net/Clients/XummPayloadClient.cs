@@ -59,6 +59,18 @@ public class XummPayloadClient : IXummPayloadClient
     }
 
     /// <inheritdoc />
+    public async Task<XummDeletePayload?> CancelAsync(XummPayloadResponse payloadResponse, bool throwError = false)
+    {
+        return await CancelAsync(payloadResponse.Uuid, throwError);
+    }
+
+    /// <inheritdoc />
+    public async Task<XummDeletePayload?> CancelAsync(XummPayloadDetails payloadDetails, bool throwError = false)
+    {
+        return await CancelAsync(payloadDetails.Meta.Uuid, throwError);
+    }
+
+    /// <inheritdoc />
     public async Task<XummDeletePayload?> CancelAsync(string payloadUuid, bool throwError = false)
     {
         try
