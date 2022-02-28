@@ -27,43 +27,38 @@ public class XummPayloadClient : IXummPayloadClient
     /// <inheritdoc />
     public async Task<XummPayloadResponse?> CreateAsync(XummPostJsonPayload payload, bool throwError = false)
     {
-        try
-        {
-            return await _httpClient.PostAsync<XummPayloadResponse>("payload", payload);
-        }
-        catch
-        {
-            if (!throwError)
-            {
-                return default;
-            }
-
-            throw;
-        }
+        return await CreatePayloadAsync(payload, throwError);
     }
+
     /// <inheritdoc />
     public async Task<XummPayloadResponse?> CreateAsync(XummPostBlobPayload payload, bool throwError = false)
     {
-        try
-        {
-            return await _httpClient.PostAsync<XummPayloadResponse>("payload", payload);
-        }
-        catch
-        {
-            if (!throwError)
-            {
-                return default;
-            }
-
-            throw;
-        }
+        return await CreatePayloadAsync(payload, throwError);
     }
 
+    /// <inheritdoc />
     public async Task<XummPayloadResponse?> CreateAsync(XummPayloadTransaction payloadTransaction, bool throwError = false)
     {
         try
         {
             return await _httpClient.PostAsync<XummPayloadResponse>("payload", new Dictionary<string, object> { { "txJson", payloadTransaction } });
+        }
+        catch
+        {
+            if (!throwError)
+            {
+                return default;
+            }
+
+            throw;
+        }
+    }
+
+    private async Task<XummPayloadResponse?> CreatePayloadAsync(XummPayloadBodyBase payload, bool throwError = false)
+    {
+        try
+        {
+            return await _httpClient.PostAsync<XummPayloadResponse>("payload", payload);
         }
         catch
         {

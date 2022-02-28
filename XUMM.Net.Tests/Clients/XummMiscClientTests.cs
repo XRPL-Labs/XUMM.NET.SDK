@@ -110,16 +110,31 @@ public class XummMiscClientTests
     }
 
     [Test]
-    public async Task GetTransactionAsync_ShouldReturnTransactionAsync()
+    [TestCase("C3951A3229506DB2C505ED248EFD3BBD8F232C7684732F38270BE9DE90F75134")]
+    public async Task GetTransactionAsync_WithValidTxHash_ShouldReturnTransactionAsync(string txHash)
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "xrpltx");
 
         // Act
-        var result = await _xummMiscClient.GetTransactionAsync(It.IsAny<string>());
+        var result = await _xummMiscClient.GetTransactionAsync(txHash);
 
         // Assert
         AssertExtensions.AreEqual(MiscFixtures.XummTransaction, result);
+    }
+
+    [Test]
+    [TestCase("C3951A3229506DB2C505ED248EFD3BBD8F232C7684732F38270BE9DE90F75134")]
+    public async Task GetTransactionAsync_WithValidTxHash_ShouldContainTxHashInRequestUriAsync(string txHash)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "xrpltx");
+
+        // Act
+        var result = await _xummMiscClient.GetTransactionAsync(txHash);
+
+        // Assert
+        _httpMessageHandlerMock.AssertRequestUri(HttpMethod.Get, $"/xrpl-tx/{txHash}");
     }
 
     [Test]

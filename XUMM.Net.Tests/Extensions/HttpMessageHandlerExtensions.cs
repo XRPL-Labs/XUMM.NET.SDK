@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Net;
 using System.Net.Http;
 using System.Reflection;
@@ -28,5 +29,18 @@ internal static class HttpMessageHandlerExtensions
                 Content = new StringContent(File.ReadAllText(fixtureFile))
             })
             .Verifiable();
+    }
+
+    internal static void AssertRequestUri(this Mock<HttpMessageHandler> httpMessageHandler, HttpMethod httpMethod, string endpoint)
+    {
+        httpMessageHandler
+            .Protected()
+            .Verify(
+                "SendAsync",
+                Times.Exactly(1),
+                ItExpr.Is<HttpRequestMessage>(request =>
+                    request.Method == httpMethod &&
+                    request.RequestUri!.ToString().EndsWith(endpoint, StringComparison.Ordinal)),
+                ItExpr.IsAny<CancellationToken>());
     }
 }

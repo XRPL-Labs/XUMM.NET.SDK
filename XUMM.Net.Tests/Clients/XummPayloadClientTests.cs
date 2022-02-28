@@ -121,6 +121,33 @@ public class XummPayloadClientTests
         // Assert
         AssertExtensions.AreEqual(PayloadFixtures.XummPayloadDetails, result!);
     }
+
+    [Test]
+    public async Task GetAsync_WithInvalidPayloadUuid_ShouldReturnNullAsync()
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.InternalServerError, "payload-error");
+
+        // Act
+        var result = await _xummPayloadClient.GetAsync(It.IsAny<string>(), false);
+
+        // Assert
+        Assert.IsNull(result);
+    }
+
+    [Test]
+    public void GetAsync_WithInvalidPayloadUuid_ShouldThrowExceptionAsync()
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.InternalServerError, "payload-error");
+
+        // Act
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _xummPayloadClient.GetAsync(It.IsAny<string>(), true));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
+    }
     #endregion
 
     #region CancelAsync Tests
@@ -135,8 +162,21 @@ public class XummPayloadClientTests
         var result = await _xummPayloadClient.CancelAsync(payloadUuid);
 
         // Assert
-        _httpMessageHandlerMock.VerifyRequestUri(HttpMethod.Delete, $"/payload/{payloadUuid}");
         AssertExtensions.AreEqual(PayloadFixtures.XummDeletePayload, result!);
+    }
+
+    [Test]
+    [TestCase("00000000-0000-4839-af2f-f794874a80b0")]
+    public async Task CancelAsync_WithValidPayloadUuid_ShouldContainPayloadUuidInRequestUriAsync(string payloadUuid)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-cancel");
+
+        // Act
+        _ = await _xummPayloadClient.CancelAsync(payloadUuid);
+
+        // Assert
+        _httpMessageHandlerMock.AssertRequestUri(HttpMethod.Delete, $"/payload/{payloadUuid}");
     }
 
     [Test]
@@ -155,8 +195,26 @@ public class XummPayloadClientTests
         var result = await _xummPayloadClient.CancelAsync(payloadDetails!);
 
         // Assert
-        _httpMessageHandlerMock.VerifyRequestUri(HttpMethod.Delete, $"/payload/{payloadUuid}");
         AssertExtensions.AreEqual(PayloadFixtures.XummDeletePayload, result!);
+    }
+
+    [Test]
+    [TestCase("00000000-0000-4839-af2f-f794874a80b0")]
+    public async Task CancelAsync_WithCreatedPayload_ShouldContainPayloadUuidInRequestUriAsync(string payloadUuid)
+    {
+        // Arrange 
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-cancel");
+
+        var payloadDetails = new XummPayloadResponse
+        {
+            Uuid = payloadUuid
+        };
+
+        // Act
+        _ = await _xummPayloadClient.CancelAsync(payloadDetails!);
+
+        // Assert
+        _httpMessageHandlerMock.AssertRequestUri(HttpMethod.Delete, $"/payload/{payloadUuid}");
     }
 
     [Test]
@@ -178,8 +236,29 @@ public class XummPayloadClientTests
         var result = await _xummPayloadClient.CancelAsync(payloadDetails!);
 
         // Assert
-        _httpMessageHandlerMock.VerifyRequestUri(HttpMethod.Delete, $"/payload/{payloadUuid}");
         AssertExtensions.AreEqual(PayloadFixtures.XummDeletePayload, result!);
+    }
+
+    [Test]
+    [TestCase("00000000-0000-4839-af2f-f794874a80b0")]
+    public async Task CancelAsync_WithFetchedPayload_ShouldContainPayloadUuidInRequestUriAsync(string payloadUuid)
+    {
+        // Arrange 
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-cancel");
+
+        var payloadDetails = new XummPayloadDetails
+        {
+            Meta = new XummPayloadDetailsMeta
+            {
+                Uuid = payloadUuid
+            }
+        };
+
+        // Act
+        _ = await _xummPayloadClient.CancelAsync(payloadDetails!);
+
+        // Assert
+        _httpMessageHandlerMock.AssertRequestUri(HttpMethod.Delete, $"/payload/{payloadUuid}");
     }
 
     [Test]
