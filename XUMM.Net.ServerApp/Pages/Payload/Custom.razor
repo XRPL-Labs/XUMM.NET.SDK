@@ -1,4 +1,4 @@
-﻿@page "/signin"
+﻿@page "/custom-json"
 @using System.Text.Json
 @using System.Text.Json.Serialization
 @using XUMM.Net.Clients.Interfaces
@@ -9,9 +9,9 @@
 
 @inject IXummPayloadClient _payloadClient
 
-<PageTitle>Sign In</PageTitle>
+<PageTitle>Custom Payload</PageTitle>
 
-<h1>Sign In</h1>
+<h1>Custom Payload</h1>
 
 @if (_signed.HasValue)
 {
@@ -41,6 +41,11 @@
         }
         else
         {
+            <div class="mb-3">
+                <label for="json" class="form-label">JSON data</label>
+                <textarea id="json" class="form-control" placeholder="JSON" aria-label="Currency" aria-describedby="basic-addon2" rows="10" @bind="_json"></textarea>
+            </div>
+
             <div class="btn-group mb-3" role="group">
                 <button class="btn btn-primary" @onclick="CreatePayloadAndSubscribe">Create payload and subscribe</button>
             </div>
@@ -82,20 +87,19 @@
 @code {
     private CancellationTokenSource _cts = default!;
     private readonly List<string> _messages = new();
+    private string? _json;
     private string? _qrCodeUrl;
     private string? _payloadUuid;
     private bool? _signed;
 
     private async Task CreatePayloadAndSubscribe()
     {
-        var serializerOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
+        if (string.IsNullOrWhiteSpace(_json))
+        {
+            return;
+        }
 
-        var payload = new XummPostJsonPayload(JsonSerializer.Serialize(new XummPayloadTransaction(XummTransactionType.SignIn), serializerOptions))
-            {
-                CustomMeta = new XummPayloadCustomMeta { Instruction = "Test payload created with the XUMM.Net Wrapper." }
-            };
-
-        var payloadResult = await _payloadClient.CreateAsync(payload);
+        var payloadResult = await _payloadClient.CreateAsync(new XummPostJsonPayload(_json));
 
         if (payloadResult != null)
         {
@@ -115,7 +119,7 @@
     {
         _cts.Cancel();
         _qrCodeUrl = null;
-            _messages.Add($"Payload {_payloadUuid} subscription cancelled.");
+        _messages.Add($"Payload {_payloadUuid} subscription cancelled.");
         StateHasChanged();
     }
 

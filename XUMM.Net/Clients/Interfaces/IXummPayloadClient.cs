@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using XUMM.Net.Models.Payload;
+using XUMM.Net.Models.Payload.Xumm;
 using XUMM.Net.WebSocket.EventArgs;
 
 namespace XUMM.Net.Clients.Interfaces;
@@ -13,7 +15,21 @@ public interface IXummPayloadClient
     /// </summary>
     /// <param name="payload">Payload to create.</param>
     /// <param name="throwError">Throws an exception if an error occurred; otherwise errors are ignored..</param>
-    Task<XummPayloadResponse?> CreateAsync(XummPayload payload, bool throwError = false);
+    Task<XummPayloadResponse?> CreateAsync(XummPostJsonPayload payload, bool throwError = false);
+
+    /// <summary>
+    /// Submit a payload containing a sign request to the XUMM platform.
+    /// </summary>
+    /// <param name="payload">Payload to create.</param>
+    /// <param name="throwError">Throws an exception if an error occurred; otherwise errors are ignored..</param>
+    Task<XummPayloadResponse?> CreateAsync(XummPostBlobPayload payload, bool throwError = false);
+
+    /// <summary>
+    /// Submit a payload containing a sign request to the XUMM platform.
+    /// </summary>
+    /// <param name="payload">Payload to create.</param>
+    /// <param name="throwError">Throws an exception if an error occurred; otherwise errors are ignored..</param>
+    Task<XummPayloadResponse?> CreateAsync(XummPayloadTransaction payloadTransaction, bool throwError = false);
 
     /// <summary>
     /// Get payload details or payload resolve status and result data.
@@ -80,6 +96,16 @@ public interface IXummPayloadClient
     /// <param name="eventHandler">Event handler to receive subscription messages.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken">CancellationToken</see> to observe.</param>
     /// <returns></returns>
-    Task<XummPayloadSubscription> CreateAndSubscribeAsync(XummPayload payload,
+    Task<XummPayloadSubscription> CreateAndSubscribeAsync(XummPostJsonPayload payload,
+        EventHandler<XummSubscriptionEventArgs> eventHandler, CancellationToken cancellationToken);
+
+    /// <summary>
+    /// You can get, or wait, for payload status updates using websockets to the xumm API.
+    /// </summary>
+    /// <param name="payload">Payload to create.</param>
+    /// <param name="eventHandler">Event handler to receive subscription messages.</param>
+    /// <param name="cancellationToken">The <see cref="CancellationToken">CancellationToken</see> to observe.</param>
+    /// <returns></returns>
+    Task<XummPayloadSubscription> CreateAndSubscribeAsync(XummPostBlobPayload payload,
         EventHandler<XummSubscriptionEventArgs> eventHandler, CancellationToken cancellationToken);
 }

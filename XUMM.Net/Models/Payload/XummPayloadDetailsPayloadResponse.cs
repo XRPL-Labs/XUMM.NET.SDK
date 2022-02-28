@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text.Json;
 using System.Text.Json.Serialization;
 
 namespace XUMM.Net.Models.Payload
@@ -15,7 +16,7 @@ namespace XUMM.Net.Models.Payload
         public int? TxDestinationTag { get; set; }
 
         [JsonPropertyName("request_json")]
-        public XummPayloadDetailsPayloadRequestJsonResponse RequestJson { get; set; } = default!;
+        public JsonDocument RequestJson { get; set; } = default!;
 
         [JsonPropertyName("origintype")]
         public string? OriginType { get; set; }

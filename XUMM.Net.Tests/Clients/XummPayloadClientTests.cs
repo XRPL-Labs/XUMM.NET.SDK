@@ -8,7 +8,9 @@ using NUnit.Framework;
 using XUMM.Net.Clients;
 using XUMM.Net.Clients.Interfaces;
 using XUMM.Net.Configs;
+using XUMM.Net.Enums;
 using XUMM.Net.Models.Payload;
+using XUMM.Net.Models.Payload.Xumm;
 using XUMM.Net.Tests.Extensions;
 using XUMM.Net.Tests.Fixtures;
 
@@ -42,6 +44,39 @@ public class XummPayloadClientTests
 
         _xummPayloadClient = new XummPayloadClient(_xummHttpClient,
             new Mock<ILogger<IXummPayloadClient>>().Object);
+    }
+
+    [Test]
+    public async Task WhenSimplePaymentIsRequested_ShouldCreatePayloadAsync()
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-create");
+        var payload = new XummPostJsonPayload(PayloadFixtures.ValidPayloadJson);
+
+        // Act
+        var result = await _xummPayloadClient.CreateAsync(payload);
+
+        // Assert
+        AssertExtensions.AreEqual(PayloadFixtures.XummCreatePayload, result!);
+    }
+
+    [Test]
+    public async Task WhenSimplePaymentIsRequestedWithJsonDocument_ShouldCreatePayloadAsync()
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-create");
+
+        var transaction = new XummPayloadTransaction(XummTransactionType.SignIn)
+        {
+            { "Destination", "rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY" },
+            { "DestinationTag", "495" },
+        };
+
+        // Act
+        var result = await _xummPayloadClient.CreateAsync(transaction);
+
+        // Assert
+        AssertExtensions.AreEqual(PayloadFixtures.XummCreatePayload, result!);
     }
 
     [Test]

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using XUMM.Net.Clients.Interfaces;
 using XUMM.Net.Models.Payload;
+using XUMM.Net.Models.Payload.Xumm;
 using XUMM.Net.WebSocket;
 using XUMM.Net.WebSocket.EventArgs;
 
@@ -23,11 +25,45 @@ public class XummPayloadClient : IXummPayloadClient
     }
 
     /// <inheritdoc />
-    public async Task<XummPayloadResponse?> CreateAsync(XummPayload payload, bool throwError = false)
+    public async Task<XummPayloadResponse?> CreateAsync(XummPostJsonPayload payload, bool throwError = false)
     {
         try
         {
             return await _httpClient.PostAsync<XummPayloadResponse>("payload", payload);
+        }
+        catch
+        {
+            if (!throwError)
+            {
+                return default;
+            }
+
+            throw;
+        }
+    }
+    /// <inheritdoc />
+    public async Task<XummPayloadResponse?> CreateAsync(XummPostBlobPayload payload, bool throwError = false)
+    {
+        try
+        {
+            return await _httpClient.PostAsync<XummPayloadResponse>("payload", payload);
+        }
+        catch
+        {
+            if (!throwError)
+            {
+                return default;
+            }
+
+            throw;
+        }
+    }
+
+    public async Task<XummPayloadResponse?> CreateAsync(XummPayloadTransaction payloadTransaction, bool throwError = false)
+    {
+        try
+        {
+            return await _httpClient.PostAsync<XummPayloadResponse>("payload", new Dictionary<string, object> { { "txJson", payloadTransaction } });
         }
         catch
         {
@@ -138,16 +174,31 @@ public class XummPayloadClient : IXummPayloadClient
         };
     }
 
-    public async Task<XummPayloadSubscription> CreateAndSubscribeAsync(XummPayload payload,
+    public async Task<XummPayloadSubscription> CreateAndSubscribeAsync(XummPostJsonPayload payload,
         EventHandler<XummSubscriptionEventArgs> eventHandler,
         CancellationToken cancellationToken)
     {
         var createdPayload = await CreateAsync(payload);
-        if (createdPayload == null)
+        return await CreateAndSubscribeAsync(createdPayload, eventHandler, cancellationToken);
+    }
+
+    public async Task<XummPayloadSubscription> CreateAndSubscribeAsync(XummPostBlobPayload payload,
+        EventHandler<XummSubscriptionEventArgs> eventHandler,
+        CancellationToken cancellationToken)
+    {
+        var createdPayload = await CreateAsync(payload);
+        return await CreateAndSubscribeAsync(createdPayload, eventHandler, cancellationToken);
+    }
+
+    private async Task<XummPayloadSubscription> CreateAndSubscribeAsync(XummPayloadResponse? payload,
+        EventHandler<XummSubscriptionEventArgs> eventHandler,
+        CancellationToken cancellationToken)
+    {
+        if (payload == null)
         {
             throw new Exception("Error creating payload or subscribing to created payload");
         }
 
-        return await SubscribeAsync(createdPayload.Uuid, eventHandler, cancellationToken);
+        return await SubscribeAsync(payload.Uuid, eventHandler, cancellationToken);
     }
 }

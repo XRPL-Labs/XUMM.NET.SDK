@@ -1,5 +1,6 @@
 ﻿@page "/storage"
 @using XUMM.Net.Clients.Interfaces
+@using XUMM.Net.Extensions
 
 @inject IXummMiscAppStorageClient _miscAppStorageClient
 
@@ -12,8 +13,8 @@
 <div class="row align-items-start">
     <div class="col-md-6">
         <div class="mb-3">
-            <label for="currency" class="form-label">JSON data</label>
-            <textarea id="currency" class="form-control" placeholder="JSON" aria-label="Currency" aria-describedby="basic-addon2" @bind="_json"></textarea>
+            <label for="json" class="form-label">JSON data</label>
+            <textarea id="json" class="form-control" placeholder="JSON" aria-label="Currency" aria-describedby="basic-addon2" @bind="_json"></textarea>
         </div>
 
         <div class="btn-group mb-3" role="group">
@@ -54,7 +55,7 @@
     private async Task GetStorageAsync()
     {
         var storage = await _miscAppStorageClient.GetAsync();
-        _storedData = storage?.Data;
+        _storedData = storage?.Data?.ToJsonString();
         StateHasChanged();
     }
 
