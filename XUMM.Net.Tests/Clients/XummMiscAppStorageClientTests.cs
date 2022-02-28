@@ -42,7 +42,7 @@ public class XummMiscAppStorageClientTests
     }
 
     [Test]
-    public async Task WhenAppStorageIsRequested_ShouldReturnAppStorageAsync()
+    public async Task GetAsync_ShouldReturnXummStorageAsync()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "storage-get");
@@ -55,7 +55,7 @@ public class XummMiscAppStorageClientTests
     }
 
     [Test]
-    public async Task WhenAppStorageIsStored_ShouldReturnAppStorageStoreAsync()
+    public async Task StoreAsync_WithAnyValue_ShouldReturnXummStorageStoreAsync()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "storage-set");
@@ -68,7 +68,7 @@ public class XummMiscAppStorageClientTests
     }
 
     [Test]
-    public async Task WhenAppStorageIsCleared_ShouldReturnAppStorageStoreWithoutDataAsync()
+    public async Task ClearAsync_ShouldReturnEmptyDataAsync()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "storage-delete");
@@ -81,7 +81,7 @@ public class XummMiscAppStorageClientTests
     }
 
     [Test]
-    public void WhenAppStorageIsRequestedAndInvalidCredentialsAreProvided_ShouldThrowException()
+    public void GetAsync_WithInvalidCredentials_ShouldThrowException()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.Forbidden, "invalid-credentials");
@@ -95,7 +95,7 @@ public class XummMiscAppStorageClientTests
     }
 
     [Test]
-    public void WhenAppStorageIsStoredAndInvalidCredentialsAreProvided_ShouldReturnAppStorageStoreAsync()
+    public void StoreAsync_WithInvalidCredentials_ShouldThrowException()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.Forbidden, "invalid-credentials");
@@ -109,7 +109,7 @@ public class XummMiscAppStorageClientTests
     }
 
     [Test]
-    public void WhenAppStorageIsClearedAndInvalidCredentialsAreProvided_ShouldReturnAppStorageStoreWithoutDataAsync()
+    public void ClearAsync_WithInvalidCredentials_ShouldThrowException()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.Forbidden, "invalid-credentials");

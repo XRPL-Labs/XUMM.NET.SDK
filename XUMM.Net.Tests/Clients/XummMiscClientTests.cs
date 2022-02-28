@@ -44,20 +44,20 @@ public class XummMiscClientTests
     }
 
     [Test]
-    public async Task WhenPingIsRequested_ShouldReturnPongAsync()
+    public async Task GetPingAsync_ShouldReturnPongAsync()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "pong");
 
         // Act
-        var result = await _xummMiscClient.PingAsync();
+        var result = await _xummMiscClient.GetPingAsync();
 
         // Assert
         AssertExtensions.AreEqual(MiscFixtures.XummPong, result);
     }
 
     [Test]
-    public async Task WhenCuratedAssetsAreRequested_ShouldReturnCuratedAssetsAsync()
+    public async Task GetCuratedAssetsAsync_ShouldReturnCuratedAssetsAsync()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "curated-assets");
@@ -71,7 +71,7 @@ public class XummMiscClientTests
 
     [Test]
     [TestCase("2557f69c-6617-40dc-9d1e-a34487cb3f90")]
-    public async Task WhenKycStatusIsRequestedWithUserToken_ShouldReturnInProgressKycStatusAsync(string userToken)
+    public async Task GetKycStatusAsync_WithUserToken_ShouldReturnKycStatusAsync(string userToken)
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "kycstatus-usertoken");
@@ -85,7 +85,7 @@ public class XummMiscClientTests
 
     [Test]
     [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB")]
-    public async Task WhenKycStatusIsRequestedWithAccount_ShouldReturnInProgressKycStatusAsync(string account)
+    public async Task GetKycStatusAsync_WithAccount_ShouldReturnKycStatusAsync(string account)
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "kycstatus-account");
@@ -100,7 +100,7 @@ public class XummMiscClientTests
     [Test]
     [TestCase("2557f69c661740dc9d1ea34487cb3f90")]
     [TestCase("qrDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB")]
-    public async Task WhenKycStatusIsRequestedWithInvalidUserTokenAndAccount_ShouldReturnNoneKycStatusAsync(string userTokenOrAccount)
+    public async Task GetKycStatusAsync_WithInvalidUserTokenAndAccount_ShouldReturnKycStatusNoneAsync(string userTokenOrAccount)
     {
         // Act
         var result = await _xummMiscClient.GetKycStatusAsync(userTokenOrAccount);
@@ -110,7 +110,7 @@ public class XummMiscClientTests
     }
 
     [Test]
-    public async Task WhenTransactionIsRequested_ShouldReturnTransactionAsync()
+    public async Task GetTransactionAsync_ShouldReturnTransactionAsync()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "xrpltx");
@@ -126,7 +126,7 @@ public class XummMiscClientTests
     [TestCase(50)]
     [TestCase(100)]
     [TestCase(199)]
-    public void WhenInvalidAvatarDimensionsAreProvided_ShouldThrowException(int dimensions)
+    public void GetAvatarUrl_WithInvalidDimensions_ShouldThrowException(int dimensions)
     {
         // Act
         var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _xummMiscClient.GetAvatarUrl(It.IsAny<string>(), dimensions, It.IsAny<int>()));
@@ -139,7 +139,7 @@ public class XummMiscClientTests
     [Test]
     [TestCase(-50)]
     [TestCase(-1)]
-    public void WhenInvalidAvatarPaddingIsProvided_ShouldThrowException(int padding)
+    public void GetAvatarUrl_WithInvalidPadding_ShouldThrowException(int padding)
     {
         // Act
         var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _xummMiscClient.GetAvatarUrl(It.IsAny<string>(), 200, padding));
@@ -153,7 +153,7 @@ public class XummMiscClientTests
     [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 200, 5, "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_200_5.png")]
     [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 250, 0, "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_250_0.png")]
     [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 500, 2, "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_500_2.png")]
-    public void WhenValidAvatarDetailsAreProvided_ShouldReturnTheAvatarUrl(string account, int dimensions, int padding, string expected)
+    public void GetAvatarUrl_WithValidDimensions_ShouldReturnAvatarUrl(string account, int dimensions, int padding, string expected)
     {
         // Act
         var result = _xummMiscClient.GetAvatarUrl(account, dimensions, padding);

@@ -6,7 +6,7 @@ namespace XUMM.Net.Clients.Interfaces;
 
 public interface IXummMiscClient
 {
-    Task<XummPong> PingAsync();
+    Task<XummPong> GetPingAsync();
 
     /// <summary>
     /// Get curated assets from the XUMM API. This API contains the same issuers and assets available to users in XUMM when

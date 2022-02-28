@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace XUMM.Net.Models.Payload
 {
@@ -11,7 +12,7 @@ namespace XUMM.Net.Models.Payload
         public string? Txid { get; set; }
 
         [JsonPropertyName("resolved_at")]
-        public string? ResolvedAt { get; set; }
+        public DateTime? ResolvedAt { get; set; }
 
         [JsonPropertyName("dispatched_to")]
         public string? DispatchedTo { get; set; }

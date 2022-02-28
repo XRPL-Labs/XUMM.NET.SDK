@@ -20,7 +20,7 @@
 
     private async Task CreatePayloadAndSubscribe()
     {
-        _pong = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.PingAsync());
+        _pong = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetPingAsync());
         _responseAlertBox.SetAlert("Pong", _pong != null);
     }
 }

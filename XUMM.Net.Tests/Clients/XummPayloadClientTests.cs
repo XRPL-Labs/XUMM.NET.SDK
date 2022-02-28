@@ -48,21 +48,20 @@ public class XummPayloadClientTests
 
     #region CreateAsync Tests
     [Test]
-    public async Task WhenSimplePaymentIsRequested_ShouldCreatePayloadAsync()
+    public async Task CreateAsync_WithValidXummPostJsonPayload_ShouldReturnXummPayloadResponseAsync()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-create");
-        var payload = new XummPostJsonPayload(PayloadFixtures.ValidPayloadJson);
 
         // Act
-        var result = await _xummPayloadClient.CreateAsync(payload);
+        var result = await _xummPayloadClient.CreateAsync(It.IsAny<XummPostJsonPayload>());
 
         // Assert
         AssertExtensions.AreEqual(PayloadFixtures.XummCreatePayload, result!);
     }
 
     [Test]
-    public async Task WhenSimplePaymentIsRequestedWithJsonDocument_ShouldCreatePayloadAsync()
+    public async Task CreateAsync_WithValidXummPayloadTransaction_ShouldReturnCreatedPayloadAsync()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-create");
@@ -81,7 +80,7 @@ public class XummPayloadClientTests
     }
 
     [Test]
-    public async Task WhenPaymentIsRequestedWithInvalidPayload_ShouldReturnNullAsync()
+    public async Task CreateAsync_WithInvalidXummPostJsonPayload_ShouldReturnNullAsync()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.InternalServerError, "payload-error");
@@ -94,7 +93,7 @@ public class XummPayloadClientTests
     }
 
     [Test]
-    public void WhenPaymentIsRequestedWithInvalidPayload_ShouldThrowExceptionAsync()
+    public void CreateAsync_WithInvalidXummPostJsonPayload_ShouldThrowExceptionAsync()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.InternalServerError, "payload-error");
@@ -108,10 +107,26 @@ public class XummPayloadClientTests
     }
     #endregion
 
+    #region GetAsync Tests
+    [Test]
+    [TestCase("00000000-0000-4839-af2f-f794874a80b0")]
+    public async Task GetAsync_WithValidPayloadUuid_ShouldReturnPayloadAsync(string payloadUuid)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-get");
+
+        // Act
+        var result = await _xummPayloadClient.GetAsync(payloadUuid);
+
+        // Assert
+        AssertExtensions.AreEqual(PayloadFixtures.XummPayloadDetails, result!);
+    }
+    #endregion
+
     #region CancelAsync Tests
     [Test]
     [TestCase("00000000-0000-4839-af2f-f794874a80b0")]
-    public async Task WhenCancelIsRequested_ShouldCancelPayloadAsync(string payloadUuid)
+    public async Task CancelAsync_WithValidPayloadUuid_ShouldCancelPayloadAsync(string payloadUuid)
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-cancel");
@@ -126,7 +141,7 @@ public class XummPayloadClientTests
 
     [Test]
     [TestCase("00000000-0000-4839-af2f-f794874a80b0")]
-    public async Task WhenCancelIsRequestedWithCreatedPayload_ShouldCancelPayloadAsync(string payloadUuid)
+    public async Task CancelAsync_WithCreatedPayload_ShouldCancelPayloadAsync(string payloadUuid)
     {
         // Arrange 
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-cancel");
@@ -146,7 +161,7 @@ public class XummPayloadClientTests
 
     [Test]
     [TestCase("00000000-0000-4839-af2f-f794874a80b0")]
-    public async Task WhenCancelIsRequestedWithFetchedPayload_ShouldCancelPayloadAsync(string payloadUuid)
+    public async Task CancelAsync_WithFetchedPayload_ShouldCancelPayloadAsync(string payloadUuid)
     {
         // Arrange 
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-cancel");
@@ -168,7 +183,7 @@ public class XummPayloadClientTests
     }
 
     [Test]
-    public async Task WhenCancelIsRequestedWithUnknownUuid_ShouldReturnNullAsync()
+    public async Task CancelAsync_WithInvalidPayloadUuid_ShouldReturnNullAsync()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.NotFound, "payload-notfound");
@@ -181,7 +196,7 @@ public class XummPayloadClientTests
     }
 
     [Test]
-    public void WhenCancelIsRequestedWithUnknownUuid_ShouldThrowExceptionAsync()
+    public void CancelAsync_WithInvalidPayloadUuid_ShouldThrowExceptionAsync()
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.NotFound, "payload-notfound");

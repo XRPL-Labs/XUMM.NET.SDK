@@ -19,7 +19,7 @@ public class XummMiscClient : IXummMiscClient
     }
 
     /// <inheritdoc />
-    public async Task<XummPong> PingAsync()
+    public async Task<XummPong> GetPingAsync()
     {
         return await _httpClient.GetAsync<XummPong>("ping");
     }

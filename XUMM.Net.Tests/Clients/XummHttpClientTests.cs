@@ -28,7 +28,7 @@ public class XummHttpClientTests
     [Test]
     [TestCase("f6c4a1c7-d00b-4592-9eb9-f6e90ee836a0", "430ab92a-ccf8-4e8f-bd88-e65e1033acc3")]
     [TestCase("883b82d8-6b5b-4c34-a8e6-3d6019659182", "884b9650-5e52-420e-b0d9-b1206405bd46")]
-    public void WhenValidCredentialsAreProvided_ShouldReturnHttpClient(string apiKey, string apiSecret)
+    public void GetHttpClient_WithValidCredentials_ShouldReturnHttpClient(string apiKey, string apiSecret)
     {
         // Arrange
         var xummHttpClient = new XummHttpClient(
@@ -40,7 +40,7 @@ public class XummHttpClientTests
             }),
             new Mock<ILogger<XummHttpClient>>().Object);
 
-        //Act
+        // Act
         var httpClient = xummHttpClient.GetHttpClient(true);
 
         // Assert
@@ -51,7 +51,7 @@ public class XummHttpClientTests
     [Test]
     [TestCase("xxxxxx", "430ab92a-ccf8-4e8f-bd88-e65e1033acc3", "Invalid API Key.")]
     [TestCase("f6c4a1c7-d00b-4592-9eb9-f6e90ee836a0", "yyyyyyy", "Invalid API Secret.")]
-    public void WhenInvalidCredentialsAreProvided_ShouldThrowException(string apiKey, string apiSecret, string message)
+    public void XummHttpClient_WithInvalidCredentials_ShouldThrowException(string apiKey, string apiSecret, string message)
     {
         // Arrange & Act
         var ex = Assert.Throws<Exception>(() => new XummHttpClient(
@@ -63,7 +63,7 @@ public class XummHttpClientTests
                 }),
                 new Mock<ILogger<XummHttpClient>>().Object));
 
-        // Asert
+        // Assert
         Assert.IsNotNull(ex);
         Assert.That(ex!.Message, Is.EqualTo(message));
     }
