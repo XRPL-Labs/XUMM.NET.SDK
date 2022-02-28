@@ -25,10 +25,10 @@ internal static class PayloadFixtures
 
     internal static string ValidPayloadJson => "{\"TransactionType\":\"Payment\",\"Destination\":\"rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY\",\"DestinationTag\":495}";
 
-    internal static string InvalidPayloadJson => "{user_token:'aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee'," +
-        "txblob:'1200002400000003614000000002FAF0806840000000000000C873208536F6D65547970657D0" +
-        "8536F6D6544617461E1EA7C09446576656C6F7065727D0B4057696574736557696E64E1F1'," +
-        "txjson:{TransactionType:'Payment',Destination:'rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY',DestinationTag:495,Amount:'65000'}";
+    internal static string InvalidPayloadJson => "{\"user_token\":\"aaaaaaaa-bbbb-cccc-dddd-eeeeeeeeeeee\"," +
+        "\"txblob\":\"1200002400000003614000000002FAF0806840000000000000C873208536F6D65547970657D0" +
+        "8536F6D6544617461E1EA7C09446576656C6F7065727D0B4057696574736557696E64E1F1\"," +
+        "\"txjson\":{\"TransactionType\":\"Payment\",\"Destination\":\"rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY\",\"DestinationTag\":495,\"Amount\":\"65000\"}}";
 
     internal static XummDeletePayload XummDeletePayload => new()
     {
