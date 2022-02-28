@@ -1,0 +1,12 @@
+﻿{
+  "USD": 75.50455,
+  "XRP": 54.329676,
+  "__meta": {
+    "currency": {
+      "en": "Indian Rupee",
+      "code": "INR",
+      "symbol": "₹",
+      "isoDecimals": 2
+    }
+  }
+}

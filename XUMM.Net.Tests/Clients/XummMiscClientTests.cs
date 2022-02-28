@@ -100,13 +100,56 @@ public class XummMiscClientTests
     [Test]
     [TestCase("2557f69c661740dc9d1ea34487cb3f90")]
     [TestCase("qrDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB")]
-    public async Task GetKycStatusAsync_WithInvalidUserTokenAndAccount_ShouldReturnKycStatusNoneAsync(string userTokenOrAccount)
+    public void GetKycStatusAsync_WithInvalidUserTokenAndAccount_ShouldThrowExceptionAsync(string userTokenOrAccount)
     {
         // Act
-        var result = await _xummMiscClient.GetKycStatusAsync(userTokenOrAccount);
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _xummMiscClient.GetKycStatusAsync(userTokenOrAccount));
 
         // Assert
-        AssertExtensions.AreEqual(XummKycStatus.None, result);
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Invalid user token or account provided (Parameter 'userTokenOrAccount')"));
+    }
+
+    [Test]
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase(" ")]
+    public void GetKycStatusAsync_WithNullOrWhiteSpaceUserTokenAndAccount_ShouldThrowExceptionAsync(string userTokenOrAccount)
+    {
+        // Act
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _xummMiscClient.GetKycStatusAsync(userTokenOrAccount));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'userTokenOrAccount')"));
+    }
+
+    [Test]
+    [TestCase("INR")]
+    public async Task GetRatesAsync_WithValidCurrencyCode_ShouldReturnRatesAsync(string currencyCode)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "rates");
+
+        // Act
+        var result = await _xummMiscClient.GetRatesAsync(currencyCode);
+
+        // Assert
+        AssertExtensions.AreEqual(MiscFixtures.XummRates, result);
+    }
+
+    [Test]
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase(" ")]
+    public void GetRatesAsync_WithInvalidCurrencyCode_ShouldThrowExceptionAsync(string currencyCode)
+    {
+        // Act
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _xummMiscClient.GetRatesAsync(currencyCode));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'currencyCode')"));
     }
 
     [Test]
@@ -138,13 +181,42 @@ public class XummMiscClientTests
     }
 
     [Test]
-    [TestCase(50)]
-    [TestCase(100)]
-    [TestCase(199)]
-    public void GetAvatarUrl_WithInvalidDimensions_ShouldThrowException(int dimensions)
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase(" ")]
+    public void GetTransactionAsync_WithInvalidTxHash_ShouldThrowExceptionAsync(string txHash)
     {
         // Act
-        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _xummMiscClient.GetAvatarUrl(It.IsAny<string>(), dimensions, It.IsAny<int>()));
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _xummMiscClient.GetTransactionAsync(txHash));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'txHash')"));
+    }
+
+    [Test]
+    [TestCase(null, 50, 5)]
+    [TestCase("", 100, 0)]
+    [TestCase(" ", 199, 2)]
+    public void GetAvatarUrl_WithInvalidAccount_ShouldThrowExceptionAsync(string account, int dimensions, int padding)
+    {
+        // Act
+        var ex = Assert.Throws<ArgumentException>(() => _xummMiscClient.GetAvatarUrl(account, dimensions, padding));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'account')"));
+    }
+
+    [Test]
+    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 50, 5)]
+    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 100, 0)]
+    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 199, 2)]
+
+    public void GetAvatarUrl_WithInvalidDimensions_ShouldThrowException(string account, int dimensions, int padding)
+    {
+        // Act
+        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _xummMiscClient.GetAvatarUrl(account, dimensions, padding));
 
         // Assert
         Assert.IsNotNull(ex);
@@ -152,12 +224,13 @@ public class XummMiscClientTests
     }
 
     [Test]
-    [TestCase(-50)]
-    [TestCase(-1)]
-    public void GetAvatarUrl_WithInvalidPadding_ShouldThrowException(int padding)
+
+    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 200, -50)]
+    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 250, -1)]
+    public void GetAvatarUrl_WithInvalidPadding_ShouldThrowException(string account, int dimensions, int padding)
     {
         // Act
-        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _xummMiscClient.GetAvatarUrl(It.IsAny<string>(), 200, padding));
+        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _xummMiscClient.GetAvatarUrl(account, dimensions, padding));
 
         // Asert
         Assert.IsNotNull(ex);

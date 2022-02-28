@@ -33,12 +33,22 @@ public class XummMiscClient : IXummMiscClient
     /// <inheritdoc />
     public async Task<XummTransaction> GetTransactionAsync(string txHash)
     {
+        if (string.IsNullOrWhiteSpace(txHash))
+        {
+            throw new ArgumentException("Value cannot be null or white space", nameof(txHash));
+        }
+
         return await _httpClient.GetAsync<XummTransaction>($"xrpl-tx/{txHash}");
     }
 
     /// <inheritdoc />
     public async Task<XummKycStatus> GetKycStatusAsync(string userTokenOrAccount)
     {
+        if (string.IsNullOrWhiteSpace(userTokenOrAccount))
+        {
+            throw new ArgumentException("Value cannot be null or white space", nameof(userTokenOrAccount));
+        }
+
         if (userTokenOrAccount.IsAccountAddress())
         {
             var kycInfo = await _httpClient.GetAsync<XummKycInfo>($"kyc-status/{userTokenOrAccount}", true);
@@ -56,18 +66,28 @@ public class XummMiscClient : IXummMiscClient
             return EnumHelper.GetValueFromName<XummKycStatus>(kycInfo.KycStatus);
         }
 
-        return XummKycStatus.None;
+        throw new ArgumentException("Invalid user token or account provided", nameof(userTokenOrAccount));
     }
 
     /// <inheritdoc />
     public async Task<XummRates> GetRatesAsync(string currencyCode)
     {
+        if (string.IsNullOrWhiteSpace(currencyCode))
+        {
+            throw new ArgumentException("Value cannot be null or white space", nameof(currencyCode));
+        }
+
         return await _httpClient.GetAsync<XummRates>($"rates/{currencyCode.Trim().ToUpperInvariant()}");
     }
 
     /// <inheritdoc />
     public string GetAvatarUrl(string account, int dimensions, int padding)
     {
+        if (string.IsNullOrWhiteSpace(account))
+        {
+            throw new ArgumentException("Value cannot be null or white space", nameof(account));
+        }
+
         if (dimensions < MinimumAvatarDimensions)
         {
             throw new ArgumentOutOfRangeException(nameof(dimensions), $"The minimum (square) dimensions are {MinimumAvatarDimensions}.");

@@ -141,4 +141,20 @@ internal static class MiscFixtures
             "\"Fee\":\"12\",\"Flags\":2147483648,\"Sequence\":58549314,\"SigningPubKey\":\"0260F06C0590C470E7E7FA9DE3D9E85B1825E19196D8893DD84431F6E9491739AC\"," +
             "\"TransactionType\":\"Payment\",\"meta\":{\"TransactionIndex\":0,\"TransactionResult\":\"tesSUCCESS\",\"delivered_amount\":\"1000000\"},\"validated\":true}")
     };
+
+    internal static XummRates XummRates => new()
+    {
+        USD = 75.50455,
+        XRP = 54.329676,
+        Meta = new XummMeta
+        {
+            Currency = new XummCurrency
+            {
+                En = "Indian Rupee",
+                Code = "INR",
+                Symbol = "₹",
+                IsoDecimals = 2
+            }
+        }
+    };
 }

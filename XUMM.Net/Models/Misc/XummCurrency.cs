@@ -12,5 +12,8 @@ namespace XUMM.Net.Models.Misc
 
         [JsonPropertyName("symbol")]
         public string? Symbol { get; set; }
+
+        [JsonPropertyName("isoDecimals")]
+        public int IsoDecimals { get; set; }
     }
 }
