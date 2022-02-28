@@ -96,13 +96,7 @@ public class XummHttpClient : IXummHttpClient
                 throw GetHttpRequestException(response, responseText);
             }
 
-            var result = JsonSerializer.Deserialize<T>(responseText);
-            if (result == null)
-            {
-                throw new Exception($"Unexpected response for {endpoint} response.");
-            }
-
-            return result;
+            return JsonSerializer.Deserialize<T>(responseText)!;
         }
         catch (Exception ex)
         {
