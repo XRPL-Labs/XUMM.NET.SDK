@@ -10,31 +10,24 @@ using Microsoft.Extensions.Logging;
 
 namespace XUMM.Net.WebSocket;
 
-public class XummWebSocket : IAsyncDisposable
+public class XummWebSocket : IXummWebSocket, IAsyncDisposable
 {
-    private readonly ILogger? _logger;
-    private readonly string _payloadUuid;
-    private readonly Uri _uri;
+    private readonly ILogger<XummWebSocket> _logger;
     private readonly ClientWebSocket _webSocket = new();
+    private string _payloadUuid = default!;
 
-    internal XummWebSocket(string payloadUuid, ILogger? logger)
+    public XummWebSocket(ILogger<XummWebSocket> logger)
     {
-        _payloadUuid = payloadUuid;
-        _uri = new Uri($"wss://xumm.app/sign/{_payloadUuid}");
         _logger = logger;
     }
 
-    public async ValueTask DisposeAsync()
-    {
-        await _webSocket.CloseAsync(WebSocketCloseStatus.Empty, string.Empty, CancellationToken.None);
-        WriteLog("Subscription ended (WebSocket closed).");
-    }
-
-    public async IAsyncEnumerable<string> SubscribeAsync([EnumeratorCancellation] CancellationToken cancellationToken)
+    public async IAsyncEnumerable<string> SubscribeAsync(string payloadUuid, [EnumeratorCancellation] CancellationToken cancellationToken)
     {
         cancellationToken.ThrowIfCancellationRequested();
 
-        await _webSocket.ConnectAsync(_uri, CancellationToken.None);
+        _payloadUuid = payloadUuid;
+
+        await _webSocket.ConnectAsync(new Uri($"wss://xumm.app/sign/{_payloadUuid}"), CancellationToken.None);
 
         if (_webSocket.State == WebSocketState.Open)
         {
@@ -70,5 +63,11 @@ public class XummWebSocket : IAsyncDisposable
     private void WriteLog(string logMessage)
     {
         _logger?.LogInformation("Payload {0}: {1}", _payloadUuid, logMessage);
+    }
+
+    public async ValueTask DisposeAsync()
+    {
+        await _webSocket.CloseAsync(WebSocketCloseStatus.Empty, string.Empty, CancellationToken.None);
+        WriteLog("Subscription ended (WebSocket closed).");
     }
 }

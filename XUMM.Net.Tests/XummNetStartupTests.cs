@@ -6,6 +6,7 @@ using NUnit.Framework;
 using XUMM.Net.Clients;
 using XUMM.Net.Clients.Interfaces;
 using XUMM.Net.Tests.Extensions;
+using XUMM.Net.WebSocket;
 
 namespace XUMM.Net.Tests
 {
@@ -47,6 +48,8 @@ namespace XUMM.Net.Tests
             _serviceCollectionMock.Verify(sc => sc.Add(
                 It.Is<ServiceDescriptor>(x => x.Is<IXummPayloadClient, XummPayloadClient>(ServiceLifetime.Singleton))));
             _serviceCollectionMock.Verify(sc => sc.Add(
+                It.Is<ServiceDescriptor>(x => x.Is<IXummWebSocket, XummWebSocket>(ServiceLifetime.Transient))));
+            _serviceCollectionMock.Verify(sc => sc.Add(
                 It.Is<ServiceDescriptor>(x => x.Is<IXummHttpClient, XummHttpClient>(ServiceLifetime.Singleton))));
         }
 
@@ -61,6 +64,8 @@ namespace XUMM.Net.Tests
             });
 
             // Assert
+            _serviceCollectionMock.Verify(sc => sc.Add(
+                It.Is<ServiceDescriptor>(x => x.Is<IXummWebSocket, XummWebSocket>(ServiceLifetime.Transient))));
             _serviceCollectionMock.Verify(sc => sc.Add(
                It.Is<ServiceDescriptor>(x => x.Is<IXummMiscAppStorageClient, XummMiscAppStorageClient>(ServiceLifetime.Singleton))));
             _serviceCollectionMock.Verify(sc => sc.Add(

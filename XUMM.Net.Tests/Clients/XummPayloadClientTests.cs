@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System.Collections.Generic;
+using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -13,6 +14,8 @@ using XUMM.Net.Models.Payload;
 using XUMM.Net.Models.Payload.Xumm;
 using XUMM.Net.Tests.Extensions;
 using XUMM.Net.Tests.Fixtures;
+using XUMM.Net.WebSocket;
+using XUMM.Net.WebSocket.EventArgs;
 
 namespace XUMM.Net.Tests.Clients;
 
@@ -23,6 +26,7 @@ public class XummPayloadClientTests
     private XummPayloadClient _xummPayloadClient = default!;
     private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
     private Mock<IHttpClientFactory> _httpClientFactory = default!;
+    private Mock<IXummWebSocket> _xummWebSocket = default!;
 
     [SetUp]
     public void SetUp()
@@ -33,6 +37,8 @@ public class XummPayloadClientTests
         _httpClientFactory.Setup(_ => _.CreateClient(It.IsAny<string>()))
             .Returns(new HttpClient(_httpMessageHandlerMock.Object));
 
+        _xummWebSocket = new Mock<IXummWebSocket>();
+
         _xummHttpClient = new XummHttpClient(
             _httpClientFactory.Object,
             Options.Create(new ApiConfig
@@ -42,8 +48,9 @@ public class XummPayloadClientTests
             }),
             new Mock<ILogger<XummHttpClient>>().Object);
 
-        _xummPayloadClient = new XummPayloadClient(_xummHttpClient,
-            new Mock<ILogger<IXummPayloadClient>>().Object);
+        _xummPayloadClient = new XummPayloadClient(
+            _xummHttpClient,
+            _xummWebSocket.Object);
     }
 
     #region CreateAsync Tests

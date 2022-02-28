@@ -4,6 +4,7 @@ using Microsoft.Extensions.DependencyInjection;
 using XUMM.Net.Clients;
 using XUMM.Net.Clients.Interfaces;
 using XUMM.Net.Configs;
+using XUMM.Net.WebSocket;
 
 namespace XUMM.Net;
 
@@ -31,6 +32,7 @@ public static class XummNetStartup
 
     private static IServiceCollection AddXummNetClients(this IServiceCollection services)
     {
+        services.AddTransient<IXummWebSocket, XummWebSocket>();
         services.AddSingleton<IXummMiscAppStorageClient, XummMiscAppStorageClient>();
         services.AddSingleton<IXummMiscClient, XummMiscClient>();
         services.AddSingleton<IXummPayloadClient, XummPayloadClient>();

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
 using XUMM.Net.Clients.Interfaces;
 using XUMM.Net.Models.Payload;
 using XUMM.Net.Models.Payload.Xumm;
@@ -15,13 +14,13 @@ namespace XUMM.Net.Clients;
 public class XummPayloadClient : IXummPayloadClient
 {
     private readonly IXummHttpClient _httpClient;
-    private readonly ILogger<IXummPayloadClient> _logger;
+    private readonly IXummWebSocket _webSocket;
 
     public XummPayloadClient(IXummHttpClient httpClient,
-        ILogger<IXummPayloadClient> logger)
+        IXummWebSocket webSocket)
     {
         _httpClient = httpClient;
-        _logger = logger;
+        _webSocket = webSocket;
     }
 
     /// <inheritdoc />
@@ -149,8 +148,7 @@ public class XummPayloadClient : IXummPayloadClient
         var payload = await GetAsync(payloadUuid);
         if (payload != null)
         {
-            var webSocket = new XummWebSocket(payloadUuid, _logger);
-            await foreach (var message in webSocket.SubscribeAsync(source.Token))
+            await foreach (var message in _webSocket.SubscribeAsync(payloadUuid, source.Token))
             {
                 eventHandler(this,
                     new XummSubscriptionEventArgs
