@@ -51,7 +51,7 @@ public class XummMiscClient : IXummMiscClient
 
         if (userTokenOrAccount.IsAccountAddress())
         {
-            var kycInfo = await _httpClient.GetAsync<XummKycInfo>($"kyc-status/{userTokenOrAccount}", true);
+            var kycInfo = await _httpClient.GetPublicAsync<XummKycInfo>($"kyc-status/{userTokenOrAccount}");
             return kycInfo.KycApproved ? XummKycStatus.Successful : XummKycStatus.None;
         }
 

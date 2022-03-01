@@ -17,10 +17,10 @@ namespace XUMM.Net.Tests.Clients;
 [TestFixture]
 public class XummMiscClientTests
 {
-    private XummHttpClient _xummHttpClient = default!;
-    private XummMiscClient _xummMiscClient = default!;
+    private Mock<XummHttpClient> _xummHttpClient = default!;
     private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
     private Mock<IHttpClientFactory> _httpClientFactory = default!;
+    private XummMiscClient _subject = default!;
 
     [SetUp]
     public void SetUp()
@@ -31,7 +31,7 @@ public class XummMiscClientTests
         _httpClientFactory.Setup(_ => _.CreateClient(It.IsAny<string>()))
             .Returns(new HttpClient(_httpMessageHandlerMock.Object));
 
-        _xummHttpClient = new XummHttpClient(
+        _xummHttpClient = new Mock<XummHttpClient>(
             _httpClientFactory.Object,
             Options.Create(new ApiConfig
             {
@@ -40,7 +40,7 @@ public class XummMiscClientTests
             }),
             new Mock<ILogger<XummHttpClient>>().Object);
 
-        _xummMiscClient = new XummMiscClient(_xummHttpClient);
+        _subject = new XummMiscClient(_xummHttpClient.Object);
     }
 
     [Test]
@@ -50,7 +50,7 @@ public class XummMiscClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "pong");
 
         // Act
-        var result = await _xummMiscClient.GetPingAsync();
+        var result = await _subject.GetPingAsync();
 
         // Assert
         AssertExtensions.AreEqual(MiscFixtures.XummPong, result);
@@ -63,7 +63,7 @@ public class XummMiscClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "curated-assets");
 
         // Act
-        var result = await _xummMiscClient.GetCuratedAssetsAsync();
+        var result = await _subject.GetCuratedAssetsAsync();
 
         // Assert
         AssertExtensions.AreEqual(MiscFixtures.XummCuratedAssets, result);
@@ -77,7 +77,7 @@ public class XummMiscClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "kycstatus-usertoken");
 
         // Act
-        var result = await _xummMiscClient.GetKycStatusAsync(userToken);
+        var result = await _subject.GetKycStatusAsync(userToken);
 
         // Assert
         AssertExtensions.AreEqual(XummKycStatus.InProgress, result);
@@ -91,7 +91,7 @@ public class XummMiscClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "kycstatus-account");
 
         // Act
-        var result = await _xummMiscClient.GetKycStatusAsync(account);
+        var result = await _subject.GetKycStatusAsync(account);
 
         // Assert
         AssertExtensions.AreEqual(XummKycStatus.Successful, result);
@@ -103,7 +103,7 @@ public class XummMiscClientTests
     public void GetKycStatusAsync_WithInvalidUserTokenAndAccount_ShouldThrowExceptionAsync(string userTokenOrAccount)
     {
         // Act
-        var ex = Assert.ThrowsAsync<ArgumentException>(() => _xummMiscClient.GetKycStatusAsync(userTokenOrAccount));
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.GetKycStatusAsync(userTokenOrAccount));
 
         // Assert
         Assert.IsNotNull(ex);
@@ -117,7 +117,7 @@ public class XummMiscClientTests
     public void GetKycStatusAsync_WithNullOrWhiteSpaceUserTokenAndAccount_ShouldThrowExceptionAsync(string userTokenOrAccount)
     {
         // Act
-        var ex = Assert.ThrowsAsync<ArgumentException>(() => _xummMiscClient.GetKycStatusAsync(userTokenOrAccount));
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.GetKycStatusAsync(userTokenOrAccount));
 
         // Assert
         Assert.IsNotNull(ex);
@@ -132,7 +132,7 @@ public class XummMiscClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "rates");
 
         // Act
-        var result = await _xummMiscClient.GetRatesAsync(currencyCode);
+        var result = await _subject.GetRatesAsync(currencyCode);
 
         // Assert
         AssertExtensions.AreEqual(MiscFixtures.XummRates, result);
@@ -145,7 +145,7 @@ public class XummMiscClientTests
     public void GetRatesAsync_WithInvalidCurrencyCode_ShouldThrowExceptionAsync(string currencyCode)
     {
         // Act
-        var ex = Assert.ThrowsAsync<ArgumentException>(() => _xummMiscClient.GetRatesAsync(currencyCode));
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.GetRatesAsync(currencyCode));
 
         // Assert
         Assert.IsNotNull(ex);
@@ -160,7 +160,7 @@ public class XummMiscClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "xrpltx");
 
         // Act
-        var result = await _xummMiscClient.GetTransactionAsync(txHash);
+        var result = await _subject.GetTransactionAsync(txHash);
 
         // Assert
         AssertExtensions.AreEqual(MiscFixtures.XummTransaction, result);
@@ -174,7 +174,7 @@ public class XummMiscClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "xrpltx");
 
         // Act
-        var result = await _xummMiscClient.GetTransactionAsync(txHash);
+        var result = await _subject.GetTransactionAsync(txHash);
 
         // Assert
         _httpMessageHandlerMock.AssertRequestUri(HttpMethod.Get, $"/xrpl-tx/{txHash}");
@@ -187,7 +187,7 @@ public class XummMiscClientTests
     public void GetTransactionAsync_WithInvalidTxHash_ShouldThrowExceptionAsync(string txHash)
     {
         // Act
-        var ex = Assert.ThrowsAsync<ArgumentException>(() => _xummMiscClient.GetTransactionAsync(txHash));
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.GetTransactionAsync(txHash));
 
         // Assert
         Assert.IsNotNull(ex);
@@ -201,7 +201,7 @@ public class XummMiscClientTests
     public void GetAvatarUrl_WithInvalidAccount_ShouldThrowExceptionAsync(string account, int dimensions, int padding)
     {
         // Act
-        var ex = Assert.Throws<ArgumentException>(() => _xummMiscClient.GetAvatarUrl(account, dimensions, padding));
+        var ex = Assert.Throws<ArgumentException>(() => _subject.GetAvatarUrl(account, dimensions, padding));
 
         // Assert
         Assert.IsNotNull(ex);
@@ -216,7 +216,7 @@ public class XummMiscClientTests
     public void GetAvatarUrl_WithInvalidDimensions_ShouldThrowException(string account, int dimensions, int padding)
     {
         // Act
-        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _xummMiscClient.GetAvatarUrl(account, dimensions, padding));
+        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _subject.GetAvatarUrl(account, dimensions, padding));
 
         // Assert
         Assert.IsNotNull(ex);
@@ -230,7 +230,7 @@ public class XummMiscClientTests
     public void GetAvatarUrl_WithInvalidPadding_ShouldThrowException(string account, int dimensions, int padding)
     {
         // Act
-        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _xummMiscClient.GetAvatarUrl(account, dimensions, padding));
+        var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _subject.GetAvatarUrl(account, dimensions, padding));
 
         // Asert
         Assert.IsNotNull(ex);
@@ -244,7 +244,7 @@ public class XummMiscClientTests
     public void GetAvatarUrl_WithValidDimensions_ShouldReturnAvatarUrl(string account, int dimensions, int padding, string expected)
     {
         // Act
-        var result = _xummMiscClient.GetAvatarUrl(account, dimensions, padding);
+        var result = _subject.GetAvatarUrl(account, dimensions, padding);
 
         // Assert
         AssertExtensions.AreEqual(expected, result);

@@ -66,7 +66,7 @@ public interface IXummPayloadClient
     /// <param name="eventHandler">Event handler to receive subscription messages.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken">CancellationToken</see> to observe.</param>
     /// <returns></returns>
-    Task<XummPayloadSubscription> SubscribeAsync(XummPayloadDetails payload,
+    Task SubscribeAsync(XummPayloadDetails payload,
         EventHandler<XummSubscriptionEventArgs> eventHandler, CancellationToken cancellationToken);
 
     /// <summary>
@@ -76,7 +76,7 @@ public interface IXummPayloadClient
     /// <param name="eventHandler">Event handler to receive subscription messages.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken">CancellationToken</see> to observe.</param>
     /// <returns></returns>
-    Task<XummPayloadSubscription> SubscribeAsync(XummPayloadResponse payload,
+    Task SubscribeAsync(XummPayloadResponse payload,
         EventHandler<XummSubscriptionEventArgs> eventHandler, CancellationToken cancellationToken);
 
     /// <summary>
@@ -86,7 +86,7 @@ public interface IXummPayloadClient
     /// <param name="eventHandler">Event handler to receive subscription messages.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken">CancellationToken</see> to observe.</param>
     /// <returns></returns>
-    Task<XummPayloadSubscription> SubscribeAsync(string payloadUuid,
+    Task SubscribeAsync(string payloadUuid,
         EventHandler<XummSubscriptionEventArgs> eventHandler, CancellationToken cancellationToken);
 
     /// <summary>
@@ -96,7 +96,7 @@ public interface IXummPayloadClient
     /// <param name="eventHandler">Event handler to receive subscription messages.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken">CancellationToken</see> to observe.</param>
     /// <returns></returns>
-    Task<XummPayloadSubscription> CreateAndSubscribeAsync(XummPostJsonPayload payload,
+    Task<XummPayloadResponse> CreateAndSubscribeAsync(XummPostJsonPayload payload,
         EventHandler<XummSubscriptionEventArgs> eventHandler, CancellationToken cancellationToken);
 
     /// <summary>
@@ -106,6 +106,6 @@ public interface IXummPayloadClient
     /// <param name="eventHandler">Event handler to receive subscription messages.</param>
     /// <param name="cancellationToken">The <see cref="CancellationToken">CancellationToken</see> to observe.</param>
     /// <returns></returns>
-    Task<XummPayloadSubscription> CreateAndSubscribeAsync(XummPostBlobPayload payload,
+    Task<XummPayloadResponse> CreateAndSubscribeAsync(XummPostBlobPayload payload,
         EventHandler<XummSubscriptionEventArgs> eventHandler, CancellationToken cancellationToken);
 }

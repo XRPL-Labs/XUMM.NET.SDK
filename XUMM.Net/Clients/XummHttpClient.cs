@@ -39,9 +39,14 @@ public class XummHttpClient : IXummHttpClient
         };
     }
 
-    public async Task<T> GetAsync<T>(string endpoint, bool isPublicEndpoint = false)
+    public async Task<T> GetAsync<T>(string endpoint)
     {
-        return await SendAsync<T>(HttpMethod.Get, endpoint, !isPublicEndpoint, default);
+        return await SendAsync<T>(HttpMethod.Get, endpoint, true, default);
+    }
+
+    public async Task<T> GetPublicAsync<T>(string endpoint)
+    {
+        return await SendAsync<T>(HttpMethod.Get, endpoint, false, default);
     }
 
     public async Task<T> PostAsync<T>(string endpoint, object content)

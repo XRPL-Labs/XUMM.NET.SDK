@@ -119,28 +119,28 @@ public class XummPayloadClient : IXummPayloadClient
     }
 
     /// <inheritdoc />
-    public async Task<XummPayloadSubscription> SubscribeAsync(XummPayloadDetails payload,
+    public async Task SubscribeAsync(XummPayloadDetails payload,
         EventHandler<XummSubscriptionEventArgs> eventHandler,
         CancellationToken cancellationToken)
     {
-        return await SubscribeAsync(payload.Meta.Uuid, eventHandler, cancellationToken);
+        await SubscribeAsync(payload.Meta.Uuid, eventHandler, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<XummPayloadSubscription> SubscribeAsync(XummPayloadResponse payload,
+    public async Task SubscribeAsync(XummPayloadResponse payload,
         EventHandler<XummSubscriptionEventArgs> eventHandler,
         CancellationToken cancellationToken)
     {
-        return await SubscribeAsync(payload.Uuid, eventHandler, cancellationToken);
+        await SubscribeAsync(payload.Uuid, eventHandler, cancellationToken);
     }
 
     /// <inheritdoc />
-    public async Task<XummPayloadSubscription> SubscribeAsync(string payloadUuid,
+    public async Task SubscribeAsync(string payloadUuid,
         EventHandler<XummSubscriptionEventArgs> eventHandler,
         CancellationToken cancellationToken)
     {
         var source = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-
+        
         //This is ugly, but there's a small chance a created XUMM payload has not been distributed
         //across the load balanced XUMM backend, so wait a bit.
         await Task.Delay(75, cancellationToken);
@@ -160,38 +160,28 @@ public class XummPayloadClient : IXummPayloadClient
                     });
             }
         }
-
-        return new XummPayloadSubscription
-        {
-            Payload = payload
-        };
     }
 
-    public async Task<XummPayloadSubscription> CreateAndSubscribeAsync(XummPostJsonPayload payload,
+    public async Task<XummPayloadResponse> CreateAndSubscribeAsync(XummPostJsonPayload payload,
         EventHandler<XummSubscriptionEventArgs> eventHandler,
         CancellationToken cancellationToken)
     {
-        var createdPayload = await CreateAsync(payload);
-        return await CreateAndSubscribeAsync(createdPayload, eventHandler, cancellationToken);
+        return await CreateAndSubscribePayloadAsync(payload, eventHandler, cancellationToken);
     }
 
-    public async Task<XummPayloadSubscription> CreateAndSubscribeAsync(XummPostBlobPayload payload,
+    public async Task<XummPayloadResponse> CreateAndSubscribeAsync(XummPostBlobPayload payload,
         EventHandler<XummSubscriptionEventArgs> eventHandler,
         CancellationToken cancellationToken)
     {
-        var createdPayload = await CreateAsync(payload);
-        return await CreateAndSubscribeAsync(createdPayload, eventHandler, cancellationToken);
+        return await CreateAndSubscribePayloadAsync(payload, eventHandler, cancellationToken);
     }
 
-    private async Task<XummPayloadSubscription> CreateAndSubscribeAsync(XummPayloadResponse? payload,
+    private async Task<XummPayloadResponse> CreateAndSubscribePayloadAsync(XummPayloadBodyBase payload,
         EventHandler<XummSubscriptionEventArgs> eventHandler,
         CancellationToken cancellationToken)
     {
-        if (payload == null)
-        {
-            throw new Exception("Error creating payload or subscribing to created payload");
-        }
-
-        return await SubscribeAsync(payload.Uuid, eventHandler, cancellationToken);
+        var result = await CreatePayloadAsync(payload, true);
+        await SubscribeAsync(result!.Uuid, eventHandler, cancellationToken);
+        return result;
     }
 }

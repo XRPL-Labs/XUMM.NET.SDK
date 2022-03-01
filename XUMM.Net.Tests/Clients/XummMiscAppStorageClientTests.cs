@@ -15,10 +15,10 @@ namespace XUMM.Net.Tests.Clients;
 [TestFixture]
 public class XummMiscAppStorageClientTests
 {
-    private XummHttpClient _xummHttpClient = default!;
-    private XummMiscAppStorageClient _xummMiscAppStorageClient = default!;
+    private Mock<XummHttpClient> _xummHttpClient = default!;
     private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
     private Mock<IHttpClientFactory> _httpClientFactory = default!;
+    private XummMiscAppStorageClient _subject = default!;
 
     [SetUp]
     public void SetUp()
@@ -29,7 +29,7 @@ public class XummMiscAppStorageClientTests
         _httpClientFactory.Setup(_ => _.CreateClient(It.IsAny<string>()))
             .Returns(new HttpClient(_httpMessageHandlerMock.Object));
 
-        _xummHttpClient = new XummHttpClient(
+        _xummHttpClient = new Mock<XummHttpClient>(
             _httpClientFactory.Object,
             Options.Create(new ApiConfig
             {
@@ -38,7 +38,7 @@ public class XummMiscAppStorageClientTests
             }),
             new Mock<ILogger<XummHttpClient>>().Object);
 
-        _xummMiscAppStorageClient = new XummMiscAppStorageClient(_xummHttpClient);
+        _subject = new XummMiscAppStorageClient(_xummHttpClient.Object);
     }
 
     [Test]
@@ -48,7 +48,7 @@ public class XummMiscAppStorageClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "storage-get");
 
         // Act
-        var result = await _xummMiscAppStorageClient.GetAsync();
+        var result = await _subject.GetAsync();
 
         // Assert
         AssertExtensions.AreEqual(MiscAppStorageFixtures.XummStorage, result);
@@ -61,7 +61,7 @@ public class XummMiscAppStorageClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "storage-set");
 
         // Act
-        var result = await _xummMiscAppStorageClient.StoreAsync(It.IsAny<string>());
+        var result = await _subject.StoreAsync(It.IsAny<string>());
 
         // Assert
         AssertExtensions.AreEqual(MiscAppStorageFixtures.XummStorageStore, result);
@@ -74,7 +74,7 @@ public class XummMiscAppStorageClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "storage-delete");
 
         // Act
-        var result = await _xummMiscAppStorageClient.ClearAsync();
+        var result = await _subject.ClearAsync();
 
         // Assert
         AssertExtensions.AreEqual(MiscAppStorageFixtures.XummStorageDelete, result);
@@ -87,7 +87,7 @@ public class XummMiscAppStorageClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.Forbidden, "invalid-credentials");
 
         // Act
-        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _xummMiscAppStorageClient.GetAsync());
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.GetAsync());
 
         // Assert
         Assert.IsNotNull(ex);
@@ -101,7 +101,7 @@ public class XummMiscAppStorageClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.Forbidden, "invalid-credentials");
 
         // Act
-        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _xummMiscAppStorageClient.StoreAsync(It.IsAny<string>()));
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.StoreAsync(It.IsAny<string>()));
 
         // Assert
         Assert.IsNotNull(ex);
@@ -115,7 +115,7 @@ public class XummMiscAppStorageClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.Forbidden, "invalid-credentials");
 
         // Act
-        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _xummMiscAppStorageClient.ClearAsync());
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.ClearAsync());
 
         // Asert
         Assert.IsNotNull(ex);
