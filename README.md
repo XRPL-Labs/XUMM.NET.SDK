@@ -119,4 +119,4 @@ live from the XRP ledger, as fetched for you by the XUMM backend.
 var txInfo = await _miscClient.GetTransactionAsync("00000000-0000-0000-0000-000000000000");
 ```
 
-Returns: `<XummTransaction>`](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Models/Misc/XummTransaction.cs)
+Returns: [`<XummTransaction>`](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Models/Misc/XummTransaction.cs)
