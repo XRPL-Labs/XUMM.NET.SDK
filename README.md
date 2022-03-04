@@ -54,7 +54,7 @@ The `ping` method allows you to verify API access (valid credentials) and return
 var pong = await _miscClient.GetPingAsync();
 ```
 
-Returns [`XummPong`](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Models/Misc/XummPong.cs):
+Returns: [`XummPong`](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Models/Misc/XummPong.cs)
 ```C#
 var pong = new XummPong
 {
@@ -98,7 +98,7 @@ XUMM when the session KYC was initiated by.
 var kycStatus = await _miscClient.GetKycStatusAsync("00000000-0000-0000-0000-000000000000");
 ```
 
-Returns [`XummKycStatus`](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Enums/XummKycStatus.cs).
+Returns: [`XummKycStatus`](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Enums/XummKycStatus.cs)
 
 ###### Notes on KYC information
 
@@ -119,4 +119,4 @@ live from the XRP ledger, as fetched for you by the XUMM backend.
 var txInfo = await _miscClient.GetTransactionAsync("00000000-0000-0000-0000-000000000000");
 ```
 
-Returns: [`<XummTransaction>`](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Models/Misc/XummTransaction.cs)
+Returns: [`XummTransaction`](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Models/Misc/XummTransaction.cs)
