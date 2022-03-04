@@ -1,4 +1,4 @@
-name: .NET
+name: XUMM.NET
 
 on:
   push:
