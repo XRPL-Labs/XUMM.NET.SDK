@@ -43,3 +43,38 @@ Create your app and get your XUMM API credentials at the XUMM Developer Console:
 More information about the XUMM API, payloads, the API workflow, sending Push notifications, etc. please check the XUMM API Docs: 
 
 - https://xumm.readme.io/docs
+
+##### IXummMiscClient.GetPingAsync()
+
+The `ping` method allows you to verify API access (valid credentials) and returns some info on your XUMM APP:
+
+```C#
+@inject IXummMiscClient _miscClient
+var pong = await _miscClient.GetPingAsync();
+```
+
+Returns [`XummPong`](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Models/Misc/XummPong.cs):
+```C#
+var pong = new XummPong
+{
+    Pong = true,
+    Auth = new XummAuth
+    {
+        Quota = new Dictionary<string, object>
+        {
+            { "ratelimit", null}
+        },
+        Application = new XummApplication
+        {
+            Uuidv4 = "00000000-1111-2222-3333-aaaaaaaaaaaa",
+            Name = "My XUMM APP",
+            WebhookUrl = "",
+            Disabled = 0
+        },
+        Call = new XummCall
+        {
+            Uuidv4 = "bbbbbbbb-cccc-dddd-eeee-111111111111"
+        }
+    }
+}
+```
