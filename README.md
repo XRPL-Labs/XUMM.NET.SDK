@@ -120,3 +120,31 @@ var txInfo = await _miscClient.GetTransactionAsync("00000000-0000-0000-0000-0000
 ```
 
 Returns: [`XummTransaction`](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Models/Misc/XummTransaction.cs)
+
+
+#### App Storage
+
+App Storage allows you to store a JSON object at the XUMM API platform, containing max 60KB of data.
+Your XUMM APP storage is stored at the XUMM API backend, meaning it persists until you overwrite or delete it.
+
+This data is private, and accessible only with your own API credentials. This private JSON data can be used to store credentials / config / bootstrap info / ... for your headless application (eg. POS device).
+
+```C#
+@inject IXummMiscAppStorageClient _miscAppStorageClient
+
+var storageSet = await _miscClient.StoreAsync({name: 'Dominique', age: 32, male: true});
+Console.WriteLine(storageSet.Stored)
+// true
+
+var storageGet = await _miscAppStorageClient.GetAsync()
+Console.WriteLine(storageGet.Data)
+// { name: 'Dominique', age: 32, male: true }
+
+var storageDelete = await _miscAppStorageClient.ClearAsync()
+Console.WriteLine(storageSet.Stored)
+// true
+
+var storageGetAfterDelete = await _miscAppStorageClient.GetAsync()
+Console.WriteLine(storageGetAfterDelete.Data)
+// null
+```
