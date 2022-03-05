@@ -84,6 +84,21 @@ public class XummMiscClientTests
     }
 
     [Test]
+    [TestCase("2557f69c-6617-40dc-9d1e-a34487cb3f90")]
+    public void GetKycStatusAsync_WithUserTokenAndInvalidStatus_ShouldThrowExceptionAsync(string userToken)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "kycstatus-invalid");
+        
+        // Act
+        var ex = Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => _subject.GetKycStatusAsync(userToken));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Specified argument was out of the range of valid values. (Parameter 'name')\r\nActual value was INVALID_STATUS."));
+    }
+
+    [Test]
     [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB")]
     public async Task GetKycStatusAsync_WithAccount_ShouldReturnKycStatusAsync(string account)
     {

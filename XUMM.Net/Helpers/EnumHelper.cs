@@ -22,6 +22,6 @@ public static class EnumHelper
             }
         }
 
-        throw new ArgumentOutOfRangeException(nameof(name));
+        throw new ArgumentOutOfRangeException(nameof(name), name, "Specified argument was out of the range of valid values.");
     }
 }
