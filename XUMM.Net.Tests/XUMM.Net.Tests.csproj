@@ -8,7 +8,7 @@
 
     <SignAssembly>False</SignAssembly>
   </PropertyGroup>
-
+  
   <ItemGroup>
     <Content Include="Data\rates.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
@@ -47,6 +47,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\kycstatus-account.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </Content>
+    <Content Include="Data\kycstatus-invalid.json">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
     <Content Include="Data\kycstatus-usertoken.json">
