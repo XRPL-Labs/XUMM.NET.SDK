@@ -178,3 +178,31 @@ Optionally (besides `TxJson`) a payload can contain these properties ([XummPaylo
 A [reference for payload options & custom meta](https://xumm.readme.io/reference/post-payload) can be found in the [API Docs](https://xumm.readme.io/reference/post-payload).
 
 Instead of providing a `TxJson` transaction, a transaction formatted as HEX blob (string) can be provided in a `TxBlob` property.
+
+##### IXummPayloadClient.GetAsync
+
+To get payload details, status and if resolved & signed: results (transaction, transaction hash, etc.) you can `GetAsync()` a payload.
+
+Note! Please don't use _polling_! The XUMM API offers Webhooks (configure your Webhook endpoint in the [Developer Console](https://apps.xumm.dev)) or use [a subscription](#payload-subscriptions-live-updates) to receive live payload updates (for non-SDK users: [Webhooks](https://xumm.readme.io/docs/payload-status)).
+
+You can `GetAsync()` a payload by:
+- Payload UUID  
+  ```C#
+  @inject IXummPayloadClient _payloadClient
+  var payload = await _payloadClient.GetAsync("00000000-0000-0000-0000-000000000000");
+  ```
+
+- Passing a created Payload object (see: [IXummPayloadClient.CreateAsync()](#sdkpayloadcreate))  
+  ```C#
+  @inject IXummPayloadClient _payloadClient
+  var newPayload = new XummPostJsonPayload("{...}");
+  var created = await _payloadClient.CreateAsync(newPayload);
+  var payload = await _payloadClient.GetAsync(created);
+  ```
+
+If a payload can't be fetched (eg. doesn't exist), `null` will be returned, unless a second param (boolean) is provided to get the SDK to throw an Exception in case a payload can't be retrieved:
+
+```C#
+@inject IXummPayloadClient _payloadClient
+var payload = await _payloadClient.GetAsync("00000000-0000-0000-0000-000000000000", true);
+```

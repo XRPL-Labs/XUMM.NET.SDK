@@ -199,6 +199,25 @@ public class XummPayloadClientTests
     #region GetAsync Tests
     [Test]
     [TestCase("00000000-0000-4839-af2f-f794874a80b0")]
+    public async Task GetAsync_WithCreatedPayload_ShouldReturnPayloadAsync(string payloadUuid)
+    {
+        // Arrange 
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-get");
+
+        var payloadDetails = new XummPayloadResponse
+        {
+            Uuid = payloadUuid
+        };
+
+        // Act
+        var result = await _subject.GetAsync(payloadDetails!);
+
+        // Assert
+        AssertExtensions.AreEqual(PayloadFixtures.XummPayloadDetails, result!);
+    }
+
+    [Test]
+    [TestCase("00000000-0000-4839-af2f-f794874a80b0")]
     public async Task GetAsync_WithValidPayloadUuid_ShouldReturnPayloadAsync(string payloadUuid)
     {
         // Arrange
