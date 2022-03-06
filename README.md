@@ -148,3 +148,33 @@ var storageGetAfterDelete = await _miscAppStorageClient.GetAsync()
 Console.WriteLine(storageGetAfterDelete.Data)
 // null
 ```
+
+
+#### Payloads
+
+##### Intro
+
+Payloads are the primary reason for the XUMM API (thus this SDK) to exist. The [XUMM API Docs explain '**Payloads**'](https://xumm.readme.io/docs/introduction) like this:
+
+>  An XRPL transaction "template" can be posted to the XUMM API. Your transaction tample to sign (so: your "sign request") will be persisted at the XUMM API backend. We now call it a  a **Payload**. XUMM app user(s) can open the Payload (sign request) by scanning a QR code, opening deeplink or receiving push notification and resolve (reject or sign) on their own device.
+
+A payload can contain an XRPL transaction template. Some properties may be omitted, as they will be added by the XUMM app when a user signs a transaction. A simple payload may look like this:
+
+```C#
+var payload = new XummPostJsonPayload("{ 
+        "\"TransactionType\": \"Payment\", " + 
+        "\"Destination\": \"rwiETSee2wMz3SBnAG8hkMsCgvGy9LWbZ1\", " + 
+        "\"Amount\": \"1337\" }";
+```
+
+As you can see the payload looks like a regular XRPL transaction, wrapped in an `TxJson` object, omitting the mandatory `Account`, `Fee` and `Sequence` properties. They will be added containing the correct values when the payload is signed by an app user.
+
+Optionally (besides `TxJson`) a payload can contain these properties ([XummPayloadBodyBase definition](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Models/Payload/XummPayloadBodyBase.cs)):
+
+- `XummPayloadOptions` to define payload options like a return URL, expiration, etc.
+- `XummPayloadCustomMeta` to add metadata, user instruction, your own unique ID, ...
+- `UserToken` to push the payload to a user (after [obtaining a user specific token](https://xumm.readme.io/docs/pushing-sign-requests))
+
+A [reference for payload options & custom meta](https://xumm.readme.io/reference/post-payload) can be found in the [API Docs](https://xumm.readme.io/reference/post-payload).
+
+Instead of providing a `TxJson` transaction, a transaction formatted as HEX blob (string) can be provided in a `TxBlob` property.
