@@ -95,7 +95,7 @@ public class XummMiscClientTests
 
         // Assert
         Assert.IsNotNull(ex);
-        Assert.That(ex!.Message, Is.EqualTo("Specified argument was out of the range of valid values. (Parameter 'name')\r\nActual value was INVALID_STATUS."));
+        Assert.That(ex!.Message, Is.EqualTo($"Specified argument was out of the range of valid values. (Parameter 'name'){Environment.NewLine}Actual value was INVALID_STATUS."));
     }
 
     [Test]
