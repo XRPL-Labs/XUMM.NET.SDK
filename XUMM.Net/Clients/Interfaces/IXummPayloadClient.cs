@@ -34,6 +34,13 @@ public interface IXummPayloadClient
     /// <summary>
     /// Get payload details or payload resolve status and result data.
     /// </summary>
+    /// <param name="payload">The <see cref="XummPayloadResponse" /> return value of <see cref="CreateAsync" />.</param>
+    /// <param name="throwError">Throws an exception if an error occurred; otherwise errors are ignored..</param>
+    Task<XummPayloadDetails?> GetAsync(XummPayloadResponse payload, bool throwError = false);
+
+    /// <summary>
+    /// Get payload details or payload resolve status and result data.
+    /// </summary>
     /// <param name="payloadUuid">Payload UUID as received from the Payload POST endpoint.</param>
     /// <param name="throwError">Throws an exception if an error occurred; otherwise errors are ignored..</param>
     Task<XummPayloadDetails?> GetAsync(string payloadUuid, bool throwError = false);

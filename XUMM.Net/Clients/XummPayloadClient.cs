@@ -71,6 +71,12 @@ public class XummPayloadClient : IXummPayloadClient
     }
 
     /// <inheritdoc />
+    public async Task<XummPayloadDetails?> GetAsync(XummPayloadResponse payload, bool throwError = false)
+    {
+        return await GetAsync(payload.Uuid, throwError);
+    }
+
+    /// <inheritdoc />
     public async Task<XummPayloadDetails?> GetAsync(string payloadUuid, bool throwError = false)
     {
         try
