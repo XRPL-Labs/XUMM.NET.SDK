@@ -161,10 +161,10 @@ Payloads are the primary reason for the XUMM API (thus this SDK) to exist. The [
 A payload can contain an XRPL transaction template. Some properties may be omitted, as they will be added by the XUMM app when a user signs a transaction. A simple payload may look like this:
 
 ```C#
-var payload = new XummPostJsonPayload("{ 
-        "\"TransactionType\": \"Payment\", " + 
+var payload = new XummPostJsonPayload(
+        "{ \"TransactionType\": \"Payment\", " + 
         "\"Destination\": \"rwiETSee2wMz3SBnAG8hkMsCgvGy9LWbZ1\", " + 
-        "\"Amount\": \"1337\" }";
+        "\"Amount\": \"1337\" }");
 ```
 
 As you can see the payload looks like a regular XRPL transaction, wrapped in an `TxJson` object, omitting the mandatory `Account`, `Fee` and `Sequence` properties. They will be added containing the correct values when the payload is signed by an app user.
@@ -192,7 +192,7 @@ You can `GetAsync()` a payload by:
   var payload = await _payloadClient.GetAsync("00000000-0000-0000-0000-000000000000");
   ```
 
-- Passing a created Payload object (see: [IXummPayloadClient.CreateAsync()](#sdkpayloadcreate))  
+- Passing a created Payload object (see: [IXummPayloadClient.CreateAsync](#sdkpayloadcreate))  
   ```C#
   @inject IXummPayloadClient _payloadClient
   var newPayload = new XummPostJsonPayload("{...}");
@@ -206,3 +206,31 @@ If a payload can't be fetched (eg. doesn't exist), `null` will be returned, unle
 @inject IXummPayloadClient _payloadClient
 var payload = await _payloadClient.GetAsync("00000000-0000-0000-0000-000000000000", true);
 ```
+
+##### IXummPayloadClient.CreateAsync
+
+To create a payload, a `TxJson` XRPL transaction can be provided. Alternatively, a transaction formatted as HEX blob (string) can be provided in a `TxBlob` property. **See the [intro](#intro) for more information about payloads.** Take a look at the [Developer Docs for more information about payloads](https://xumm.readme.io/docs/your-first-payload).
+
+The response (see: [Developer Docs](https://xumm.readme.io/docs/payload-response-resources)) of a `IXummPayloadClient.CreateAsync()` operation, a `<XummPayloadResponse>` object, looks like this:
+
+```C#
+var payload = new XummPayloadResponse
+{
+    Uuid = "1289e9ae-7d5d-4d5f-b89c-18633112ce09",
+    Next = new XummPayloadNextResponse
+    {
+        Always = "https://xumm.app/sign/1289e9ae-7d5d-4d5f-b89c-18633112ce09",
+        NoPushMessageReceived = "https://xumm.app/sign/1289e9ae-7d5d-4d5f-b89c-18633112ce09/qr"
+    },
+    Refs = new XummPayloadRefsResponse
+    {
+        QrPng = "https://xumm.app/sign/1289e9ae-7d5d-4d5f-b89c-18633112ce09_q.png",
+        QrMatrix = "https://xumm.app/sign/1289e9ae-7d5d-4d5f-b89c-18633112ce09_q.json",
+        QrUriQualityOpts = new List<string> { "m", "q", "h" },
+        WebsocketStatus = "wss://xumm.app/sign/1289e9ae-7d5d-4d5f-b89c-18633112ce09"
+    },
+    Pushed = true
+};
+```
+
+The `Next.Always` URL is the URL to send the end user to, to scan a QR code or automatically open the XUMM app (if on mobile). If a `UserToken` has been provided as part of the payload data provided to `IXummPayloadClient.CreateAsync()`, you can see if the payload has been pushed to the end user. A button "didn't receive a push notification" could then take the user to the `Next.NoPushMessageReceived` URL. The alternatively user routing / instruction flows can be custom built using the QR information provided in the `XummPayloadRefsResponse` object, and a subscription for live status updates (opened, signed, etc.) using a WebSocket client can be setup by conneting to the `Refs.WebsocketStatus` URL. **Please note: this SDK already offers subscriptions. There's no need to setup your own WebSocket client, see [Payload subscriptions: live updates](#payload-subscriptions-live-updates).** There's more information about the [payload workflow](https://xumm.readme.io/docs/payload-workflow) and a [payload lifecycle](https://xumm.readme.io/docs/doc-payload-life-cycle) in the Developer Docs.
