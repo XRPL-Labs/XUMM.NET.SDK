@@ -80,7 +80,7 @@ namespace XUMM.NET.SDK.Tests
         public void WhenXummNetIsAddedWithoutSectionFound_ShouldThrowException()
         {
             // Arrange 
-            _configurationMock.Setup(x => x.GetSection(It.Is<string>(k => k == "Xumm"))).Returns((IConfigurationSection?)null);
+            _configurationMock.Setup(x => x.GetSection(It.Is<string>(k => k == "Xumm"))).Returns<IConfigurationSection?>(null);
 
             // Act
             var ex = Assert.Throws<Exception>(() => _serviceCollectionMock.Object.AddXummNet(_configurationMock.Object));
