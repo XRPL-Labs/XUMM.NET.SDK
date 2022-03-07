@@ -3,13 +3,13 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using XUMM.Net.Clients.Interfaces;
-using XUMM.Net.Models.Payload;
-using XUMM.Net.Models.Payload.Xumm;
-using XUMM.Net.WebSocket;
-using XUMM.Net.WebSocket.EventArgs;
+using XUMM.NET.SDK.Clients.Interfaces;
+using XUMM.NET.SDK.Models.Payload;
+using XUMM.NET.SDK.Models.Payload.Xumm;
+using XUMM.NET.SDK.WebSocket;
+using XUMM.NET.SDK.WebSocket.EventArgs;
 
-namespace XUMM.Net.Clients;
+namespace XUMM.NET.SDK.Clients;
 
 public class XummPayloadClient : IXummPayloadClient
 {

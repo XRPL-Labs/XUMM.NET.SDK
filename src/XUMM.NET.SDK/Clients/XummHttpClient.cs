@@ -7,11 +7,11 @@ using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using XUMM.Net.Clients.Interfaces;
-using XUMM.Net.Configs;
-using XUMM.Net.Models;
+using XUMM.NET.SDK.Clients.Interfaces;
+using XUMM.NET.SDK.Configs;
+using XUMM.NET.SDK.Models;
 
-namespace XUMM.Net.Clients;
+namespace XUMM.NET.SDK.Clients;
 
 public class XummHttpClient : IXummHttpClient
 {

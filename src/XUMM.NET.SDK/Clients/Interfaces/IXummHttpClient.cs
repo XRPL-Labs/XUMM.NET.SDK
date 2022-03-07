@@ -1,7 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace XUMM.Net.Clients.Interfaces;
+namespace XUMM.NET.SDK.Clients.Interfaces;
 
 public interface IXummHttpClient
 {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.Net.Models
+namespace XUMM.NET.SDK.Models
 {
     public class XummFatalApiError
     {

@@ -5,10 +5,10 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
-using XUMM.Net.Clients;
-using XUMM.Net.Configs;
+using XUMM.NET.SDK.Clients;
+using XUMM.NET.SDK.Configs;
 
-namespace XUMM.Net.Tests.Clients;
+namespace XUMM.NET.SDK.Tests.Clients;
 
 [TestFixture]
 public class XummHttpClientTests

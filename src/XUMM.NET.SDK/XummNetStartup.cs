@@ -1,12 +1,12 @@
 ﻿using System;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
-using XUMM.Net.Clients;
-using XUMM.Net.Clients.Interfaces;
-using XUMM.Net.Configs;
-using XUMM.Net.WebSocket;
+using XUMM.NET.SDK.Clients;
+using XUMM.NET.SDK.Clients.Interfaces;
+using XUMM.NET.SDK.Configs;
+using XUMM.NET.SDK.WebSocket;
 
-namespace XUMM.Net;
+namespace XUMM.NET.SDK;
 
 public static class XummNetStartup
 {

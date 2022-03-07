@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
-using XUMM.Net.Models.Misc.AppStorage;
+using XUMM.NET.SDK.Models.Misc.AppStorage;
 
-namespace XUMM.Net.Clients.Interfaces;
+namespace XUMM.NET.SDK.Clients.Interfaces;
 
 public interface IXummMiscAppStorageClient
 {

@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
 using NUnit.Framework;
 
-namespace XUMM.Net.Tests.Extensions;
+namespace XUMM.NET.SDK.Tests.Extensions;
 
 internal static class AssertExtensions
 {

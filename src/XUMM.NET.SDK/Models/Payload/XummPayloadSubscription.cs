@@ -1,4 +1,4 @@
-﻿namespace XUMM.Net.Models.Payload;
+﻿namespace XUMM.NET.SDK.Models.Payload;
 
 public class XummPayloadSubscription
 {

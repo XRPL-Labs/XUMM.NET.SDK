@@ -3,12 +3,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
-using XUMM.Net.Clients;
-using XUMM.Net.Clients.Interfaces;
-using XUMM.Net.Tests.Extensions;
-using XUMM.Net.WebSocket;
+using XUMM.NET.SDK.Clients;
+using XUMM.NET.SDK.Clients.Interfaces;
+using XUMM.NET.SDK.Tests.Extensions;
+using XUMM.NET.SDK.WebSocket;
 
-namespace XUMM.Net.Tests
+namespace XUMM.NET.SDK.Tests
 {
     internal class XummNetStartupTests
     {

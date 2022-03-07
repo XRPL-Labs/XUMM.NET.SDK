@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Text.Json;
-using XUMM.Net.Models.Payload;
+using XUMM.NET.SDK.Models.Payload;
 
-namespace XUMM.Net.WebSocket.EventArgs;
+namespace XUMM.NET.SDK.WebSocket.EventArgs;
 
 public class XummSubscriptionEventArgs
 {

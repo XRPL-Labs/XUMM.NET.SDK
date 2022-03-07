@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using XUMM.Net.Enums;
+using XUMM.NET.SDK.Enums;
 
-namespace XUMM.Net.Models.Payload.XRPL
+namespace XUMM.NET.SDK.Models.Payload.XRPL
 {
     public class XrplPaymentTransaction : XrplTransaction
     {

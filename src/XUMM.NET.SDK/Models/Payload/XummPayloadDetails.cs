@@ -1,7 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-using XUMM.Net.Models.Misc;
+using XUMM.NET.SDK.Models.Misc;
 
-namespace XUMM.Net.Models.Payload
+namespace XUMM.NET.SDK.Models.Payload
 {
     public class XummPayloadDetails
     {

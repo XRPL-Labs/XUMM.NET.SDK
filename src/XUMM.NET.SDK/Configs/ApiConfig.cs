@@ -1,7 +1,7 @@
 ﻿using System;
-using XUMM.Net.Extensions;
+using XUMM.NET.SDK.Extensions;
 
-namespace XUMM.Net.Configs;
+namespace XUMM.NET.SDK.Configs;
 
 public class ApiConfig
 {

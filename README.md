@@ -22,11 +22,11 @@ builder.Services.AddXummNet(builder.Configuration);
 ````
 
 5. Hit `F5`: you're now running a completely empty Blazor server-side App with XUMM.NET. 
-6. Start building your app. For reference, browse the [XUMM.Net.ServerApp](https://github.com/DominiqueBlomsma/XUMM.Net/tree/main/XUMM.Net.ServerApp) to see all the options.
+6. Start building your app. For reference, browse the [XUMM.NET.ServerApp](https://github.com/DominiqueBlomsma/XUMM.Net/tree/main/XUMM.NET.ServerApp) to see all the options.
 
 ### Credentials
 
-The SDK will look in your appsettings for the `ApiKey` and `ApiSecret` values. Optionally the `RestClientAddress` can be provided. An [example appsettings](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net.ServerApp/appsettings.json) file is provided in this repository. Alternatively you can provide your XUMM API Key & Secret by passing them like:
+The SDK will look in your appsettings for the `ApiKey` and `ApiSecret` values. Optionally the `RestClientAddress` can be provided. An [example appsettings](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.NET.ServerApp/appsettings.json) file is provided in this repository. Alternatively you can provide your XUMM API Key & Secret by passing them like:
 
 ```C#
 builder.Services.AddXummNet(o =>

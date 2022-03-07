@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using XUMM.Net.Clients.Interfaces;
-using XUMM.Net.Enums;
-using XUMM.Net.Extensions;
-using XUMM.Net.Helpers;
-using XUMM.Net.Models.Misc;
+using XUMM.NET.SDK.Clients.Interfaces;
+using XUMM.NET.SDK.Enums;
+using XUMM.NET.SDK.Extensions;
+using XUMM.NET.SDK.Helpers;
+using XUMM.NET.SDK.Models.Misc;
 
-namespace XUMM.Net.Clients;
+namespace XUMM.NET.SDK.Clients;
 
 public class XummMiscClient : IXummMiscClient
 {

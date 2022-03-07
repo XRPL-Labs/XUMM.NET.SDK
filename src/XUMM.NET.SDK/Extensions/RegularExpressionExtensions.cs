@@ -1,6 +1,6 @@
 ﻿using System.Text.RegularExpressions;
 
-namespace XUMM.Net.Extensions;
+namespace XUMM.NET.SDK.Extensions;
 
 public static class RegularExpressionExtensions
 {

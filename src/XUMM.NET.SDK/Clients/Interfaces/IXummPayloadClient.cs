@@ -2,11 +2,11 @@
 using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
-using XUMM.Net.Models.Payload;
-using XUMM.Net.Models.Payload.Xumm;
-using XUMM.Net.WebSocket.EventArgs;
+using XUMM.NET.SDK.Models.Payload;
+using XUMM.NET.SDK.Models.Payload.Xumm;
+using XUMM.NET.SDK.WebSocket.EventArgs;
 
-namespace XUMM.Net.Clients.Interfaces;
+namespace XUMM.NET.SDK.Clients.Interfaces;
 
 public interface IXummPayloadClient
 {

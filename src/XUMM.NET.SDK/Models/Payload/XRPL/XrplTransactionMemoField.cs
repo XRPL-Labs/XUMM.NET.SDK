@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.Net.Models.Payload.XRPL
+namespace XUMM.NET.SDK.Models.Payload.XRPL
 {
     public class XrplTransactionMemoField
     {

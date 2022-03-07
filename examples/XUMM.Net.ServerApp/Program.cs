@@ -1,4 +1,4 @@
-﻿using XUMM.Net;
+﻿using XUMM.NET.SDK;
 
 var builder = WebApplication.CreateBuilder(args);
 
