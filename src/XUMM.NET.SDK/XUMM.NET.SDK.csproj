@@ -8,13 +8,13 @@
     <Authors>Dominique Blomsma</Authors>
     <Description>XUMM .NET SDK - Interact with the XUMM Developer API the easy way</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/DominiqueBlomsma/XUMM.Net</PackageProjectUrl>
+    <PackageProjectUrl>https://github.com/XRPL-Labs/XUMM.NET.SDK</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/DominiqueBlomsma/XUMM.Net.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/XRPL-Labs/XUMM.NET.SDK.git</RepositoryUrl>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageIconUrl />
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageTags>XUMM SDK C# .NET</PackageTags>
+    <PackageTags>XUMM .NET SDK C#</PackageTags>
     <Copyright>Dominique Blomsma © 2022</Copyright>
   </PropertyGroup>
 

@@ -1,4 +1,4 @@
-# XUMM.NET [![XUMM.NET](https://github.com/DominiqueBlomsma/XUMM.Net/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/DominiqueBlomsma/XUMM.Net/actions/workflows/dotnet.yml)
+# XUMM.NET [![XUMM.NET](https://github.com/XRPL-Labs/XUMM.NET.SDK/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/XRPL-Labs/XUMM.NET.SDK/actions/workflows/dotnet.yml)
 Interact with the XUMM SDK from .NET / C# environments.
 
 ## Install XUMM.NET in server-side Blazor App
@@ -22,11 +22,11 @@ builder.Services.AddXummNet(builder.Configuration);
 ````
 
 5. Hit `F5`: you're now running a completely empty Blazor server-side App with XUMM.NET. 
-6. Start building your app. For reference, browse the [XUMM.NET.ServerApp](https://github.com/DominiqueBlomsma/XUMM.Net/tree/main/XUMM.NET.ServerApp) to see all the options.
+6. Start building your app. For reference, browse the [XUMM.NET.ServerApp](https://github.com/XRPL-Labs/XUMM.NET.SDK/tree/main/XUMM.NET.ServerApp) to see all the options.
 
 ### Credentials
 
-The SDK will look in your appsettings for the `ApiKey` and `ApiSecret` values. Optionally the `RestClientAddress` can be provided. An [example appsettings](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.NET.ServerApp/appsettings.json) file is provided in this repository. Alternatively you can provide your XUMM API Key & Secret by passing them like:
+The SDK will look in your appsettings for the `ApiKey` and `ApiSecret` values. Optionally the `RestClientAddress` can be provided. An [example appsettings](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/XUMM.NET.ServerApp/appsettings.json) file is provided in this repository. Alternatively you can provide your XUMM API Key & Secret by passing them like:
 
 ```C#
 builder.Services.AddXummNet(o =>
@@ -54,7 +54,7 @@ The `ping` method allows you to verify API access (valid credentials) and return
 var pong = await _miscClient.GetPingAsync();
 ```
 
-Returns: [`XummPong`](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Models/Misc/XummPong.cs)
+Returns: [`XummPong`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/XUMM.Net/Models/Misc/XummPong.cs)
 ```C#
 var pong = new XummPong
 {
@@ -98,7 +98,7 @@ XUMM when the session KYC was initiated by.
 var kycStatus = await _miscClient.GetKycStatusAsync("00000000-0000-0000-0000-000000000000");
 ```
 
-Returns: [`XummKycStatus`](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Enums/XummKycStatus.cs)
+Returns: [`XummKycStatus`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/XUMM.Net/Enums/XummKycStatus.cs)
 
 ###### Notes on KYC information
 
@@ -119,7 +119,7 @@ live from the XRP ledger, as fetched for you by the XUMM backend.
 var txInfo = await _miscClient.GetTransactionAsync("00000000-0000-0000-0000-000000000000");
 ```
 
-Returns: [`XummTransaction`](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Models/Misc/XummTransaction.cs)
+Returns: [`XummTransaction`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/XUMM.Net/Models/Misc/XummTransaction.cs)
 
 
 #### App Storage
@@ -132,7 +132,7 @@ This data is private, and accessible only with your own API credentials. This pr
 ```C#
 @inject IXummMiscAppStorageClient _miscAppStorageClient
 
-var storageSet = await _miscClient.StoreAsync({name: 'Dominique', age: 32, male: true});
+var storageSet = await _miscAppStorageClient.StoreAsync({name: 'Dominique', age: 32, male: true});
 Console.WriteLine(storageSet.Stored)
 // true
 
@@ -169,7 +169,7 @@ var payload = new XummPostJsonPayload(
 
 As you can see the payload looks like a regular XRPL transaction, wrapped in an `TxJson` object, omitting the mandatory `Account`, `Fee` and `Sequence` properties. They will be added containing the correct values when the payload is signed by an app user.
 
-Optionally (besides `TxJson`) a payload can contain these properties ([XummPayloadBodyBase definition](https://github.com/DominiqueBlomsma/XUMM.Net/blob/main/XUMM.Net/Models/Payload/XummPayloadBodyBase.cs)):
+Optionally (besides `TxJson`) a payload can contain these properties ([XummPayloadBodyBase definition](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/XUMM.Net/Models/Payload/XummPayloadBodyBase.cs)):
 
 - `XummPayloadOptions` to define payload options like a return URL, expiration, etc.
 - `XummPayloadCustomMeta` to add metadata, user instruction, your own unique ID, ...
