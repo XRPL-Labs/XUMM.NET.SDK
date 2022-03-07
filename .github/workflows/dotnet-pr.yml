@@ -2,7 +2,7 @@ name: XUMM.NET.SDK PR
 
 on:
   pull_request:
-    branches: [ main ]
+    branches: [ develop ]
 
 jobs:
   build:
