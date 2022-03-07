@@ -3,7 +3,7 @@ name: XUMM.NET.SDK
 on:
   push:
     branches: [ main ]
-\  pull_request:
+  pull_request:
     branches: [ develop ]
 jobs:
   build:
