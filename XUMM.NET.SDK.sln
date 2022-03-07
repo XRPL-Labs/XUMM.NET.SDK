@@ -18,7 +18,6 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{AFC2408B-FC18-4397-A98F-E86017C68F80}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
-		.github\workflows\dotnet-pr.yml = .github\workflows\dotnet-pr.yml
 		LICENSE.md = LICENSE.md
 		README.md = README.md
 	EndProjectSection
