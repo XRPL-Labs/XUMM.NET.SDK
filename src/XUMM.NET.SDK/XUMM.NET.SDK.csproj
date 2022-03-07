@@ -6,7 +6,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <Authors>Dominique Blomsma</Authors>
-    <Description>XUMM.Net is a wrapper around the XUMM API</Description>
+    <Description>XUMM .NET SDK - Interact with the XUMM Developer API the easy way</Description>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageProjectUrl>https://github.com/DominiqueBlomsma/XUMM.Net</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
@@ -14,8 +14,8 @@
     <PackageIcon>Icon.png</PackageIcon>
     <PackageIconUrl />
     <NeutralLanguage>en</NeutralLanguage>
-    <PackageTags>XUMM XUMM.Net C# .Net</PackageTags>
-    <Copyright>Dominique Blomsma © 2021</Copyright>
+    <PackageTags>XUMM SDK C# .NET</PackageTags>
+    <Copyright>Dominique Blomsma © 2022</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
