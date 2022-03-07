@@ -5,21 +5,21 @@ VisualStudioVersion = 17.0.32112.339
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "examples", "examples", "{7AF9F0C9-3C27-4A58-A28B-348117330F5C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUMM.NET.ServerApp", "examples\XUMM.NET.ServerApp\XUMM.NET.ServerApp.csproj", "{D4C84A07-5EC6-41F0-AC62-224E59B363E2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUMM.NET.ServerApp", "..\examples\XUMM.NET.ServerApp\XUMM.NET.ServerApp.csproj", "{D4C84A07-5EC6-41F0-AC62-224E59B363E2}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{48565AAD-6CD8-44E4-AA5E-5E5CBDA4C726}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "test", "test", "{7750F62E-6726-4ABA-8568-CC7D0524BA91}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUMM.NET.SDK", "src\XUMM.NET.SDK\XUMM.NET.SDK.csproj", "{605726BE-9CB4-4FE4-BDCD-A4694DC9E8AE}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUMM.NET.SDK", "XUMM.NET.SDK\XUMM.NET.SDK.csproj", "{605726BE-9CB4-4FE4-BDCD-A4694DC9E8AE}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUMM.NET.SDK.Tests", "src\XUMM.NET.SDK.Tests\XUMM.NET.SDK.Tests.csproj", "{99A2C104-526B-4FC5-BDE7-19253E5DDDCB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUMM.NET.SDK.Tests", "XUMM.NET.SDK.Tests\XUMM.NET.SDK.Tests.csproj", "{99A2C104-526B-4FC5-BDE7-19253E5DDDCB}"
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{AFC2408B-FC18-4397-A98F-E86017C68F80}"
 	ProjectSection(SolutionItems) = preProject
-		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
-		LICENSE.md = LICENSE.md
-		README.md = README.md
+		..\.github\workflows\dotnet.yml = ..\.github\workflows\dotnet.yml
+		..\LICENSE.md = ..\LICENSE.md
+		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
 Global
