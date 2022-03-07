@@ -234,3 +234,25 @@ var payload = new XummPayloadResponse
 ```
 
 The `Next.Always` URL is the URL to send the end user to, to scan a QR code or automatically open the XUMM app (if on mobile). If a `UserToken` has been provided as part of the payload data provided to `IXummPayloadClient.CreateAsync()`, you can see if the payload has been pushed to the end user. A button "didn't receive a push notification" could then take the user to the `Next.NoPushMessageReceived` URL. The alternatively user routing / instruction flows can be custom built using the QR information provided in the `XummPayloadRefsResponse` object, and a subscription for live status updates (opened, signed, etc.) using a WebSocket client can be setup by conneting to the `Refs.WebsocketStatus` URL. **Please note: this SDK already offers subscriptions. There's no need to setup your own WebSocket client, see [Payload subscriptions: live updates](#payload-subscriptions-live-updates).** There's more information about the [payload workflow](https://xumm.readme.io/docs/payload-workflow) and a [payload lifecycle](https://xumm.readme.io/docs/doc-payload-life-cycle) in the Developer Docs.
+
+##### IXummPayloadClient.CancelAsync
+
+To cancel a payload, provide a payload UUID (string), a `<XummPayloadResponse>` (by performing a `IXummPayloadClient.GetAsync()` first) or a `<XummPayloadDetails>` (by using the response of a `IXummPayloadClient.CreateAsync()` call). By cancelling an existing payload, the payload will be marked as expired and can no longer be opened by users. 
+
+**Please note**: *if a user already opened the payload in XUMM APP, the payload cannot be cancelled: the user may still be resolving the payload in the XUMM App, and should have a chance to complete that process*.
+
+A [XummDeletePayload](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/src/XUMM.NET.SDK/Models/Payload/XummDeletePayload.cs) response looks like:
+```C#
+var deletedPayload = new XummDeletePayload
+{
+    Result = new XummDeletePayloadResult
+    {
+        Cancelled = true,
+        Reason = "OK"
+    },
+    Meta = new XummPayloadDetailsMeta
+    {
+        Uuid = "1289e9ae-7d5d-4d5f-b89c-18633112ce09"
+    }
+};
+```
