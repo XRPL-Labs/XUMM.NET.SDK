@@ -1,4 +1,4 @@
-name: XUMM.NET
+name: XUMM.NET.SDK
 
 on:
   push:
@@ -8,18 +8,20 @@ on:
 
 jobs:
   build:
-
-    runs-on: ubuntu-latest
+    runs-on: windows-latest 
 
     steps:
     - uses: actions/checkout@v2
+    - name: Get tag
+      id: tag
+      uses: dawidd6/action-get-tag@v1
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-    - name: Restore dependencies
-      run: dotnet restore
-    - name: Build
-      run: dotnet build --no-restore
-    - name: Test
-      run: dotnet test --no-build --verbosity normal
+    - name: Run XUMM.NET.SDK Tests
+      run: dotnet test ./src/XUMM.NET.SDK.Tests/XUMM.NET.SDK.Tests.csproj
+    - name: XUMM.NET.SDK
+      run: dotnet build -p:PackageVersion=${{steps.tag.outputs.tag}} --configuration Release ./src/XUMM.NET.SDK/XUMM.NET.SDK.csproj
+    - name: Publish XUMM.NET.SDK
+      run: dotnet nuget push .\src\XUMM.NET.SDK\bin\Release\*.nupkg -k ${{ secrets.NUGET_APIKEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
