@@ -481,6 +481,70 @@ public class XummPayloadClientTests
     }
     #endregion
 
+    #region CreateAndSubscribeAsync Tests
+    [Test]
+    public async Task CreateAndSubscribeAsync_WithValidXummPostJsonPayload_ShouldReturnXummPayloadResponseAsync()
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-create");
+
+        // Act
+        var result = await _subject.CreateAndSubscribeAsync(It.IsAny<XummPostJsonPayload>(), delegate (object? sender, XummSubscriptionEventArgs e)
+        {
+        }, It.IsAny<CancellationToken>());
+
+        // Assert
+        AssertExtensions.AreEqual(PayloadFixtures.XummCreatePayload, result!);
+    }
+
+    [Test]
+    public void CreateAndSubscribeAsync_WithInvalidXummPostJsonPayload_ShouldThrowExceptionAsync()
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.InternalServerError, "payload-error");
+
+        // Act
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.CreateAndSubscribeAsync(It.IsAny<XummPostJsonPayload>(), delegate (object? sender, XummSubscriptionEventArgs e)
+        {
+        }, It.IsAny<CancellationToken>()));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
+    }
+
+    [Test]
+    public async Task CreateAndSubscribeAsync_WithValidXummPostBlobPayload_ShouldReturnXummPayloadResponseAsync()
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-create");
+
+        // Act
+        var result = await _subject.CreateAndSubscribeAsync(It.IsAny<XummPostBlobPayload>(), delegate (object? sender, XummSubscriptionEventArgs e)
+        {
+        }, It.IsAny<CancellationToken>());
+
+        // Assert
+        AssertExtensions.AreEqual(PayloadFixtures.XummCreatePayload, result!);
+    }
+
+    [Test]
+    public void CreateAndSubscribeAsync_WithInvalidXummPostBlobPayload_ShouldThrowExceptionAsync()
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.InternalServerError, "payload-error");
+
+        // Act
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.CreateAndSubscribeAsync(It.IsAny<XummPostBlobPayload>(), delegate (object? sender, XummSubscriptionEventArgs e)
+        {
+        }, It.IsAny<CancellationToken>()));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
+    }
+    #endregion
+
     public static async IAsyncEnumerable<string> GetWebSocketMessagesAsync()
     {
         yield return "{\"message\": \"Welcome aaaaaaaa-dddd-ffff-cccc-8207bd724e45\"}";
