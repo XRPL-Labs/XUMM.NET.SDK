@@ -6,13 +6,13 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Moq;
 using NUnit.Framework;
-using XUMM.Net.Clients;
-using XUMM.Net.Configs;
-using XUMM.Net.Enums;
-using XUMM.Net.Tests.Extensions;
-using XUMM.Net.Tests.Fixtures;
+using XUMM.NET.SDK.Clients;
+using XUMM.NET.SDK.Configs;
+using XUMM.NET.SDK.Enums;
+using XUMM.NET.SDK.Tests.Extensions;
+using XUMM.NET.SDK.Tests.Fixtures;
 
-namespace XUMM.Net.Tests.Clients;
+namespace XUMM.NET.SDK.Tests.Clients;
 
 [TestFixture]
 public class XummMiscClientTests

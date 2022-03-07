@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.Net.Models.XApp
+namespace XUMM.NET.SDK.Models.XApp
 {
     public class XummXAppOttResponse
     {

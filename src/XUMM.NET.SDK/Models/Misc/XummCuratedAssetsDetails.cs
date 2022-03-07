@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace XUMM.Net.Models.Misc
+namespace XUMM.NET.SDK.Models.Misc
 {
     public class XummCuratedAssetsDetails
     {

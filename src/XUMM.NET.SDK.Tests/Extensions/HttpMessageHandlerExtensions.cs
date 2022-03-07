@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 using Moq;
 using Moq.Protected;
 
-namespace XUMM.Net.Tests.Extensions;
+namespace XUMM.NET.SDK.Tests.Extensions;
 
 internal static class HttpMessageHandlerExtensions
 {

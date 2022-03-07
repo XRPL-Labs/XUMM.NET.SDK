@@ -1,7 +1,7 @@
 ﻿using System.Text.Json;
-using XUMM.Net.Models.Misc.AppStorage;
+using XUMM.NET.SDK.Models.Misc.AppStorage;
 
-namespace XUMM.Net.Tests.Fixtures
+namespace XUMM.NET.SDK.Tests.Fixtures
 {
     internal static class MiscAppStorageFixtures
     {

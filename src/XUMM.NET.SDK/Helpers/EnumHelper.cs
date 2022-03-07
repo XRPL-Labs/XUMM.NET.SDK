@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace XUMM.Net.Helpers;
+namespace XUMM.NET.SDK.Helpers;
 
 public static class EnumHelper
 {

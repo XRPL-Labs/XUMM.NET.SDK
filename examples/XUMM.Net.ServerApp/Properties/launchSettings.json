@@ -8,7 +8,7 @@
     }
   },
   "profiles": {
-    "XUMM.Net.ServerApp": {
+    "XUMM.NET.ServerApp": {
       "commandName": "Project",
       "dotnetRunMessages": true,
       "launchBrowser": true,

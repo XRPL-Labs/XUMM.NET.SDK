@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using XUMM.Net.Enums;
-using XUMM.Net.Models.Misc;
+using XUMM.NET.SDK.Enums;
+using XUMM.NET.SDK.Models.Misc;
 
-namespace XUMM.Net.Clients.Interfaces;
+namespace XUMM.NET.SDK.Clients.Interfaces;
 
 public interface IXummMiscClient
 {

@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.Net.Models.Misc.AppStorage
+namespace XUMM.NET.SDK.Models.Misc.AppStorage
 {
     public class XummStorageStore : XummStorage
     {

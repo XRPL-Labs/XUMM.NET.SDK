@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
-using XUMM.Net.Models.Misc;
-using XUMM.Net.Models.Payload;
+using XUMM.NET.SDK.Models.Misc;
+using XUMM.NET.SDK.Models.Payload;
 
-namespace XUMM.Net.Tests.Fixtures;
+namespace XUMM.NET.SDK.Tests.Fixtures;
 
 internal static class PayloadFixtures
 {

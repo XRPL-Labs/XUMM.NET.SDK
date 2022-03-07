@@ -1,4 +1,4 @@
-﻿namespace XUMM.Net.Enums;
+﻿namespace XUMM.NET.SDK.Enums;
 
 public enum XrplTransactionType
 {

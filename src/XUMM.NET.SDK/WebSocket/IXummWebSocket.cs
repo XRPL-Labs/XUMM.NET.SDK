@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading;
 
-namespace XUMM.Net.WebSocket
+namespace XUMM.NET.SDK.WebSocket
 {
     public interface IXummWebSocket
     {

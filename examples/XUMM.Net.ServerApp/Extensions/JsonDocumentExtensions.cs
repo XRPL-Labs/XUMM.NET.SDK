@@ -1,7 +1,7 @@
 ﻿using System.Text;
 using System.Text.Json;
 
-namespace XUMM.Net.ServerApp.Extensions
+namespace XUMM.NET.ServerApp.Extensions
 {
     public static class JsonDocumentExtensions
     {

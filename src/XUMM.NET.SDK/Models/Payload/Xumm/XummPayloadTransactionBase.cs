@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace XUMM.Net.Models.Payload.Xumm
+namespace XUMM.NET.SDK.Models.Payload.Xumm
 {
     public class XummPayloadTransactionBase : Dictionary<string, object>
     {

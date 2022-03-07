@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 
-namespace XUMM.Net.Tests.Extensions
+namespace XUMM.NET.SDK.Tests.Extensions
 {
     public static class ServiceDescriptionExtensions
     {
