@@ -26,7 +26,8 @@ builder.Services.AddXummNet(builder.Configuration);
 
 ### Credentials
 
-The SDK will look in your appsettings for the `ApiKey` and `ApiSecret` values. Optionally the `RestClientAddress` can be provided. An [example appsettings](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/XUMM.NET.ServerApp/appsettings.json) file is provided in this repository. Alternatively you can provide your XUMM API Key & Secret by passing them like:
+The SDK will look in your appsettings for the `ApiKey` and `ApiSecret` values. Optionally the `RestClientAddress` can be provided. An [example appsettings](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/examples/XUMM.Net.ServerApp/appsettings.json) file is provided in this repository. 
+Alternatively you can provide your XUMM API Key & Secret by passing them like:
 
 ```C#
 builder.Services.AddXummNet(o =>
@@ -47,7 +48,7 @@ More information about the XUMM API, payloads, the API workflow, sending Push no
 
 ##### IXummMiscClient.GetPingAsync()
 
-The `ping` method allows you to verify API access (valid credentials) and returns some info on your XUMM APP:
+The `GetPingAsync()` method allows you to verify API access (valid credentials) and returns some info on your XUMM APP:
 
 ```C#
 @inject IXummMiscClient _miscClient
@@ -83,8 +84,8 @@ var pong = new XummPong
 
 ##### IXummMiscClient.GetKycStatusAsync()
 
-The `GetKycStatusAsync` return the KYC status of a user based on a user_token, issued after the
-user signed a Sign Request (from your app) before (see Payloads - Intro).
+The `GetKycStatusAsync()` return the KYC status of a user based on a `UserToken`, issued after the
+user signed a Sign Request (from your app) before (see [Payloads - Intro](#intro)).
 
 If a user token specified is invalid, revoked, expired, etc. the method will always
 return `XummKycStatus.None`, just like when a user didn't go through KYC. You cannot distinct a non-KYC'd user
@@ -100,6 +101,7 @@ var kycStatus = await _miscClient.GetKycStatusAsync("00000000-0000-0000-0000-000
 
 Returns: [`XummKycStatus`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/XUMM.Net/Enums/XummKycStatus.cs)
 
+
 ###### Notes on KYC information
 
 - Once an account has successfully completed the XUMM KYC flow, the KYC flag will be applied to the account even if the identity document used to KYC expired. The flag shows that the account was **once** KYC'd by a real person with a real identity document.
@@ -108,7 +110,7 @@ Returns: [`XummKycStatus`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/X
 
 ##### IXummMiscClient.GetTransactionAsync()
 
-The `GetTransactionAsync` method allows you to get the transaction outcome (mainnet)
+The `GetTransactionAsync()` method allows you to get the transaction outcome (mainnet)
 live from the XRP ledger, as fetched for you by the XUMM backend.
 
 **Note**: it's best to retrieve these results **yourself** instead of relying on the XUMM platform to get live XRPL transaction information! You can use the **[xrpl-txdata](https://www.npmjs.com/package/xrpl-txdata)** package to do this:  
@@ -177,7 +179,8 @@ Optionally (besides `TxJson`) a payload can contain these properties ([XummPaylo
 
 A [reference for payload options & custom meta](https://xumm.readme.io/reference/post-payload) can be found in the [API Docs](https://xumm.readme.io/reference/post-payload).
 
-Instead of providing a `TxJson` transaction, a transaction formatted as HEX blob (string) can be provided in a `TxBlob` property.
+Instead of providing a `TxJson` transaction via `XummPostJsonPayload`, a transaction formatted as HEX blob (string) can be provided in a `TxBlob` property via `XummPostBlobPayload`.
+
 
 ##### IXummPayloadClient.GetAsync
 
@@ -192,7 +195,7 @@ You can `GetAsync()` a payload by:
   var payload = await _payloadClient.GetAsync("00000000-0000-0000-0000-000000000000");
   ```
 
-- Passing a created Payload object (see: [IXummPayloadClient.CreateAsync](#sdkpayloadcreate))  
+- Passing a created Payload object (see: [IXummPayloadClient.CreateAsync](#IXummPayloadClient.CreateAsync))  
   ```C#
   @inject IXummPayloadClient _payloadClient
   var newPayload = new XummPostJsonPayload("{...}");
@@ -200,16 +203,17 @@ You can `GetAsync()` a payload by:
   var payload = await _payloadClient.GetAsync(created);
   ```
 
-If a payload can't be fetched (eg. doesn't exist), `null` will be returned, unless a second param (boolean) is provided to get the SDK to throw an Exception in case a payload can't be retrieved:
+If a payload can't be fetched (eg. doesn't exist), `null` will be returned, unless a second param (boolean) is provided to get the SDK to throw an exception in case a payload can't be retrieved:
 
 ```C#
 @inject IXummPayloadClient _payloadClient
 var payload = await _payloadClient.GetAsync("00000000-0000-0000-0000-000000000000", true);
 ```
 
+
 ##### IXummPayloadClient.CreateAsync
 
-To create a payload, a `TxJson` XRPL transaction can be provided. Alternatively, a transaction formatted as HEX blob (string) can be provided in a `TxBlob` property. **See the [intro](#intro) for more information about payloads.** Take a look at the [Developer Docs for more information about payloads](https://xumm.readme.io/docs/your-first-payload).
+To create a payload, a `TxJson` XRPL transaction can be provided. Alternatively, a transaction formatted as HEX blob (string) can be provided in a `TxBlob` property. **See the [Intro](#intro) for more information about payloads.** Take a look at the [Developer Docs for more information about payloads](https://xumm.readme.io/docs/your-first-payload).
 
 The response (see: [Developer Docs](https://xumm.readme.io/docs/payload-response-resources)) of a `IXummPayloadClient.CreateAsync()` operation, a `<XummPayloadResponse>` object, looks like this:
 
@@ -235,6 +239,7 @@ var payload = new XummPayloadResponse
 
 The `Next.Always` URL is the URL to send the end user to, to scan a QR code or automatically open the XUMM app (if on mobile). If a `UserToken` has been provided as part of the payload data provided to `IXummPayloadClient.CreateAsync()`, you can see if the payload has been pushed to the end user. A button "didn't receive a push notification" could then take the user to the `Next.NoPushMessageReceived` URL. The alternatively user routing / instruction flows can be custom built using the QR information provided in the `XummPayloadRefsResponse` object, and a subscription for live status updates (opened, signed, etc.) using a WebSocket client can be setup by conneting to the `Refs.WebsocketStatus` URL. **Please note: this SDK already offers subscriptions. There's no need to setup your own WebSocket client, see [Payload subscriptions: live updates](#payload-subscriptions-live-updates).** There's more information about the [payload workflow](https://xumm.readme.io/docs/payload-workflow) and a [payload lifecycle](https://xumm.readme.io/docs/doc-payload-life-cycle) in the Developer Docs.
 
+
 ##### IXummPayloadClient.CancelAsync
 
 To cancel a payload, provide a payload UUID (string), a `<XummPayloadResponse>` (by performing a `IXummPayloadClient.GetAsync()` first) or a `<XummPayloadDetails>` (by using the response of a `IXummPayloadClient.CreateAsync()` call). By cancelling an existing payload, the payload will be marked as expired and can no longer be opened by users. 
@@ -256,3 +261,42 @@ var deletedPayload = new XummDeletePayload
     }
 };
 ```
+
+
+#### Payload subscriptions: live updates
+
+To subscribe to live payload status updates, the XUMM .NET SDK can setup a WebSocket connection and monitor live status events. Emitted events include:
+
+- The payload is opened by a XUMM App user (webpage)
+- The payload is opened by a XUMM App user (in the app)
+- Payload expiration updates (remaining time in seconds)
+- The payload was resolved by rejecting
+- The payload was resolved by accepting (signing)
+
+More information about the status update events & sample event data [can be found in the Developer Docs](https://xumm.readme.io/docs/payload-status).
+
+Status updates can be processed by providing a *callback function* to the `IXummPayloadClient.SubscribeAsync()` method.
+
+The subscription will be closed by either:
+
+- Requesting a cancellation via the `CancellationToken` passed to the `IXummPayloadClient.SubscribeAsync()` method.
+- Manually calling `<XummSubscriptionEventArgs>.CloseConnectionAsync()` on the event returned by the `IXummPayloadClient.SubscribeAsync()` event handler.
+
+
+##### IXummPayloadClient.SubscribeAsync
+
+For every payload specific event the callback function will be called with [`<XummSubscriptionEventArgs>`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/df6bdc86569f5808e851fabfb6854629bcdec74e/src/XUMM.NET.SDK/WebSocket/EventArgs/XummSubscriptionEventArgs.cs). 
+The `<XummSubscriptionEventArgs>.Data` property contains parsed JSON containing event information.
+
+Resolving (by requesting a cancellation or calling `CloseConnectionAsync()` manually) closes the WebSocket client the XUMM SDK sets up 'under the hood'.
+
+Examples:
+
+- [SignIn Payload](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/examples/XUMM.Net.ServerApp/Pages/Payload/SignIn.razor)
+- [Custom Payload](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/examples/XUMM.Net.ServerApp/Pages/Payload/Custom.razor)
+
+
+##### IXummPayloadClient.CreateAndSubscribeAsync
+
+All information that applies on [`IXummPayloadClient.CreateAsync()`](#IXummPayloadClient.CreateAsync) and [`IXummPayloadClient.SubscribeAsync()`](#IXummPayloadClient.SubscribeAsync) applies. 
+Only differences is that the input for a `IXummPayloadClient.CreateAndSubscribeAsync()` call isn't a payload UUID / existing payload, but a payload to create. 
