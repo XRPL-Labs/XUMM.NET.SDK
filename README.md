@@ -300,3 +300,7 @@ Examples:
 
 All information that applies on [`IXummPayloadClient.CreateAsync()`](#IXummPayloadClient.CreateAsync) and [`IXummPayloadClient.SubscribeAsync()`](#IXummPayloadClient.SubscribeAsync) applies. 
 Only differences is that the input for a `IXummPayloadClient.CreateAndSubscribeAsync()` call isn't a payload UUID / existing payload, but a payload to create. 
+
+
+## Debugging (logging)
+The XUMM .NET SDK will emit logs with the use of https://docs.microsoft.com/en-us/dotnet/core/extensions/logging
