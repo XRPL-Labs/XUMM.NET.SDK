@@ -6,7 +6,6 @@
     <Authors>Dominique Blomsma</Authors>
     <Description>XUMM .NET SDK - Interact with the XUMM Developer API the easy way</Description>
     <Copyright>© 2022</Copyright>
-    <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/XRPL-Labs/XUMM.NET.SDK</RepositoryUrl>
     <PackageIcon>Icon.png</PackageIcon>
