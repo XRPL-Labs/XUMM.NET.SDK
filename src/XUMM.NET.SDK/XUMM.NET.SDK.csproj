@@ -1,25 +1,36 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
     <LangVersion>10.0</LangVersion>
     <Nullable>enable</Nullable>
-  </PropertyGroup>
-  <PropertyGroup>
-    <TargetFramework>net6.0</TargetFramework>
     <Authors>Dominique Blomsma</Authors>
     <Description>XUMM .NET SDK - Interact with the XUMM Developer API the easy way</Description>
+    <Copyright>© 2022</Copyright>
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
-    <PackageProjectUrl>https://github.com/XRPL-Labs/XUMM.NET.SDK</PackageProjectUrl>
     <RepositoryType>git</RepositoryType>
-    <RepositoryUrl>https://github.com/XRPL-Labs/XUMM.NET.SDK.git</RepositoryUrl>
+    <RepositoryUrl>https://github.com/XRPL-Labs/XUMM.NET.SDK</RepositoryUrl>
     <PackageIcon>Icon.png</PackageIcon>
     <PackageIconUrl />
     <NeutralLanguage>en</NeutralLanguage>
     <PackageTags>XUMM .NET SDK C#</PackageTags>
-    <Copyright>Dominique Blomsma © 2022</Copyright>
+    <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+    <PackageProjectUrl>https://github.com/XRPL-Labs/XUMM.NET.SDK</PackageProjectUrl>
+    <GenerateDocumentationFile>true</GenerateDocumentationFile>
+    <PackageVersion>$(PackageVersion)</PackageVersion>
   </PropertyGroup>
 
   <ItemGroup>
     <None Include="Icon\Icon.png">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="..\..\LICENSE.md">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
     </None>
