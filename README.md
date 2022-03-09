@@ -4,7 +4,7 @@ Interact with the XUMM SDK from .NET / C# environments.
 ## Install XUMM.NET in server-side Blazor App
 
 1. Create a new ASP.NET Core Blazor Server-App project.
-2. Install NuGet-package: `XUMM.NET`.
+2. Install NuGet-package: `XUMM.NET.SDK`.
 3. Add the following code block at the end of the services in `Program.cs`:
 
 ```c#
