@@ -5,6 +5,7 @@
     <Nullable>enable</Nullable>
     <Authors>Dominique Blomsma</Authors>
     <Description>XUMM .NET SDK - Interact with the XUMM Developer API the easy way</Description>
+    <Version>1.1.0</Version>
     <Copyright>© 2022</Copyright>
     <RepositoryType>git</RepositoryType>
     <RepositoryUrl>https://github.com/XRPL-Labs/XUMM.NET.SDK</RepositoryUrl>
@@ -22,6 +23,7 @@
     <ComponentsPackageVersion>3.1.23</ComponentsPackageVersion>
     <ComponentsPackageVersion Condition="'$(TargetFramework)' == 'net6.0' ">6.0.0</ComponentsPackageVersion>
     <ComponentsPackageVersion Condition="'$(TargetFramework)' == 'net5.0' ">5.0.0</ComponentsPackageVersion>
+    <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
   </PropertyGroup>
 
   <ItemGroup>
