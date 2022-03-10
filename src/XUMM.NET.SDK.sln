@@ -22,6 +22,8 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{AFC2408B-F
 		..\README.md = ..\README.md
 	EndProjectSection
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUMM.NET.WebApp", "..\examples\XUMM.NET.WebApp\XUMM.NET.WebApp.csproj", "{A4AA2FD4-16F8-47C4-9557-93327CCEB3D4}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -40,6 +42,10 @@ Global
 		{99A2C104-526B-4FC5-BDE7-19253E5DDDCB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{99A2C104-526B-4FC5-BDE7-19253E5DDDCB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{99A2C104-526B-4FC5-BDE7-19253E5DDDCB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A4AA2FD4-16F8-47C4-9557-93327CCEB3D4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A4AA2FD4-16F8-47C4-9557-93327CCEB3D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A4AA2FD4-16F8-47C4-9557-93327CCEB3D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A4AA2FD4-16F8-47C4-9557-93327CCEB3D4}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -48,6 +54,7 @@ Global
 		{D4C84A07-5EC6-41F0-AC62-224E59B363E2} = {7AF9F0C9-3C27-4A58-A28B-348117330F5C}
 		{605726BE-9CB4-4FE4-BDCD-A4694DC9E8AE} = {48565AAD-6CD8-44E4-AA5E-5E5CBDA4C726}
 		{99A2C104-526B-4FC5-BDE7-19253E5DDDCB} = {7750F62E-6726-4ABA-8568-CC7D0524BA91}
+		{A4AA2FD4-16F8-47C4-9557-93327CCEB3D4} = {7AF9F0C9-3C27-4A58-A28B-348117330F5C}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {00F9CCB4-0863-455A-B517-A0C9B82BAA76}

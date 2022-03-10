@@ -1,0 +1,21 @@
+﻿@page
+@model PingPongModel
+
+@{
+    ViewData["Title"] = "Ping";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.Pong.Pong)
+{
+    <div class="alert alert-success" role="alert">
+        <h4 class="alert-heading">Retrieved Pong!</h4>
+    </div>
+}
+else
+{
+    <div class="alert alert-danger" role="alert">
+        <h4 class="alert-heading">Failed to retrieve Pong!</h4>
+    </div>
+}
