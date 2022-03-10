@@ -31,7 +31,11 @@ public class XummHttpClient : IXummHttpClient
 
         _serializerOptions = new JsonSerializerOptions
         {
+#if NET5_0_OR_GREATER
             DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+#else
+            IgnoreNullValues = true,
+#endif
             Converters =
             {
                 new JsonStringEnumConverter()
@@ -127,7 +131,11 @@ public class XummHttpClient : IXummHttpClient
             {
                 if (!string.IsNullOrWhiteSpace(fatalApiError.Message))
                 {
+#if NET5_0_OR_GREATER
                     exception = new HttpRequestException(fatalApiError.Message, null, response.StatusCode);
+#else
+                    exception = new HttpRequestException(fatalApiError.Message);
+#endif
                 }
             }
         }
@@ -143,8 +151,13 @@ public class XummHttpClient : IXummHttpClient
                 var apiError = JsonSerializer.Deserialize<XummApiError>(responseText);
                 if (apiError != null)
                 {
-                    exception = new HttpRequestException(
-                        $"Error code {apiError.Error.Code}, see XUMM Dev Console, reference: '{apiError.Error.Reference}'.", null, response.StatusCode);
+                    var message = $"Error code {apiError.Error.Code}, see XUMM Dev Console, reference: '{apiError.Error.Reference}'.";
+
+#if NET5_0_OR_GREATER
+                    exception = new HttpRequestException(message, null, response.StatusCode);
+#else
+                    exception = new HttpRequestException(message);
+#endif
                 }
             }
         }
@@ -153,7 +166,13 @@ public class XummHttpClient : IXummHttpClient
             _logger.LogTrace(ex, $"No {nameof(XummApiError)} available in unsuccessful response body of request: {response.RequestMessage?.RequestUri}");
         }
 
-        return exception ??= new HttpRequestException(response.ReasonPhrase, null, response.StatusCode);
+#if NET5_0_OR_GREATER
+        exception ??= new HttpRequestException(response.ReasonPhrase, null, response.StatusCode);
+#else
+        exception ??= new HttpRequestException(response.ReasonPhrase);
+#endif
+
+        return exception;
     }
 
     private string GetRequestUrl(string endpoint)
