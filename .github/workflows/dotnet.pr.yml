@@ -1,9 +1,9 @@
 name: XUMM.NET.SDK
 
-on: 
-    push:
-        tags:
-        - '*.*.*'
+on:
+  pull_request:
+    branches: 
+    - '**'
 jobs:
   build:
     runs-on: windows-latest 
