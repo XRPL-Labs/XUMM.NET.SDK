@@ -1,7 +1,7 @@
-# XUMM.NET [![XUMM.NET](https://github.com/XRPL-Labs/XUMM.NET.SDK/actions/workflows/dotnet.yml/badge.svg?branch=main)](https://github.com/XRPL-Labs/XUMM.NET.SDK/actions/workflows/dotnet.yml)
+# XUMM.NET.SDK [![XUMM.NET.SDK](https://github.com/XRPL-Labs/XUMM.NET.SDK/actions/workflows/dotnet.yml/badge.svg)](https://github.com/XRPL-Labs/XUMM.NET.SDK/actions/workflows/dotnet.yml)
 Interact with the XUMM SDK from .NET / C# environments.
 
-## Install XUMM.NET in server-side Blazor App
+## Install XUMM.NET.SDK in server-side Blazor App
 
 1. Create a new ASP.NET Core Blazor Server-App project.
 2. Install NuGet-package: `XUMM.NET.SDK`.

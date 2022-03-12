@@ -1,4 +1,4 @@
-name: Releases
+name: XUMM.NET.SDK
 
 on: 
     push:
