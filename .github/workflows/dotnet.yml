@@ -1,4 +1,4 @@
-name: XUMM.NET.SDK
+name: Releases
 
 on: 
     push:
@@ -10,11 +10,18 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
+    - name: Get tag
+      id: tag
+      uses: dawidd6/action-get-tag@v1
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
         dotnet-version: 6.0.x
-    - name: XUMM.NET.SDK
-      run: dotnet build --configuration Release ./src/XUMM.NET.SDK/XUMM.NET.SDK.csproj
-    - name: Run Model Maker Tests
-      run: dotnet test ./src/XUMM.NET.SDK.Tests/XUMM.NET.SDK.Tests.csproj
+    - uses: nuget/setup-nuget@v1
+      with:
+        nuget-api-key: ${{ secrets.NUGET_APIKEY }}
+        nuget-version: '5.x'
+    - name: Build XUMM.NET.SDK
+      run: dotnet build -p:PackageVersion=${{steps.tag.outputs.tag}} --configuration Release ./src/XUMM.NET.SDK/XUMM.NET.SDK.csproj
+    - name: Publish XUMM.NET.SDK
+      run: dotnet nuget push .\src\XUMM.NET.SDK\bin\Release\*.nupkg -k ${{ secrets.NUGET_APIKEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
