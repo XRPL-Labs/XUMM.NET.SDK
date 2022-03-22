@@ -63,7 +63,15 @@
             return;
         }
 
-        _xummUserTokens = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.VerifyUserTokensAsync(userTokens));
+        if (userTokens.Length == 1)
+        {
+            _xummUserTokens = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.VerifyUserTokenAsync(userTokens[0]));
+        }
+        else
+        {
+            _xummUserTokens = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.VerifyUserTokensAsync(userTokens));
+        }
+
         _responseAlertBox.SetAlert("User Token validity", _xummUserTokens != null);
     }
 }

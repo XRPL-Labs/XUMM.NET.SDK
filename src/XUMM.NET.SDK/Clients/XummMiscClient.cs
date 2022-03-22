@@ -84,15 +84,22 @@ public class XummMiscClient : IXummMiscClient
     /// <inheritdoc />
     public async Task<XummUserTokens> VerifyUserTokenAsync(string userToken)
     {
-        return await VerifyUserTokensAsync(new[]
+        if (string.IsNullOrWhiteSpace(userToken))
         {
-            userToken
-        });
+            throw new ArgumentException("Value cannot be null or white space", nameof(userToken));
+        }
+
+        return await _httpClient.GetAsync<XummUserTokens>($"user-token/{userToken}");
     }
 
     /// <inheritdoc />
     public async Task<XummUserTokens> VerifyUserTokensAsync(string[] userTokens)
     {
+        if (userTokens == null || userTokens.Length == 0)
+        {
+            throw new ArgumentException("Value cannot be null or empty", nameof(userTokens));
+        }
+
         var request = new XummUserTokensRequest
         {
             Tokens = new List<string>(userTokens)

@@ -157,4 +157,33 @@ internal static class MiscFixtures
             }
         }
     };
+
+    internal static XummUserTokens XummUserToken => new()
+    {
+        Tokens = new List<XummUserTokenValidity>
+        {
+            new()
+            {
+                UserToken = "691d5ae8-968b-44c8-8835-f25da1214f35",
+                Active = true
+            }
+        }
+    };
+
+    internal static XummUserTokens XummUserTokens => new()
+    {
+        Tokens = new List<XummUserTokenValidity>
+        {
+            new()
+            {
+                UserToken = "691d5ae8-968b-44c8-8835-f25da1214f35",
+                Active = true
+            },
+            new()
+            {
+                UserToken = "b12b59a8-83c8-4bc0-8acb-1d1d743871f1",
+                Active = false
+            }
+        }
+    };
 }
