@@ -34,6 +34,18 @@ public interface IXummMiscClient
     Task<XummRates> GetRatesAsync(string currencyCode);
 
     /// <summary>
+    /// Validate a User Token
+    /// </summary>
+    /// <param name="userToken">UUID User Token to check and return in the response (validity)</param>
+    Task<XummUserTokens> VerifyUserTokenAsync(string userToken);
+
+    /// <summary>
+    /// Validate a list of User Tokens
+    /// </summary>
+    /// <param name="userTokens">List of User Token UUID's to check and return in the response (validity)</param>
+    Task<XummUserTokens> VerifyUserTokensAsync(string[] userTokens);
+
+    /// <summary>
     /// Get an avatar (gravatar or personal avatar)
     /// </summary>
     /// <param name="account">Account address, eg. rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB</param>

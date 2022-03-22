@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using XUMM.NET.SDK.Clients.Interfaces;
 using XUMM.NET.SDK.Enums;
@@ -81,6 +82,26 @@ public class XummMiscClient : IXummMiscClient
     }
 
     /// <inheritdoc />
+    public async Task<XummUserTokens> VerifyUserTokenAsync(string userToken)
+    {
+        return await VerifyUserTokensAsync(new[]
+        {
+            userToken
+        });
+    }
+
+    /// <inheritdoc />
+    public async Task<XummUserTokens> VerifyUserTokensAsync(string[] userTokens)
+    {
+        var request = new XummUserTokensRequest
+        {
+            Tokens = new List<string>(userTokens)
+        };
+
+        return await _httpClient.PostAsync<XummUserTokens>("user-tokens", request);
+    }
+
+    /// <inheritdoc />
     public string GetAvatarUrl(string account, int dimensions, int padding)
     {
         if (string.IsNullOrWhiteSpace(account))
@@ -90,7 +111,8 @@ public class XummMiscClient : IXummMiscClient
 
         if (dimensions < MinimumAvatarDimensions)
         {
-            throw new ArgumentOutOfRangeException(nameof(dimensions), $"The minimum (square) dimensions are {MinimumAvatarDimensions}.");
+            throw new ArgumentOutOfRangeException(nameof(dimensions),
+                $"The minimum (square) dimensions are {MinimumAvatarDimensions}.");
         }
 
         if (padding < 0)

@@ -1,0 +1,69 @@
+﻿@page "/user-tokens"
+@using XUMM.NET.SDK.Clients.Interfaces
+@using XUMM.NET.SDK.Models.Misc
+@using System.Text.RegularExpressions
+
+@inject IXummMiscClient _miscClient
+
+<PageTitle>User Tokens</PageTitle>
+
+<ResponseAlertBox @ref="_responseAlertBox"></ResponseAlertBox>
+
+<h1>User Tokens</h1>
+<div class="row">
+    <div class="mb-3">
+        <label for="usertokens" class="form-label">User Token(s)</label>
+        <textarea id="usertokens" class="form-control" placeholder="User tokens (one per line)" aria-label="User Token(s)" aria-describedby="basic-addon2" rows="10" @bind="_userTokens"></textarea>
+    </div>
+    <div class="btn-group mb-3" role="group">
+        <button class="btn btn-primary" type="button" @onclick="VerifyUserTokensAsync">Verify</button>
+    </div>
+</div>
+
+@if (_xummUserTokens != null)
+{
+    <div class="row">
+        <div class="mb-3">
+            <h2>User Token Validity</h2>
+            <table class="table">
+                <thead>
+                <tr>
+                    <th scope="col">User Token</th>
+                    <th scope="col">Active</th>
+                    <th scope="col">Issued</th>
+                    <th scope="col">Expires</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var userToken in _xummUserTokens.Tokens)
+                {
+                    <tr>
+                        <th scope="row">@userToken.UserToken</th>
+                        <td>@userToken.Active</td>
+                        <td>@userToken.Issued</td>
+                        <td>@userToken.Expires</td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@code {
+    private ResponseAlertBox _responseAlertBox = default!;
+    private string _userTokens = default!;
+    private XummUserTokens? _xummUserTokens;
+
+    private async Task VerifyUserTokensAsync()
+    {
+        var userTokens = Regex.Replace(_userTokens, @"\r\n?|\n", "\r").Split('\r', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
+        if (userTokens.Length == 0)
+        {
+            return;
+        }
+
+        _xummUserTokens = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.VerifyUserTokensAsync(userTokens));
+        _responseAlertBox.SetAlert("User Token validity", _xummUserTokens != null);
+    }
+}
