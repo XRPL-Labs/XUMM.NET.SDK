@@ -17,11 +17,6 @@ namespace XUMM.NET.SDK.Tests.Clients;
 [TestFixture]
 public class XummMiscClientTests
 {
-    private Mock<XummHttpClient> _xummHttpClient = default!;
-    private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
-    private Mock<IHttpClientFactory> _httpClientFactory = default!;
-    private XummMiscClient _subject = default!;
-
     [SetUp]
     public void SetUp()
     {
@@ -42,6 +37,11 @@ public class XummMiscClientTests
 
         _subject = new XummMiscClient(_xummHttpClient.Object);
     }
+
+    private Mock<XummHttpClient> _xummHttpClient = default!;
+    private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
+    private Mock<IHttpClientFactory> _httpClientFactory = default!;
+    private XummMiscClient _subject = default!;
 
     [Test]
     public async Task GetPingAsync_ShouldReturnPongAsync()
@@ -89,13 +89,15 @@ public class XummMiscClientTests
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "kycstatus-invalid");
-        
+
         // Act
         var ex = Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => _subject.GetKycStatusAsync(userToken));
 
         // Assert
         Assert.IsNotNull(ex);
-        Assert.That(ex!.Message, Is.EqualTo($"Specified argument was out of the range of valid values. (Parameter 'name'){Environment.NewLine}Actual value was INVALID_STATUS."));
+        Assert.That(ex!.Message,
+            Is.EqualTo(
+                $"Specified argument was out of the range of valid values. (Parameter 'name'){Environment.NewLine}Actual value was INVALID_STATUS."));
     }
 
     [Test]
@@ -129,7 +131,8 @@ public class XummMiscClientTests
     [TestCase(null)]
     [TestCase("")]
     [TestCase(" ")]
-    public void GetKycStatusAsync_WithNullOrWhiteSpaceUserTokenAndAccount_ShouldThrowExceptionAsync(string userTokenOrAccount)
+    public void GetKycStatusAsync_WithNullOrWhiteSpaceUserTokenAndAccount_ShouldThrowExceptionAsync(
+        string userTokenOrAccount)
     {
         // Act
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.GetKycStatusAsync(userTokenOrAccount));
@@ -210,6 +213,77 @@ public class XummMiscClientTests
     }
 
     [Test]
+    [TestCase("691d5ae8-968b-44c8-8835-f25da1214f35")]
+    public async Task VerifyUserTokenAsync_WithValidUserToken_ShouldReturnUserTokenAsync(string userToken)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "user-token");
+
+        // Act
+        var result = await _subject.VerifyUserTokenAsync(userToken);
+
+        // Assert
+        AssertExtensions.AreEqual(MiscFixtures.XummUserToken, result);
+    }
+
+    [Test]
+    [TestCase("691d5ae8-968b-44c8-8835-f25da1214f35")]
+    public async Task VerifyUserTokenAsync_WithValidUserToken_ShouldContainUserTokenInRequestUriAsync(string userToken)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "user-token");
+
+        // Act
+        var result = await _subject.VerifyUserTokenAsync(userToken);
+
+        // Assert
+        _httpMessageHandlerMock.AssertRequestUri(HttpMethod.Get, $"/user-token/{userToken}");
+    }
+
+    [Test]
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase(" ")]
+    public void VerifyUserTokenAsync_WithInvalidUserToken_ShouldThrowExceptionAsync(string userToken)
+    {
+        // Act
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.VerifyUserTokenAsync(userToken));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'userToken')"));
+    }
+
+    [Test]
+    [TestCase("user-tokens", new[]
+    {
+        "691d5ae8-968b-44c8-8835-f25da1214f35", "b12b59a8-83c8-4bc0-8acb-1d1d743871f1"
+    })]
+    public async Task VerifyUserTokensAsync_WithValidUserTokens_ShouldReturnUserTokensAsync(string fixture,
+        string[] userTokens)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, fixture);
+
+        // Act
+        var result = await _subject.VerifyUserTokensAsync(userTokens);
+
+        // Assert
+        AssertExtensions.AreEqual(MiscFixtures.XummUserTokens, result);
+    }
+
+    [Test]
+    public void VerifyUserTokensAsync_WithoutUserTokens_ShouldThrowExceptionAsync()
+    {
+        // Act
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.VerifyUserTokensAsync(It.IsAny<string[]>()));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or empty (Parameter 'userTokens')"));
+    }
+
+    [Test]
     [TestCase(null, 50, 5)]
     [TestCase("", 100, 0)]
     [TestCase(" ", 199, 2)]
@@ -227,7 +301,6 @@ public class XummMiscClientTests
     [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 50, 5)]
     [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 100, 0)]
     [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 199, 2)]
-
     public void GetAvatarUrl_WithInvalidDimensions_ShouldThrowException(string account, int dimensions, int padding)
     {
         // Act
@@ -239,7 +312,6 @@ public class XummMiscClientTests
     }
 
     [Test]
-
     [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 200, -50)]
     [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 250, -1)]
     public void GetAvatarUrl_WithInvalidPadding_ShouldThrowException(string account, int dimensions, int padding)
@@ -253,10 +325,14 @@ public class XummMiscClientTests
     }
 
     [Test]
-    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 200, 5, "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_200_5.png")]
-    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 250, 0, "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_250_0.png")]
-    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 500, 2, "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_500_2.png")]
-    public void GetAvatarUrl_WithValidDimensions_ShouldReturnAvatarUrl(string account, int dimensions, int padding, string expected)
+    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 200, 5,
+        "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_200_5.png")]
+    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 250, 0,
+        "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_250_0.png")]
+    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 500, 2,
+        "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_500_2.png")]
+    public void GetAvatarUrl_WithValidDimensions_ShouldReturnAvatarUrl(string account, int dimensions, int padding,
+        string expected)
     {
         // Act
         var result = _subject.GetAvatarUrl(account, dimensions, padding);

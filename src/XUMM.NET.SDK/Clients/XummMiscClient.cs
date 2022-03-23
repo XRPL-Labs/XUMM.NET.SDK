@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using XUMM.NET.SDK.Clients.Interfaces;
 using XUMM.NET.SDK.Enums;
@@ -81,6 +82,33 @@ public class XummMiscClient : IXummMiscClient
     }
 
     /// <inheritdoc />
+    public async Task<XummUserTokens> VerifyUserTokenAsync(string userToken)
+    {
+        if (string.IsNullOrWhiteSpace(userToken))
+        {
+            throw new ArgumentException("Value cannot be null or white space", nameof(userToken));
+        }
+
+        return await _httpClient.GetAsync<XummUserTokens>($"user-token/{userToken}");
+    }
+
+    /// <inheritdoc />
+    public async Task<XummUserTokens> VerifyUserTokensAsync(string[] userTokens)
+    {
+        if (userTokens == null || userTokens.Length == 0)
+        {
+            throw new ArgumentException("Value cannot be null or empty", nameof(userTokens));
+        }
+
+        var request = new XummUserTokensRequest
+        {
+            Tokens = new List<string>(userTokens)
+        };
+
+        return await _httpClient.PostAsync<XummUserTokens>("user-tokens", request);
+    }
+
+    /// <inheritdoc />
     public string GetAvatarUrl(string account, int dimensions, int padding)
     {
         if (string.IsNullOrWhiteSpace(account))
@@ -90,7 +118,8 @@ public class XummMiscClient : IXummMiscClient
 
         if (dimensions < MinimumAvatarDimensions)
         {
-            throw new ArgumentOutOfRangeException(nameof(dimensions), $"The minimum (square) dimensions are {MinimumAvatarDimensions}.");
+            throw new ArgumentOutOfRangeException(nameof(dimensions),
+                $"The minimum (square) dimensions are {MinimumAvatarDimensions}.");
         }
 
         if (padding < 0)
