@@ -4,6 +4,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using XUMM.NET.SDK;
+using XUMM.NET.SDK.Webhooks;
+using XUMM.NET.WebApp.WebHooks;
 
 namespace XUMM.NET.WebApp
 {
@@ -21,6 +23,7 @@ namespace XUMM.NET.WebApp
         {
             services.AddRazorPages();
             services.AddXummNet(Configuration);
+            services.AddXummWebhooks<XummWebhookProcessor>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -48,6 +51,8 @@ namespace XUMM.NET.WebApp
             {
                 endpoints.MapRazorPages();
             });
+
+            app.MapXummControllerRoute();
         }
     }
 }

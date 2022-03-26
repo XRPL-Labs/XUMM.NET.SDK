@@ -1,9 +1,9 @@
 ﻿using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace XUMM.NET.SDK.Models.Payload;
+namespace XUMM.NET.SDK.Webhooks.Models;
 
-public class XummPayloadCustomMeta
+public class XummCustomMeta
 {
     /// <summary>
     /// Your own identifier for this payload. This identifier must be unique. If duplicate, an error code 409 will be returned

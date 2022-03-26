@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\src\XUMM.NET.SDK.Webhooks\XUMM.NET.SDK.Webhooks.csproj" />
     <ProjectReference Include="..\..\src\XUMM.NET.SDK\XUMM.NET.SDK.csproj" />
   </ItemGroup>
 

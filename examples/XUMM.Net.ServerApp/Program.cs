@@ -1,4 +1,6 @@
 ﻿using XUMM.NET.SDK;
+using XUMM.NET.SDK.Webhooks;
+using XUMM.NET.ServerApp.Webhooks;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -7,6 +9,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
 builder.Services.AddXummNet(builder.Configuration);
+builder.Services.AddXummWebhooks<XummWebhookProcessor>();
 
 var app = builder.Build();
 
@@ -27,5 +30,6 @@ app.UseRouting();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 app.MapControllerRoute("default", "{controller=Home}/{action=Index}/{id?}");
+app.MapXummControllerRoute();
 
 app.Run();
