@@ -1,6 +1,7 @@
 ﻿@page "/signin"
 @using System.Text.Json
 @using System.Text.Json.Serialization
+@using Microsoft.Extensions.Caching.Memory
 @using XUMM.NET.SDK.Clients.Interfaces
 @using XUMM.NET.SDK.Enums
 @using XUMM.NET.SDK.WebSocket.EventArgs
@@ -8,8 +9,25 @@
 @using XUMM.NET.SDK.Models.Payload.Xumm
 
 @inject IXummPayloadClient _payloadClient
+@inject IMemoryCache _memoryCache
 
 <PageTitle>Sign In</PageTitle>
+@if (_userToken != null)
+{
+    <h1>Signed In</h1>
+    <div class="row">
+        <div class="mb-3">
+            <dl class="row">
+                <dt class="col-2">Token</dt>
+                <dd class="col-10 text-break">@_userToken</dd>
+            </dl>
+            <div class="btn-group mb-3" role="group">
+                <button class="btn btn-primary" @onclick="SignOut">Sign out</button>
+            </div>
+        </div>
+    </div>
+    <hr>
+}
 
 <h1>Sign In</h1>
 
@@ -79,12 +97,27 @@
     </div>
 </div>
 
+
 @code {
     private CancellationTokenSource _cts = default!;
     private readonly List<string> _messages = new();
     private string? _qrCodeUrl;
     private string? _payloadUuid;
     private bool? _signed;
+    private string? _userToken;
+
+    protected override Task OnInitializedAsync()
+    {
+        _memoryCache.TryGetValue("USER_TOKEN", out _userToken);
+        return base.OnInitializedAsync();
+    }
+
+    private void SignOut()
+    {
+        _memoryCache.Remove("USER_TOKEN");
+        _userToken = null;
+        StateHasChanged();
+    }
 
     private async Task CreatePayloadAndSubscribe()
     {
@@ -115,7 +148,7 @@
     {
         _cts.Cancel();
         _qrCodeUrl = null;
-            _messages.Add($"Payload {_payloadUuid} subscription cancelled.");
+        _messages.Add($"Payload {_payloadUuid} subscription cancelled.");
         StateHasChanged();
     }
 

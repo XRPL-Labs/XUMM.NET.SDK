@@ -10,6 +10,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
 builder.Services.AddXummNet(builder.Configuration);
 builder.Services.AddXummWebhooks<XummWebhookProcessor>();
+builder.Services.AddMemoryCache();
 
 var app = builder.Build();
 

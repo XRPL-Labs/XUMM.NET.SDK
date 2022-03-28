@@ -33,7 +33,7 @@ public class XummWebSocket : IXummWebSocket
         {
             var buffer = new ArraySegment<byte>(new byte[1024]);
 
-            WriteLog("Subscription active (WebSocket opened).");
+            _logger.LogInformation("Payload {0}: Subscription active (WebSocket opened).", _payloadUuid);
 
             while (webSocket.State == WebSocketState.Open)
             {
@@ -50,7 +50,7 @@ public class XummWebSocket : IXummWebSocket
                 }
                 catch (OperationCanceledException)
                 {
-                    WriteLog("Subscription ended (WebSocket closed).");
+                    _logger.LogInformation("Payload {0}: Subscription ended (WebSocket closed).", _payloadUuid);
                     yield break;
                 }
 
@@ -58,10 +58,5 @@ public class XummWebSocket : IXummWebSocket
                 yield return Encoding.UTF8.GetString(buffer.Array!, 0, result.Count);
             }
         }
-    }
-
-    private void WriteLog(string logMessage)
-    {
-        _logger.LogInformation("Payload {0}: {1}", _payloadUuid, logMessage);
     }
 }
