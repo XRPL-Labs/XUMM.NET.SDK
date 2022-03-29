@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using XUMM.NET.SDK.Models.Payload;
@@ -44,6 +43,16 @@ public interface IXummPayloadClient
     /// <param name="payloadUuid">Payload UUID as received from the Payload POST endpoint.</param>
     /// <param name="throwError">Throws an exception if an error occurred; otherwise errors are ignored..</param>
     Task<XummPayloadDetails?> GetAsync(string payloadUuid, bool throwError = false);
+
+    /// <summary>
+    /// Get payload details or payload resolve status and result data by custom identifier.
+    /// </summary>
+    /// <param name="customIdentifier">
+    /// Custom payload identifier as provided when posting your payload to the Payload POST
+    /// endpoint (<see cref="XummPayloadCustomMeta.Identifier" />)
+    /// </param>
+    /// <param name="throwError">Throws an exception if an error occurred; otherwise errors are ignored..</param>
+    Task<XummPayloadDetails?> GetByCustomIdentifierAsync(string customIdentifier, bool throwError = false);
 
     /// <summary>
     /// Cancel a payload, so a user cannot open it anymore

@@ -11,10 +11,16 @@
 <ResponseAlertBox @ref="_responseAlertBox"></ResponseAlertBox>
 
 <h1>Payload</h1>
+<div>Fetch payload details by providing the UUID or Custom Identifier.</div>
+
 <div class="row">
     <div class="mb-3">
         <label for="payloadUuid" class="form-label">Payload UUID</label>
         <input id="payloadUuid" type="text" class="form-control" placeholder="Payload UUID" aria-label="Payload UUID" aria-describedby="basic-addon2" @bind="_payloadUuid">
+    </div>
+    <div class="mb-3">
+        <label for="customIdentifier" class="form-label">Custom Identifier</label>
+        <input id="customIdentifier" type="text" class="form-control" placeholder="Custom Identifier" aria-label="Custom Identifier" aria-describedby="basic-addon2" @bind="_customIdentifier">
     </div>
     <div class="btn-group mb-3" role="group">
         <button class="btn btn-primary" type="button" @onclick="GetPayloadAsync">Fetch details</button>
@@ -35,12 +41,21 @@
 
 @code {
     private ResponseAlertBox _responseAlertBox = default!;
-    private string _payloadUuid = default!;
+    private string? _payloadUuid;
+    private string? _customIdentifier;
     private XummPayloadDetails? _payloadDetails;
 
     private async Task GetPayloadAsync()
     {
-        _payloadDetails = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _payloadClient.GetAsync(_payloadUuid));
+        if (!string.IsNullOrWhiteSpace(_payloadUuid))
+        {
+            _payloadDetails = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _payloadClient.GetAsync(_payloadUuid));
+        }
+        else if (!string.IsNullOrWhiteSpace(_customIdentifier))
+        {
+            _payloadDetails = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _payloadClient.GetByCustomIdentifierAsync(_customIdentifier));
+        }
+
         _responseAlertBox.SetAlert("Payload Details", _payloadDetails != null);
     }
 }
