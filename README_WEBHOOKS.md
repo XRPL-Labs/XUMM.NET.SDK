@@ -1,5 +1,5 @@
 # XUMM.NET.SDK [![XUMM.NET.SDK](https://github.com/XRPL-Labs/XUMM.NET.SDK/actions/workflows/dotnet.yml/badge.svg)](https://github.com/XRPL-Labs/XUMM.NET.SDK/actions/workflows/dotnet.yml)
-Receive webhooks of XUMM in .NET / C# environments.
+Receive webhook callbacks of XUMM in .NET / C# environments.
 
 ## Install XUMM.NET.SDK.Webhooks in server-side Blazor App
 
@@ -20,3 +20,14 @@ app.MapXummControllerRoute();
 
 5. Hit `F5`: you're now running a completely empty Blazor server-side App with XUMM.NET.SDK.Webhooks. 
 6. Start building your app. For reference, browse the [XUMM.NET.ServerApp](https://github.com/XRPL-Labs/XUMM.NET.SDK/tree/main/XUMM.NET.ServerApp) to see all the options.
+
+
+### Webhook URL
+
+Create your app and set your webhook URL for callbacks at the XUMM Developer Console:
+
+- https://apps.xumm.dev
+
+More information about the webhooks, etc. please check the XUMM API Docs: 
+
+- https://xumm.readme.io/docs

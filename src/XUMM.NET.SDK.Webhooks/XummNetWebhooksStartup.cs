@@ -14,9 +14,7 @@ public static class XummNetWebhooksStartup
     public static IServiceCollection AddXummWebhooks<T>(this IServiceCollection services)
         where T : IXummWebhookProcessor
     {
-        services.AddMvc().AddApplicationPart(typeof(XummNetWebhooksStartup).Assembly);
         services.AddSingleton(typeof(IXummWebhookProcessor), typeof(T));
-
         return services;
     }
 
