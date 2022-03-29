@@ -36,28 +36,17 @@ public class XummPayloadClient : IXummPayloadClient
     }
 
     /// <inheritdoc />
-    public async Task<XummPayloadResponse?> CreateAsync(XummPayloadTransaction payloadTransaction, bool throwError = false)
+    public async Task<XummPayloadResponse?> CreateAsync(XummPayloadTransaction payloadTransaction,
+        bool throwError = false)
     {
         try
         {
-            return await _httpClient.PostAsync<XummPayloadResponse>("payload", new Dictionary<string, object> { { "txJson", payloadTransaction } });
-        }
-        catch
-        {
-            if (!throwError)
+            return await _httpClient.PostAsync<XummPayloadResponse>("payload", new Dictionary<string, object>
             {
-                return default;
-            }
-
-            throw;
-        }
-    }
-
-    private async Task<XummPayloadResponse?> CreatePayloadAsync(XummPayloadBodyBase payload, bool throwError = false)
-    {
-        try
-        {
-            return await _httpClient.PostAsync<XummPayloadResponse>("payload", payload);
+                {
+                    "txJson", payloadTransaction
+                }
+            });
         }
         catch
         {
@@ -82,6 +71,24 @@ public class XummPayloadClient : IXummPayloadClient
         try
         {
             return await _httpClient.GetAsync<XummPayloadDetails>($"payload/{payloadUuid}");
+        }
+        catch
+        {
+            if (!throwError)
+            {
+                return default;
+            }
+
+            throw;
+        }
+    }
+
+    /// <inheritdoc />
+    public async Task<XummPayloadDetails?> GetByCustomIdentifierAsync(string customIdentifier, bool throwError = false)
+    {
+        try
+        {
+            return await _httpClient.GetAsync<XummPayloadDetails>($"payload/ci/{customIdentifier}");
         }
         catch
         {
@@ -146,7 +153,7 @@ public class XummPayloadClient : IXummPayloadClient
         CancellationToken cancellationToken)
     {
         var source = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken);
-        
+
         //This is ugly, but there's a small chance a created XUMM payload has not been distributed
         //across the load balanced XUMM backend, so wait a bit.
         await Task.Delay(75, cancellationToken);
@@ -180,6 +187,23 @@ public class XummPayloadClient : IXummPayloadClient
         CancellationToken cancellationToken)
     {
         return await CreateAndSubscribePayloadAsync(payload, eventHandler, cancellationToken);
+    }
+
+    private async Task<XummPayloadResponse?> CreatePayloadAsync(XummPayloadBodyBase payload, bool throwError = false)
+    {
+        try
+        {
+            return await _httpClient.PostAsync<XummPayloadResponse>("payload", payload);
+        }
+        catch
+        {
+            if (!throwError)
+            {
+                return default;
+            }
+
+            throw;
+        }
     }
 
     private async Task<XummPayloadResponse> CreateAndSubscribePayloadAsync(XummPayloadBodyBase payload,
