@@ -20,6 +20,7 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{AFC2408B-F
 		..\.github\workflows\dotnet.yml = ..\.github\workflows\dotnet.yml
 		..\LICENSE.md = ..\LICENSE.md
 		..\README.md = ..\README.md
+		..\RESPONSIBLE-DISCLOSURE.md = ..\RESPONSIBLE-DISCLOSURE.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUMM.NET.WebApp", "..\examples\XUMM.NET.WebApp\XUMM.NET.WebApp.csproj", "{A4AA2FD4-16F8-47C4-9557-93327CCEB3D4}"
