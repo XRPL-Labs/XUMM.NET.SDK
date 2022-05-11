@@ -59,6 +59,10 @@
         }
         else
         {
+            <div class="mb-3">
+                <label for="customIdentifier" class="form-label">Custom Identifier</label>
+                <input id="customIdentifier" type="text" class="form-control" placeholder="Custom Identifier" aria-label="Custom Identifier" aria-describedby="basic-addon2" @bind="_customIdentifier">
+            </div>
             <div class="btn-group mb-3" role="group">
                 <button class="btn btn-primary" @onclick="CreatePayloadAndSubscribe">Create payload and subscribe</button>
             </div>
@@ -103,6 +107,7 @@
     private readonly List<string> _messages = new();
     private string? _qrCodeUrl;
     private string? _payloadUuid;
+    private string? _customIdentifier;
     private bool? _signed;
     private string? _userToken;
 
@@ -127,6 +132,11 @@
             {
                 CustomMeta = new XummPayloadCustomMeta { Instruction = "Test payload created with the XUMM.NET SDK." }
             };
+
+        if (!string.IsNullOrWhiteSpace(_customIdentifier))
+        {
+            payload.CustomMeta.Identifier = _customIdentifier;
+        }
 
         var payloadResult = await _payloadClient.CreateAsync(payload);
 

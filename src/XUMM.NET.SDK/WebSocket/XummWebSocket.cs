@@ -31,9 +31,9 @@ public class XummWebSocket : IXummWebSocket
 
         if (webSocket.State == WebSocketState.Open)
         {
-            var buffer = new ArraySegment<byte>(new byte[1024]);
-
             _logger.LogInformation("Payload {0}: Subscription active (WebSocket opened).", _payloadUuid);
+
+            var buffer = new ArraySegment<byte>(new byte[1024]);
 
             while (webSocket.State == WebSocketState.Open)
             {

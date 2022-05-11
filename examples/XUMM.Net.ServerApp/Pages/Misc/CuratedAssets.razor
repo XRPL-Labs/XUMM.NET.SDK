@@ -28,7 +28,7 @@
                         <tr>
                             <th scope="row">@assetDetails.Id</th>
                             <td>@assetDetails.Name</td>
-                            <td>@string.Join(", ", assetDetails.Currencies.Select(x=>x.Key).OrderBy(x=>x))</td>
+                            <td>@string.Join(", ", assetDetails.Currencies.Select(x=>x.Value.CurrencyFormatted).OrderBy(x=>x))</td>
                         </tr>
                     }
                 </tbody>
