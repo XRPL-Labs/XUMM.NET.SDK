@@ -1,5 +1,7 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Globalization;
+using System.Text.Json.Serialization;
 using XUMM.NET.SDK.Enums;
+using XUMM.NET.SDK.Extensions;
 
 namespace XUMM.NET.SDK.Models.Payload.XRPL;
 
@@ -44,7 +46,7 @@ public class XrplPaymentTransaction : XrplTransaction
     /// tfPartialPayment flag is set, deliver up to this amount instead.
     /// </summary>
     [JsonPropertyName("Amount")]
-    public XrplTransactionCurrencyAmount? Amount { get; set; }
+    public object? Amount { get; private set; }
 
     /// <summary>
     /// (Optional) Highest amount of source currency this transaction is allowed to cost, including transfer fees, exchange
@@ -59,4 +61,25 @@ public class XrplPaymentTransaction : XrplTransaction
     /// </summary>
     [JsonPropertyName("DeliverMin")]
     public XrplTransactionCurrencyAmount? DeliverMin { get; set; }
+
+    /// <summary>
+    /// XRP Amount
+    /// </summary>
+    public void SetAmount(decimal amount)
+    {
+        Amount = amount.XrpToDropsString();
+    }
+
+    /// <summary>
+    /// Non-XRP Amounts
+    /// </summary>
+    public void SetAmount(string currency, decimal amount, string issuer)
+    {
+        Amount = new XrplTransactionCurrencyAmount
+        {
+            Currency = currency,
+            Value = amount.ToString(CultureInfo.InvariantCulture),
+            Issuer = issuer
+        };
+    }
 }

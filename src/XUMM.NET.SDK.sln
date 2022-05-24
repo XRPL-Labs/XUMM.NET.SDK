@@ -18,12 +18,17 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "misc", "misc", "{AFC2408B-FC18-4397-A98F-E86017C68F80}"
 	ProjectSection(SolutionItems) = preProject
 		..\.github\workflows\dotnet.yml = ..\.github\workflows\dotnet.yml
+		..\.github\workflows\dotnet.pr.yml = ..\.github\workflows\dotnet.pr.yml
 		..\LICENSE.md = ..\LICENSE.md
 		..\README.md = ..\README.md
 		..\RESPONSIBLE-DISCLOSURE.md = ..\RESPONSIBLE-DISCLOSURE.md
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUMM.NET.WebApp", "..\examples\XUMM.NET.WebApp\XUMM.NET.WebApp.csproj", "{A4AA2FD4-16F8-47C4-9557-93327CCEB3D4}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "XUMM.NET.SDK.Webhooks", "XUMM.NET.SDK.Webhooks\XUMM.NET.SDK.Webhooks.csproj", "{26E59332-DC6D-4FD2-986E-77A9590F421F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "XUMM.NET.SDK.Webhooks.Tests", "XUMM.NET.SDK.Webhooks.Tests\XUMM.NET.SDK.Webhooks.Tests.csproj", "{32CA5DC5-29AE-409E-9CAD-1E69FC5CE643}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -47,6 +52,14 @@ Global
 		{A4AA2FD4-16F8-47C4-9557-93327CCEB3D4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{A4AA2FD4-16F8-47C4-9557-93327CCEB3D4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{A4AA2FD4-16F8-47C4-9557-93327CCEB3D4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26E59332-DC6D-4FD2-986E-77A9590F421F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26E59332-DC6D-4FD2-986E-77A9590F421F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26E59332-DC6D-4FD2-986E-77A9590F421F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26E59332-DC6D-4FD2-986E-77A9590F421F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{32CA5DC5-29AE-409E-9CAD-1E69FC5CE643}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{32CA5DC5-29AE-409E-9CAD-1E69FC5CE643}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{32CA5DC5-29AE-409E-9CAD-1E69FC5CE643}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{32CA5DC5-29AE-409E-9CAD-1E69FC5CE643}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -56,6 +69,8 @@ Global
 		{605726BE-9CB4-4FE4-BDCD-A4694DC9E8AE} = {48565AAD-6CD8-44E4-AA5E-5E5CBDA4C726}
 		{99A2C104-526B-4FC5-BDE7-19253E5DDDCB} = {7750F62E-6726-4ABA-8568-CC7D0524BA91}
 		{A4AA2FD4-16F8-47C4-9557-93327CCEB3D4} = {7AF9F0C9-3C27-4A58-A28B-348117330F5C}
+		{26E59332-DC6D-4FD2-986E-77A9590F421F} = {48565AAD-6CD8-44E4-AA5E-5E5CBDA4C726}
+		{32CA5DC5-29AE-409E-9CAD-1E69FC5CE643} = {7750F62E-6726-4ABA-8568-CC7D0524BA91}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {00F9CCB4-0863-455A-B517-A0C9B82BAA76}

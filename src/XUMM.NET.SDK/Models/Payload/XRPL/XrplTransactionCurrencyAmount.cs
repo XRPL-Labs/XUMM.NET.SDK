@@ -4,13 +4,13 @@ namespace XUMM.NET.SDK.Models.Payload.XRPL
 {
     public class XrplTransactionCurrencyAmount
     {
-        [JsonPropertyName("Amount")]
-        public string Amount { get; set; } = default!;
+        [JsonPropertyName("value")]
+        public string Value { get; set; } = default!;
 
-        [JsonPropertyName("Currency")]
+        [JsonPropertyName("currency")]
         public string? Currency { get; set; }
 
-        [JsonPropertyName("Issuer")]
+        [JsonPropertyName("issuer")]
         public string? Issuer { get; set; }
     }
 }

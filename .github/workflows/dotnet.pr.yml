@@ -16,9 +16,13 @@ jobs:
         dotnet-version: 6.0.x
     - name: Build XUMM.NET.SDK
       run: dotnet build --configuration Release ./src/XUMM.NET.SDK/XUMM.NET.SDK.csproj
+    - name: Build XUMM.NET.SDK.Webhooks
+      run: dotnet build --configuration Release ./src/XUMM.NET.SDK.Webhooks/XUMM.NET.SDK.Webhooks.csproj
     - name: Build XUMM.NET.ServerApp
       run: dotnet build --configuration Release ./examples/XUMM.NET.ServerApp/XUMM.NET.ServerApp.csproj
     - name: Build XUMM.NET.WebApp
       run: dotnet build --configuration Release ./examples/XUMM.NET.WebApp/XUMM.NET.WebApp.csproj
     - name: Run XUMM.NET.SDK Tests
       run: dotnet test ./src/XUMM.NET.SDK.Tests/XUMM.NET.SDK.Tests.csproj
+    - name: Run XUMM.NET.SDK.Webhooks Tests
+      run: dotnet test ./src/XUMM.NET.SDK.Webhooks.Tests/XUMM.NET.SDK.Webhooks.Tests.csproj

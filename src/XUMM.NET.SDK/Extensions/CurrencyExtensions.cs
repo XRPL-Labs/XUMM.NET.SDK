@@ -10,7 +10,8 @@ public static class CurrencyExtensions
     private static readonly Regex RgxCurrencyHex = new("^[a-fA-F0-9]{40}$");
     private static readonly Regex RgxDecodedHex = new("[a-zA-Z0-9]{3,}");
     private static readonly string HexReplacementPattern = "(00)+$";
-
+    private static readonly string XRP = "XRP";
+    private static readonly decimal XrpDrops = 1000000m;
     /// <summary>
     /// Format currency to standard currency code
     /// </summary>
@@ -23,7 +24,7 @@ public static class CurrencyExtensions
     public static string ToFormattedCurrency(this string currency, int maxLength = 12)
     {
         currency = currency.Trim();
-        if (currency.Length == 3 && !currency.ToUpper().Equals("XRP"))
+        if (currency.Length == 3 && !currency.ToUpper().Equals(XRP))
         {
             return currency;
         }
@@ -47,12 +48,24 @@ public static class CurrencyExtensions
                 decoded = decoded[..maxLength];
             }
 
-            if (RgxDecodedHex.IsMatch(decoded) && !currency.ToUpper().Equals("XRP"))
+            if (RgxDecodedHex.IsMatch(decoded) && !currency.ToUpper().Equals(XRP))
             {
                 return decoded;
             }
         }
 
         return "???";
+    }
+
+    /// <summary>
+    /// In technical contexts, XRP is measured precisely to the nearest 0.000001 XRP, called a "drop" of XRP. The rippled APIs require all XRP amounts to be specified in drops of XRP. 
+    /// For more detailed information, see the currency format reference. 
+    /// <seealso href="https://xrpl.org/currency-formats.html" />
+    /// </summary>
+    /// <param name="value">Value in XRP</param>
+    /// <returns>Returns XRP represented in drops. For example, 1 XRP is represented as 1000000 drops.</returns>
+    public static string XrpToDropsString(this decimal value)
+    {
+        return ((int)(value * XrpDrops)).ToString();
     }
 }
