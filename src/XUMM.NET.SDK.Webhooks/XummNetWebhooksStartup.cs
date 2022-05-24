@@ -25,16 +25,16 @@ public static class XummNetWebhooksStartup
     /// with the given <paramref name="pattern" />.
     /// </summary>
     /// <param name="endpoints">The <see cref="IEndpointRouteBuilder" /> to add the route to.</param>
+    /// <param name="name">The name of the route.</param>
     /// <param name="pattern">The URL pattern of the route.</param>
     /// <returns>
     /// An <see cref="ControllerActionEndpointConventionBuilder" /> for endpoints associated with controller actions for this
     /// route.
     /// </returns>
-    public static IEndpointRouteBuilder MapXummControllerRoute(this IEndpointRouteBuilder endpoints,
-        string pattern = "Xumm/Webhook")
+    public static IEndpointRouteBuilder MapXummControllerRoute(this IEndpointRouteBuilder endpoints, string name = "XummWebhookProcessor", string pattern = "Xumm/Webhook")
     {
         endpoints.MapControllerRoute(
-            typeof(IXummWebhookProcessor).FullName!,
+            name,
             pattern,
             new
             {
@@ -51,15 +51,15 @@ public static class XummNetWebhooksStartup
     /// with the given <paramref name="pattern" />.
     /// </summary>
     /// <param name="builder">The <see cref="IApplicationBuilder" /> to add the middleware to.</param>
+    /// <param name="name">The name of the route.</param>
     /// <param name="pattern">The URL pattern of the route.</param>
     /// <returns>A reference to this instance after the operation has completed.</returns>
-    public static IApplicationBuilder MapXummControllerRoute(this IApplicationBuilder builder,
-        string pattern = "Xumm/Webhook")
+    public static IApplicationBuilder MapXummControllerRoute(this IApplicationBuilder builder, string name = "XummWebhookProcessor",string pattern = "Xumm/Webhook")
     {
         builder.UseEndpoints(endpoints =>
         {
             endpoints.MapControllerRoute(
-                typeof(IXummWebhookProcessor).FullName!,
+                name,
                 pattern,
                 new
                 {
