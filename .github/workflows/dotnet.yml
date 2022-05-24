@@ -29,5 +29,5 @@ jobs:
       run: dotnet build -p:PackageVersion=${{steps.tag.outputs.tag}} --configuration Release ./src/XUMM.NET.SDK/XUMM.NET.SDK.Webhooks.csproj
     - name: Publish XUMM.NET.SDK
       run: dotnet nuget push .\src\XUMM.NET.SDK\bin\Release\*.nupkg -k ${{ secrets.NUGET_APIKEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
-    - name: Publish XUMM.NET.SDK.Webhooks.
-      run: dotnet nuget push .\src\XUMM.NET.SDK.Webhooks.\bin\Release\*.nupkg -k ${{ secrets.NUGET_APIKEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
+    - name: Publish XUMM.NET.SDK.Webhooks
+      run: dotnet nuget push .\src\XUMM.NET.SDK.Webhooks\bin\Release\*.nupkg -k ${{ secrets.NUGET_APIKEY }} -s https://api.nuget.org/v3/index.json --skip-duplicate
