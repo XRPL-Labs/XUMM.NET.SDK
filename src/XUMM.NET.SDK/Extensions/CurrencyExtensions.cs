@@ -12,6 +12,8 @@ public static class CurrencyExtensions
     private static readonly string HexReplacementPattern = "(00)+$";
     private static readonly string XRP = "XRP";
     private static readonly decimal XrpDrops = 1000000m;
+    private static readonly decimal MaximumXrpValue = 100000000000m;
+
     /// <summary>
     /// Format currency to standard currency code
     /// </summary>
@@ -63,9 +65,15 @@ public static class CurrencyExtensions
     /// <seealso href="https://xrpl.org/currency-formats.html" />
     /// </summary>
     /// <param name="value">Value in XRP</param>
-    /// <returns>Returns XRP represented in drops. For example, 1 XRP is represented as 1000000 drops.</returns>
+    /// <exception cref="ArgumentOutOfRangeException">Thrown when <paramref name="value"/> is set to be more than <see cref="MaximumXrpValue"/>.</exception>
+    /// <returns>Returns XRP represented in drops. For example, 1 XRP is represented as <see cref="XrpDrops"/> drops.</returns>
     public static string XrpToDropsString(this decimal value)
     {
-        return ((int)(value * XrpDrops)).ToString();
+        if (value > MaximumXrpValue)
+        {
+            throw new ArgumentOutOfRangeException(nameof(value), $"Maximum value of XRP is {MaximumXrpValue}");
+        }
+
+        return Math.Truncate(value * XrpDrops).ToString();
     }
 }
