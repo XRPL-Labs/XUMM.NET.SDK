@@ -46,6 +46,12 @@ public interface IXummMiscClient
     Task<XummUserTokens> VerifyUserTokensAsync(string[] userTokens);
 
     /// <summary>
+    /// Fetch the account meta for a XUMM user (based on a public XRPL account address, r...)
+    /// </summary>
+    /// <param name="account">Account address, eg. rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB</param>
+    Task<XummAccountMetaResponse> AccountMetaAsync(string account);
+
+    /// <summary>
     /// Get an avatar (gravatar or personal avatar)
     /// </summary>
     /// <param name="account">Account address, eg. rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB</param>

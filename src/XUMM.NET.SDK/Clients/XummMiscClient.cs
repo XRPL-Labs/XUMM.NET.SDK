@@ -109,6 +109,17 @@ public class XummMiscClient : IXummMiscClient
     }
 
     /// <inheritdoc />
+    public async Task<XummAccountMetaResponse> AccountMetaAsync(string account)
+    {
+        if (!account.IsAccountAddress())
+        {
+            throw new ArgumentException("Value should be a valid account address", nameof(account));
+        }
+
+        return await _httpClient.GetAsync<XummAccountMetaResponse>($"account-meta/{account}");
+    }
+
+    /// <inheritdoc />
     public string GetAvatarUrl(string account, int dimensions, int padding)
     {
         if (string.IsNullOrWhiteSpace(account))
