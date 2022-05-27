@@ -1,0 +1,24 @@
+﻿{
+  "account": "rwietsevLFg8XSmG3bEZzFein1g8RBqWDZ",
+  "kycApproved": true,
+  "xummPro": true,
+  "avatar": "https://xumm.app/avatar/rwietsevLFg8XSmG3bEZzFein1g8RBqWDZ.png",
+  "xummProfile": {
+    "accountAlias": "XRPL Labs - Wietse Wind",
+    "ownerAlias": "Wietse Wind"
+  },
+  "thirdPartyProfiles": [
+    {
+      "accountAlias": "Wietse Wind",
+      "source": "xumm.app"
+    },
+    {
+      "accountAlias": "wietse.com",
+      "source": "xrpl"
+    }
+  ],
+  "globalid": {
+    "linked": "2021-06-29T10:22:25.123Z",
+    "profileUrl": "https://global.id/wietse"
+  }
+}
