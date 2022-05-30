@@ -284,7 +284,7 @@ public class XummMiscClientTests
     }
 
     [Test]
-    [TestCase("qrBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q")]
+    [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q")]
     public async Task GetAccountMetaAsync_WithValidAccount_ShouldReturnAccountMetaAsync(string account)
     {
         // Arrange
@@ -298,7 +298,7 @@ public class XummMiscClientTests
     }
 
     [Test]
-    [TestCase("qrBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q")]
+    [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q")]
     public async Task GetAccountMetaAsync_WithValidAccount_ShouldContainAccountInRequestUriAsync(string account)
     {
         // Arrange
