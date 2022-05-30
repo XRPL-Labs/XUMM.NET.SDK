@@ -15,15 +15,15 @@ namespace XUMM.NET.SDK.Models.Misc
         public bool XummPro { get; set; }
 
         [JsonPropertyName("avatar")]
-        public string? Avatar { get; set; }
+        public string Avatar { get; set; } = default!;
 
         [JsonPropertyName("xummProfile")]
-        public XummProfile? XummProfile { get; set; } 
+        public XummProfile XummProfile { get; set; } = default!;
 
         [JsonPropertyName("thirdPartyProfiles")]
         public List<XummThirdPartyProfile> ThirdPartyProfiles { get; set; } = new List<XummThirdPartyProfile>();
 
         [JsonPropertyName("globalid")]
-        public XummGlobaliD? GlobaliD { get; set; }
+        public XummGlobaliD GlobaliD { get; set; } = default!;
     }
 }
