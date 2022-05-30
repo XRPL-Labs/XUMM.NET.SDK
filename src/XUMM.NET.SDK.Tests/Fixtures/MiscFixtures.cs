@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Text.Json;
 using XUMM.NET.SDK.Models.Misc;
 
@@ -184,6 +185,37 @@ internal static class MiscFixtures
                 UserToken = "b12b59a8-83c8-4bc0-8acb-1d1d743871f1",
                 Active = false
             }
+        }
+    };
+
+    internal static XummAccountMetaResponse XummAccountMeta => new()
+    {
+        Account = "rwietsevLFg8XSmG3bEZzFein1g8RBqWDZ",
+        KycApproved = true,
+        XummPro = true,
+        Avatar = "https://xumm.app/avatar/rwietsevLFg8XSmG3bEZzFein1g8RBqWDZ.png",
+        XummProfile = new()
+        {
+            AccountAlias = "XRPL Labs - Wietse Wind",
+            OwnerAlias = "Wietse Wind"
+        },
+        ThirdPartyProfiles = new()
+        {
+            new XummThirdPartyProfile()
+            {
+                AccountAlias="Wietse Wind",
+                Source= "xumm.app"
+            },
+            new XummThirdPartyProfile()
+            {
+                AccountAlias= "wietse.com",
+                Source= "xrpl"
+            }
+        },
+        GlobaliD = new()
+        {
+            Linked = new DateTime(2021, 06, 29, 10, 22, 25, 123, DateTimeKind.Utc),
+            ProfileUrl = "https://global.id/wietse"
         }
     };
 }

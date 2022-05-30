@@ -192,7 +192,7 @@ public class XummMiscClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "xrpltx");
 
         // Act
-        var result = await _subject.GetTransactionAsync(txHash);
+        _ = await _subject.GetTransactionAsync(txHash);
 
         // Assert
         _httpMessageHandlerMock.AssertRequestUri(HttpMethod.Get, $"/xrpl-tx/{txHash}");
@@ -234,7 +234,7 @@ public class XummMiscClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "user-token");
 
         // Act
-        var result = await _subject.VerifyUserTokenAsync(userToken);
+        _ = await _subject.VerifyUserTokenAsync(userToken);
 
         // Assert
         _httpMessageHandlerMock.AssertRequestUri(HttpMethod.Get, $"/user-token/{userToken}");
@@ -281,6 +281,46 @@ public class XummMiscClientTests
         // Assert
         Assert.IsNotNull(ex);
         Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or empty (Parameter 'userTokens')"));
+    }
+
+    [Test]
+    [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q")]
+    public async Task GetAccountMetaAsync_WithValidAccount_ShouldReturnAccountMetaAsync(string account)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "account-meta");
+
+        // Act
+        var result = await _subject.AccountMetaAsync(account);
+
+        // Assert
+        AssertExtensions.AreEqual(MiscFixtures.XummAccountMeta, result);
+    }
+
+    [Test]
+    [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q")]
+    public async Task GetAccountMetaAsync_WithValidAccount_ShouldContainAccountInRequestUriAsync(string account)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "account-meta");
+
+        // Act
+        _ = await _subject.AccountMetaAsync(account);
+
+        // Assert
+        _httpMessageHandlerMock.AssertRequestUri(HttpMethod.Get, $"/account-meta/{account}");
+    }
+
+    [Test]
+    [TestCase("qrBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q")]
+    public void GetAccountMetaAsync_WithInvalidAccount_ShouldThrowExceptionAsync(string account)
+    {
+        // Act
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.AccountMetaAsync(account));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Value should be a valid account address (Parameter 'account')"));
     }
 
     [Test]

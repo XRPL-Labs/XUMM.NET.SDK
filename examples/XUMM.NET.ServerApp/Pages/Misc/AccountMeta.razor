@@ -1,0 +1,116 @@
+﻿@page "/account-meta"
+@using XUMM.NET.SDK.Clients.Interfaces
+@using XUMM.NET.SDK.Extensions
+@using XUMM.NET.SDK.Models.Misc
+@using XUMM.NET.ServerApp.Extensions
+
+@inject IOptions<XrplConfig> Config
+@inject IXummMiscClient _miscClient
+
+<PageTitle>Account Meta</PageTitle>
+
+<ResponseAlertBox @ref="_responseAlertBox"></ResponseAlertBox>
+
+<h1>Account Meta</h1>
+
+<div class="row align-items-start">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="mb-3">
+                <label for="account" class="form-label">Account</label>
+                <input id="account" type="text" class="form-control" placeholder="Account address, eg. @Config.Value.Account" aria-label="Account" aria-describedby="basic-addon2" @bind="_account">
+            </div>
+            <div class="btn-group mb-3" role="group">
+                <button class="btn btn-primary" type="button" @onclick="GetAccountMetaAsync">Fetch Account Meta</button>
+            </div>
+        </div>
+
+        @if (_accountMeta != null)
+        {
+            <div class="row">
+                <div class="mb-3">
+                    <h2>Account Meta</h2>
+                    <dl class="row">
+                        <dt class="col-6">Account</dt>
+                        <dd class="col-6 text-break">@_accountMeta.Account</dd>
+                        <dt class="col-6">KYC Approved</dt>
+                        <dd class="col-6 text-break">@(_accountMeta.KycApproved ? "Yes" : "No")</dd>
+                        <dt class="col-6">XUMM Pro</dt>
+                        <dd class="col-6 text-break">@(_accountMeta.XummPro ? "Yes" : "No")</dd>
+                    </dl>
+                    
+                    @if (_accountMeta.XummProfile != null)
+                    {
+                        <h2>XUMM Profile</h2>
+                        <dl class="row">
+                            <dt class="col-6">Account Alias</dt>
+                            <dd class="col-6 text-break">@_accountMeta.XummProfile.AccountAlias</dd>
+                            <dt class="col-6">Owner Alias</dt>
+                            <dd class="col-6 text-break">@_accountMeta.XummProfile.OwnerAlias</dd>
+                        </dl>
+                    }
+
+                    @if (_accountMeta.GlobaliD?.ProfileUrl != null && _accountMeta.GlobaliD?.Linked != null)
+                    {
+                        <h2>GlobaliD</h2>
+                        <dl class="row">
+                            <dt class="col-6">Profile URL</dt>
+                            <dd class="col-6 text-break"><a href="@_accountMeta.GlobaliD.ProfileUrl" target="_blank">@_accountMeta.GlobaliD.ProfileUrl</a></dd>
+                            <dt class="col-6">Linked</dt>
+                            <dd class="col-6 text-break">@_accountMeta.GlobaliD.Linked</dd>
+                        </dl>
+                    }
+
+                    @if (_accountMeta.ThirdPartyProfiles.Any())
+                    {
+                        <h2>Third Party Profiles</h2>
+                        <table class="table">
+                            <thead>
+                                <tr>
+                                    <th scope="col">Source</th>
+                                    <th scope="col">Account Alias</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach (var thirdPartyProfile in _accountMeta.ThirdPartyProfiles.OrderBy(x => x.Source))
+                                {
+                                    <tr>
+                                        <th scope="row">@thirdPartyProfile.Source</th>
+                                        <td>@thirdPartyProfile.AccountAlias</td>
+                                    </tr>
+                                }
+                            </tbody>
+                        </table>
+                    }
+                </div>
+            </div>
+        }
+    </div>
+        <div class="col-md-6 text-center">
+        @if (_accountMeta?.Avatar != null)
+        {
+            <div class="input-group mb-3">
+                <figure class="figure">
+                    <img src="@_accountMeta.Avatar" class="figure-img img-fluid rounded" alt="Avatar of account @_account">
+                    <figcaption class="figure-caption text-break">@_accountMeta.Avatar</figcaption>
+                </figure>
+            </div>
+        }
+    </div>
+</div>
+@code {
+    private ResponseAlertBox _responseAlertBox = default!;
+    private string _account = default!;
+    private XummAccountMetaResponse? _accountMeta;
+
+    private async Task GetAccountMetaAsync()
+    {
+        if (!_account.IsAccountAddress())
+        {
+            _account = Config.Value.Account;
+        }
+
+        _accountMeta = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.AccountMetaAsync(_account));
+        _responseAlertBox.SetAlert("Account Meta", _accountMeta != null);
+    }
+}
