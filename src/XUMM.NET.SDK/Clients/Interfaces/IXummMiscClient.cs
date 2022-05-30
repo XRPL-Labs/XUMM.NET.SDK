@@ -15,7 +15,7 @@ public interface IXummMiscClient
     Task<XummCuratedAssets> GetCuratedAssetsAsync();
 
     /// <summary>
-    /// Fetch transaction & outcome live from XRP ledger full history nodes (through the XUMM platform) containing parsed
+    /// Fetch transaction and outcome live from XRP ledger full history nodes (through the XUMM platform) containing parsed
     /// transaction outcome balance mutations
     /// </summary>
     /// <param name="txHash">The transaction hash (64 hexadecimal characters)</param>
@@ -48,7 +48,7 @@ public interface IXummMiscClient
     /// <summary>
     /// Fetch the account meta for a XUMM user (based on a public XRPL account address, r...)
     /// </summary>
-    /// <param name="account">Account address, eg. rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB</param>
+    /// <param name="account">Account address, eg. rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q</param>
     Task<XummAccountMetaResponse> AccountMetaAsync(string account);
 
     /// <summary>

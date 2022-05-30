@@ -4,6 +4,7 @@
 @using XUMM.NET.SDK.Models.Misc
 @using XUMM.NET.ServerApp.Extensions
 
+@inject IOptions<XrplConfig> Config
 @inject IXummMiscClient _miscClient
 
 <PageTitle>Account Meta</PageTitle>
@@ -17,7 +18,7 @@
         <div class="row">
             <div class="mb-3">
                 <label for="account" class="form-label">Account</label>
-                <input id="account" type="text" class="form-control" placeholder="Account address, eg. rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB" aria-label="Account" aria-describedby="basic-addon2" @bind="_account">
+                <input id="account" type="text" class="form-control" placeholder="Account address, eg. @Config.Value.Account" aria-label="Account" aria-describedby="basic-addon2" @bind="_account">
             </div>
             <div class="btn-group mb-3" role="group">
                 <button class="btn btn-primary" type="button" @onclick="GetAccountMetaAsync">Fetch Account Meta</button>
@@ -49,7 +50,7 @@
                         </dl>
                     }
 
-                    @if (_accountMeta.GlobaliD != null)
+                    @if (_accountMeta.GlobaliD?.ProfileUrl != null && _accountMeta.GlobaliD?.Linked != null)
                     {
                         <h2>GlobaliD</h2>
                         <dl class="row">
@@ -106,8 +107,7 @@
     {
         if (!_account.IsAccountAddress())
         {
-            // TODO: Set an example account with account meta
-            return;
+            _account = Config.Value.Account;
         }
 
         _accountMeta = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.AccountMetaAsync(_account));
