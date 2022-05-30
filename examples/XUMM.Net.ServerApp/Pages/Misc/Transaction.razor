@@ -39,6 +39,11 @@
 
     private async Task GetTransactionAsync()
     {
+        if (string.IsNullOrWhiteSpace(_txHash))
+        {
+            return;
+        }
+
         _transaction = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetTransactionAsync(_txHash));
         _responseAlertBox.SetAlert("Transaction Details", _transaction != null);
     }

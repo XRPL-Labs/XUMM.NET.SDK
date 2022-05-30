@@ -2,6 +2,7 @@
 @using XUMM.NET.SDK.Clients.Interfaces
 @using XUMM.NET.SDK.Extensions
 
+@inject IOptions<XrplConfig> Config
 @inject IXummMiscClient _miscClient
 
 <PageTitle>Avatar</PageTitle>
@@ -23,7 +24,7 @@
         <div class="mb-3">
             <label for="accountaddress" class="form-label">Account Address</label>
             <input id="accountaddress" type="text" class="form-control" placeholder="Account address" aria-label="Account Address" aria-describedby="basic-addon2" @bind="_account">
-            <small id="accountaddressHelp" class="form-text text-muted">eg. @ExampleAccount</small>
+            <small id="accountaddressHelp" class="form-text text-muted">eg. @Config.Value.Account</small>
         </div>
         <div class="btn-group mb-3" role="group">
             <button class="btn btn-primary" type="button" @onclick="GetAvatarUrl">Get Avatar</button>
@@ -43,7 +44,6 @@
 </div>
 
 @code {
-    private const string ExampleAccount = "rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB";
     private string _account = default!;
     private int _dimensions;
     private int _padding;
@@ -53,7 +53,7 @@
     {
         if (!_account.IsAccountAddress())
         {
-            _account = ExampleAccount;
+            _account = Config.Value.Account;
         }
 
         if (_dimensions < 200)

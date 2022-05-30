@@ -1,5 +1,6 @@
 ﻿using XUMM.NET.SDK;
 using XUMM.NET.SDK.Webhooks;
+using XUMM.NET.ServerApp.Configs;
 using XUMM.NET.ServerApp.Webhooks;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -10,6 +11,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddHttpClient();
 builder.Services.AddXummNet(builder.Configuration);
 builder.Services.AddXummWebhooks<XummWebhookProcessor>();
+builder.Services.Configure<XrplConfig>(builder.Configuration.GetSection(XrplConfig.SectionKey));
 builder.Services.AddMemoryCache();
 
 var app = builder.Build();
