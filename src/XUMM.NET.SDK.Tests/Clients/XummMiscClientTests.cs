@@ -101,7 +101,7 @@ public class XummMiscClientTests
     }
 
     [Test]
-    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB")]
+    [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q")]
     public async Task GetKycStatusAsync_WithAccount_ShouldReturnKycStatusAsync(string account)
     {
         // Arrange
@@ -116,7 +116,7 @@ public class XummMiscClientTests
 
     [Test]
     [TestCase("2557f69c661740dc9d1ea34487cb3f90")]
-    [TestCase("qrDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB")]
+    [TestCase("qrBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q")]
     public void GetKycStatusAsync_WithInvalidUserTokenAndAccount_ShouldThrowExceptionAsync(string userTokenOrAccount)
     {
         // Act
@@ -298,9 +298,9 @@ public class XummMiscClientTests
     }
 
     [Test]
-    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 50, 5)]
-    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 100, 0)]
-    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 199, 2)]
+    [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q", 50, 5)]
+    [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q", 100, 0)]
+    [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q", 199, 2)]
     public void GetAvatarUrl_WithInvalidDimensions_ShouldThrowException(string account, int dimensions, int padding)
     {
         // Act
@@ -312,8 +312,8 @@ public class XummMiscClientTests
     }
 
     [Test]
-    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 200, -50)]
-    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 250, -1)]
+    [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q", 200, -50)]
+    [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q", 250, -1)]
     public void GetAvatarUrl_WithInvalidPadding_ShouldThrowException(string account, int dimensions, int padding)
     {
         // Act
@@ -325,12 +325,9 @@ public class XummMiscClientTests
     }
 
     [Test]
-    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 200, 5,
-        "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_200_5.png")]
-    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 250, 0,
-        "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_250_0.png")]
-    [TestCase("rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB", 500, 2,
-        "https://xumm.app/avatar/rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB_500_2.png")]
+    [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q", 200, 5, "https://xumm.app/avatar/rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q_200_5.png")]
+    [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q", 250, 0, "https://xumm.app/avatar/rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q_250_0.png")]
+    [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q", 500, 2, "https://xumm.app/avatar/rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q_500_2.png")]
     public void GetAvatarUrl_WithValidDimensions_ShouldReturnAvatarUrl(string account, int dimensions, int padding,
         string expected)
     {
