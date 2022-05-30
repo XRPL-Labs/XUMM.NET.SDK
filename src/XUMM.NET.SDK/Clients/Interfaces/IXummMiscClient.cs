@@ -24,7 +24,7 @@ public interface IXummMiscClient
     /// <summary>
     /// Fetch the KYC status for a XUMM user (based on a public XRPL account address, r...)
     /// </summary>
-    /// <param name="userTokenOrAccount">Account address, eg. rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB</param>
+    /// <param name="userTokenOrAccount">Account address, eg. rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q</param>
     Task<XummKycStatus> GetKycStatusAsync(string userTokenOrAccount);
 
     /// <summary>
@@ -54,7 +54,7 @@ public interface IXummMiscClient
     /// <summary>
     /// Get an avatar (gravatar or personal avatar)
     /// </summary>
-    /// <param name="account">Account address, eg. rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB</param>
+    /// <param name="account">Account address, eg. rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q</param>
     /// <param name="dimensions">Dimensions in pixels</param>
     /// <param name="padding">Padding surrounding the icon in pixels</param>
     /// <returns>An avatar with specific (square) dimensions; otherwise a hashicon if no custom avatar can be found.</returns>

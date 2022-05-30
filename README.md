@@ -96,7 +96,7 @@ XUMM when the session KYC was initiated by.
 
 ```C#
 @inject IXummMiscClient _miscClient
-var kycStatus = await _miscClient.GetKycStatusAsync("00000000-0000-0000-0000-000000000000");
+var kycStatus = await _miscClient.GetKycStatusAsync("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q");
 ```
 
 Returns: [`XummKycStatus`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/XUMM.Net/Enums/XummKycStatus.cs)
@@ -165,7 +165,7 @@ A payload can contain an XRPL transaction template. Some properties may be omitt
 ```C#
 var payload = new XummPostJsonPayload(
         "{ \"TransactionType\": \"Payment\", " + 
-        "\"Destination\": \"rwiETSee2wMz3SBnAG8hkMsCgvGy9LWbZ1\", " + 
+        "\"Destination\": \"rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q\", " + 
         "\"Amount\": \"1337\" }");
 ```
 

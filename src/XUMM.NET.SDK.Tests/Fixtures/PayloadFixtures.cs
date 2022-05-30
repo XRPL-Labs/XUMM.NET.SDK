@@ -83,8 +83,8 @@ internal static class PayloadFixtures
             DispatchedTo = "wss://xrplcluster.com",
             DispatchedResult = "tes_SUCCESS",
             DispatchedNodetype = "MAINNET",
-            MultisignAccount = "rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY",
-            Account = "rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY"
+            MultisignAccount = "rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q",
+            Account = "rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q"
         },
         CustomMeta = new XummPayloadCustomMeta
         {
@@ -121,7 +121,7 @@ internal static class PayloadFixtures
             IsXapp = false,
             Signers = new[]
             {
-                "rwietsevLFg8XSmG3bEZzFein1g8RBqWDZ", "rXUMMMaopSo4RUvucwS993hBegnK8WmwV"
+                "rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q", "rXUMMMaopSo4RUvucwS993hBegnK8WmwV"
             }
         },
         CustomMeta = new XummPayloadCustomMeta

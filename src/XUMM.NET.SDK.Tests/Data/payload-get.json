@@ -47,8 +47,8 @@
     "dispatched_to": "wss://xrplcluster.com",
     "dispatched_result": "tes_SUCCESS",
     "dispatched_nodetype": "MAINNET",
-    "multisign_account": "rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY",
-    "account": "rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY"
+    "multisign_account": "rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q",
+    "account": "rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q"
   },
   "custom_meta": {
     "identifier": null,

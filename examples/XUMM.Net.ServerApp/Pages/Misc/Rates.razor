@@ -2,6 +2,7 @@
 @using XUMM.NET.SDK.Clients.Interfaces
 @using XUMM.NET.SDK.Models.Misc
 
+@inject IOptions<XrplConfig> Config
 @inject IXummMiscClient _miscClient
 
 <PageTitle>Rates</PageTitle>
@@ -16,7 +17,7 @@
             <div class="mb-3">
                 <label for="currency" class="form-label">Currency</label>
                 <input id="currency" class="form-control" placeholder="The 3 alpha char currency code" aria-label="Currency" aria-describedby="basic-addon2" @bind="_currency">
-                <small id="currencyhelp" class="form-text text-muted">eg. INR</small>
+                <small id="currencyhelp" class="form-text text-muted">eg. @Config.Value.CurrencyCode</small>
             </div>
             <div class="btn-group mb-3" role="group">
                 <button class="btn btn-primary" type="button" @onclick="GetRatesAsync">Fetch Rates</button>
@@ -47,7 +48,7 @@
     {
         if (string.IsNullOrWhiteSpace(_currency))
         {
-            _currency = "INR";
+            _currency = Config.Value.CurrencyCode;
         }
 
         _rates = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetRatesAsync(_currency));

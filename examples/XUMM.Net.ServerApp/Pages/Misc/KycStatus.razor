@@ -3,6 +3,7 @@
 @using XUMM.NET.SDK.Enums
 @using XUMM.NET.SDK.Extensions
 
+@inject IOptions<XrplConfig> Config
 @inject IXummMiscClient _miscClient
 
 <PageTitle>KYC Status</PageTitle>
@@ -17,7 +18,7 @@
             <div class="mb-3">
                 <label for="usertokenoraccount" class="form-label">User token or account</label>
                 <input id="usertokenoraccount" type="text" class="form-control" placeholder="User Token or Account address" aria-label="User token or account" aria-describedby="basic-addon2" @bind="_userTokenOrAccount">
-                <small id="usertokenoraccounthelp" class="form-text text-muted">eg. @ExampleAccount</small>
+                <small id="usertokenoraccounthelp" class="form-text text-muted">eg. @Config.Value.Account</small>
             </div>
             <div class="btn-group mb-3" role="group">
                 <button class="btn btn-primary" type="button" @onclick="GetKycStatusAsync">Fetch KYC Status</button>
@@ -38,7 +39,6 @@
 </div>
 
 @code {
-    private const string ExampleAccount = "rDWLGshgAxSX2G4TEv3gA6QhtLgiXrWQXB";
     private ResponseAlertBox _responseAlertBox = default!;
     private string _userTokenOrAccount = default!;
     private string _userTokenOrAccountType = default!;
@@ -48,7 +48,7 @@
     {
         if (!_userTokenOrAccount.IsAccountAddress() && !_userTokenOrAccount.IsValidUuid())
         {
-            _userTokenOrAccount = ExampleAccount;
+            _userTokenOrAccount = Config.Value.Account;
         }
 
         _kycStatus = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetKycStatusAsync(_userTokenOrAccount));
