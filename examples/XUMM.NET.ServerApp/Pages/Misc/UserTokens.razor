@@ -57,6 +57,11 @@
 
     private async Task VerifyUserTokensAsync()
     {
+        if (string.IsNullOrWhiteSpace(_userTokens))
+        {
+            return;
+        }
+
         var userTokens = Regex.Replace(_userTokens, @"\r\n?|\n", "\r").Split('\r', StringSplitOptions.TrimEntries | StringSplitOptions.RemoveEmptyEntries);
         if (userTokens.Length == 0)
         {

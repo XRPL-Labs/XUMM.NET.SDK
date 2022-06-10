@@ -8,14 +8,10 @@ namespace XUMM.NET.SDK.Helpers
         internal static JsonSerializerOptions SerializerOptions => new JsonSerializerOptions
         {
 #if NET5_0_OR_GREATER
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull
 #else
-            IgnoreNullValues = true,
+            IgnoreNullValues = true
 #endif
-            Converters =
-            {
-                new JsonStringEnumConverter()
-            }
         };
     }
 }
