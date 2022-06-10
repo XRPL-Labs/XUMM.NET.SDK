@@ -4,6 +4,7 @@
 @using Microsoft.Extensions.Caching.Memory
 @using XUMM.NET.SDK.Clients.Interfaces
 @using XUMM.NET.SDK.Enums
+@using XUMM.NET.SDK.Extensions
 @using XUMM.NET.SDK.WebSocket.EventArgs
 @using XUMM.NET.SDK.Models.Payload
 @using XUMM.NET.SDK.Models.Payload.Xumm
@@ -126,12 +127,8 @@
 
     private async Task CreatePayloadAndSubscribe()
     {
-        var serializerOptions = new JsonSerializerOptions { DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull };
-
-        var payload = new XummPostJsonPayload(JsonSerializer.Serialize(new XummPayloadTransaction(XummTransactionType.SignIn), serializerOptions))
-            {
-                CustomMeta = new XummPayloadCustomMeta { Instruction = "Test payload created with the XUMM.NET SDK." }
-            };
+        var payload = new XummPayloadTransaction(XummTransactionType.SignIn).ToXummPostJsonPayload();
+        payload.CustomMeta = new XummPayloadCustomMeta { Instruction = "Test payload created with the XUMM.NET SDK." };
 
         if (!string.IsNullOrWhiteSpace(_customIdentifier))
         {
