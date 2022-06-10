@@ -3,12 +3,12 @@ using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Text;
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using XUMM.NET.SDK.Clients.Interfaces;
 using XUMM.NET.SDK.Configs;
+using XUMM.NET.SDK.Helpers;
 using XUMM.NET.SDK.Models;
 
 namespace XUMM.NET.SDK.Clients;
@@ -18,7 +18,6 @@ public class XummHttpClient : IXummHttpClient
     private readonly ApiConfig _config;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<XummHttpClient> _logger;
-    private readonly JsonSerializerOptions _serializerOptions;
 
     public XummHttpClient(
         IHttpClientFactory httpClientFactory,
@@ -28,19 +27,6 @@ public class XummHttpClient : IXummHttpClient
         _config = options.Value;
         _httpClientFactory = httpClientFactory;
         _logger = logger;
-
-        _serializerOptions = new JsonSerializerOptions
-        {
-#if NET5_0_OR_GREATER
-            DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
-#else
-            IgnoreNullValues = true,
-#endif
-            Converters =
-            {
-                new JsonStringEnumConverter()
-            }
-        };
     }
 
     public async Task<T> GetAsync<T>(string endpoint)
@@ -55,7 +41,7 @@ public class XummHttpClient : IXummHttpClient
 
     public async Task<T> PostAsync<T>(string endpoint, object content)
     {
-        return await PostAsync<T>(endpoint, JsonSerializer.Serialize(content, _serializerOptions));
+        return await PostAsync<T>(endpoint, JsonSerializer.Serialize(content, JsonHelper.SerializerOptions));
     }
 
     public async Task<T> PostAsync<T>(string endpoint, string json)

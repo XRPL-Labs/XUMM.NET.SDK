@@ -1,11 +1,13 @@
-﻿using XUMM.NET.SDK.Enums;
+﻿using System.Collections.Generic;
+using XUMM.NET.SDK.Enums;
 
 namespace XUMM.NET.SDK.Models.Payload.Xumm
 {
-    public class XummPayloadTransaction : XummPayloadTransactionBase
+    public class XummPayloadTransaction : Dictionary<string, object>
     {
-        public XummPayloadTransaction(XummTransactionType transactionType) : base(transactionType.ToString())
+        public XummPayloadTransaction(XummTransactionType transactionType)
         {
+            Add("TransactionType", transactionType.ToString());
         }
     }
 }
