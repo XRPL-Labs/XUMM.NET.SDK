@@ -26,6 +26,12 @@ public class XrplPaymentTransaction : XrplTransaction
     }
 
     /// <summary>
+    /// Transactions of the Payment type support additional values in the Flags field.
+    /// </summary>
+    [JsonPropertyName("Flags")]
+    public new XrplPaymentFlags? Flags { get; set; }
+
+    /// <summary>
     /// The unique address of the account receiving the payment.
     /// </summary>
     public string Destination { get; set; }
@@ -53,14 +59,14 @@ public class XrplPaymentTransaction : XrplTransaction
     /// rates, and slippage.
     /// </summary>
     [JsonPropertyName("SendMax")]
-    public XrplTransactionCurrencyAmount? SendMax { get; set; }
+    public object? SendMax { get; private set; }
 
     /// <summary>
     /// (Optional) Minimum amount of destination currency this transaction should deliver. Only valid if this is a partial
     /// payment.
     /// </summary>
     [JsonPropertyName("DeliverMin")]
-    public XrplTransactionCurrencyAmount? DeliverMin { get; set; }
+    public object? DeliverMin { get;  private set; }
 
     /// <summary>
     /// XRP Amount
@@ -71,11 +77,53 @@ public class XrplPaymentTransaction : XrplTransaction
     }
 
     /// <summary>
+    /// XRP Amount
+    /// </summary>
+    public void SetSendMaxAmount(decimal amount)
+    {
+        SendMax = amount.XrpToDropsString();
+    }
+
+    /// <summary>
+    /// XRP Amount
+    /// </summary>
+    public void SetDeliverMinAmount(decimal amount)
+    {
+        DeliverMin = amount.XrpToDropsString();
+    }
+
+    /// <summary>
     /// Non-XRP Amounts
     /// </summary>
     public void SetAmount(string currency, decimal amount, string issuer)
     {
         Amount = new XrplTransactionCurrencyAmount
+        {
+            Currency = currency,
+            Value = amount.ToString(CultureInfo.InvariantCulture),
+            Issuer = issuer
+        };
+    }
+
+    /// <summary>
+    /// Non-XRP Amounts
+    /// </summary>
+    public void SetSendMaxAmount(string currency, decimal amount, string issuer)
+    {
+        SendMax = new XrplTransactionCurrencyAmount
+        {
+            Currency = currency,
+            Value = amount.ToString(CultureInfo.InvariantCulture),
+            Issuer = issuer
+        };
+    }
+
+    /// <summary>
+    /// Non-XRP Amounts
+    /// </summary>
+    public void SetDeliverMinAmount(string currency, decimal amount, string issuer)
+    {
+        DeliverMin = new XrplTransactionCurrencyAmount
         {
             Currency = currency,
             Value = amount.ToString(CultureInfo.InvariantCulture),
