@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Globalization;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -57,6 +58,25 @@ public static class CurrencyExtensions
         }
 
         return "???";
+    }
+
+    /// <summary>
+    /// XRP Ledger APIs generally use strings, rather than native JSON numbers, to represent numeric amounts of currency for both XRP and tokens. 
+    /// This protects against a loss of precision when using JSON parsers, which may automatically try to represent all JSON numbers in a floating-point format.
+    /// For more detailed information, see the currency format reference. 
+    /// <seealso href="https://xrpl.org/currency-formats.html#string-numbers" />
+    /// </summary>
+    /// <param name="value">XRPL currency value as a string representation.</param>
+    /// <exception cref="FormatException">Thrown when <paramref name="value"/> can't be parsed to a decimal.</exception>
+    /// <returns>Returns the decimal value of the string representation.</returns>
+    public static decimal XrplStringNumberToDecimal(this string value)
+    {
+        if (!decimal.TryParse(value, NumberStyles.Float, CultureInfo.InvariantCulture, out var result))
+        {
+            throw new FormatException($"Unable to convert string number \"{value}\" to a decimal.");
+        }
+
+        return result;
     }
 
     /// <summary>
