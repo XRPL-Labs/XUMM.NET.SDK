@@ -13,7 +13,7 @@ namespace XUMM.NET.SDK.Models.Payload
         public string TxDestination { get; set; } = default!;
 
         [JsonPropertyName("tx_destination_tag")]
-        public int? TxDestinationTag { get; set; }
+        public uint? TxDestinationTag { get; set; }
 
         [JsonPropertyName("request_json")]
         public JsonDocument RequestJson { get; set; } = default!;

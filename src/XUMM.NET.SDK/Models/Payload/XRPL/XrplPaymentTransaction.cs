@@ -13,7 +13,7 @@ public class XrplPaymentTransaction : XrplTransaction
     /// <param name="destination">The unique address of the account receiving the payment.</param>
     /// <param name="destinationTag">(Optional) Arbitrary tag that identifies the reason for the payment to the destination, or a hosted recipient to pay.</param>
     /// <param name="fee">Integer amount of XRP, in drops, to be destroyed as a cost for distributing this transaction to the network.</param>
-    public XrplPaymentTransaction(string destination, int? destinationTag, int fee) : this()
+    public XrplPaymentTransaction(string destination, uint? destinationTag, int fee) : this()
     {
         Destination = destination;
         DestinationTag = destinationTag;
@@ -39,7 +39,7 @@ public class XrplPaymentTransaction : XrplTransaction
     /// <summary>
     /// (Optional) Arbitrary tag that identifies the reason for the payment to the destination, or a hosted recipient to pay.
     /// </summary>
-    public int? DestinationTag { get; set; }
+    public uint? DestinationTag { get; set; }
 
     /// <summary>
     /// (Optional) Arbitrary 256-bit hash representing a specific reason or identifier for this payment.
