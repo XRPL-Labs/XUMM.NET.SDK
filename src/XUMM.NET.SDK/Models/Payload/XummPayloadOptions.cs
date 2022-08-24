@@ -11,6 +11,12 @@ public class XummPayloadOptions
     public bool? Submit { get; set; }
 
     /// <summary>
+    /// Allow pathfinding for regular Payment type transactions, so the user can select the asset to send to deliver the requested asset amount.
+    /// </summary>
+    [JsonPropertyName("pathfinding")]
+    public bool? Pathfinding { get; set; }
+
+    /// <summary>
     /// Should the transaction be signed as a multi sign transaction? (Optional)
     /// </summary>
     [JsonPropertyName("multisign")]

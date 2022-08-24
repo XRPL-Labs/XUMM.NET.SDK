@@ -16,6 +16,9 @@ public class XummPayloadDetailsMeta
     [JsonPropertyName("submit")]
     public bool Submit { get; set; }
 
+    [JsonPropertyName("pathfinding")]
+    public bool? Pathfinding { get; set; }
+
     [JsonPropertyName("destination")]
     public string Destination { get; set; } = default!;
 
