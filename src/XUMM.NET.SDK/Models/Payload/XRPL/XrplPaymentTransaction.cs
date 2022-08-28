@@ -48,6 +48,12 @@ public class XrplPaymentTransaction : XrplTransaction
     public string? InvoiceId { get; set; }
 
     /// <summary>
+    /// (Optional, auto-fillable) Array of payment paths to be used for this transaction. Must be omitted for XRP-to-XRP transactions.
+    /// </summary>
+    [JsonPropertyName("Paths")]
+    public XrplPaymentPathSpecification[][]? Paths { get; set; }
+
+    /// <summary>
     /// The amount of currency to deliver. For non-XRP amounts, the nested field names MUST be lower-case. If the
     /// tfPartialPayment flag is set, deliver up to this amount instead.
     /// </summary>
