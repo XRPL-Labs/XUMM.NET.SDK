@@ -96,4 +96,15 @@ public static class CurrencyExtensions
 
         return Math.Truncate(value * XrpDrops).ToString();
     }
+
+    /// <summary>
+    /// Convert XRP Drops to the decimal value
+    /// </summary>
+    /// <param name="value">Value in drops</param>
+    /// <returns>Returns the decimal value of the XRP in drops.</returns>
+    public static decimal XrpDropsToDecimal(this string value)
+    {
+        var decimalValue = value.XrplStringNumberToDecimal();
+        return decimalValue / XrpDrops;
+    }
 }
