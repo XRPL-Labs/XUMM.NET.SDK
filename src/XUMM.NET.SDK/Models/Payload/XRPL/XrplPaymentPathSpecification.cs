@@ -31,7 +31,7 @@ namespace XUMM.NET.SDK.Models.Payload.XRPL
         /// </summary>
         [Obsolete]
         [JsonPropertyName("type")]
-        public int Type { get; set; }
+        public int? Type { get; set; }
 
         /// <summary>
         /// DEPRECATED: (Optional) A hexadecimal representation of the type field.
