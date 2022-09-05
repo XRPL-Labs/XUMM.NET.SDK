@@ -1,4 +1,5 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace XUMM.NET.SDK.Models.Misc
 {
@@ -15,6 +16,9 @@ namespace XUMM.NET.SDK.Models.Misc
 
         [JsonPropertyName("webhookurl")]
         public string? WebhookUrl { get; set; }
+
+        [JsonPropertyName("redirecturis")]
+        public List<string> RedirectUris { get; set; }= new();
 
         [JsonPropertyName("disabled")]
         public int Disabled { get; set; }
