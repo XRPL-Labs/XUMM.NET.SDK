@@ -18,6 +18,11 @@ internal static class MiscFixtures
                 Uuidv4 = "00000000-0000-4839-af2f-f794874a80b0",
                 Name = "SomeApplication",
                 WebhookUrl = "https://webhook.site/00000000-0000-4e34-8112-c4391247a8ee",
+                RedirectUris = new List<string>
+                {
+                    "https://redirect.site/00000000-0000-4e34-8112-c4391247a8ee",
+                    "https://redirect.site/00000000-4e34-0000-8112-c4391247a8ee"
+                }, 
                 Disabled = 0
             },
             Call = new XummCall

@@ -6,6 +6,10 @@
       "uuidv4": "00000000-0000-4839-af2f-f794874a80b0",
       "name": "SomeApplication",
       "webhookurl": "https://webhook.site/00000000-0000-4e34-8112-c4391247a8ee",
+      "redirecturis": [
+        "https://redirect.site/00000000-0000-4e34-8112-c4391247a8ee",
+        "https://redirect.site/00000000-4e34-0000-8112-c4391247a8ee"
+      ],
       "disabled": 0
     },
     "call": {
