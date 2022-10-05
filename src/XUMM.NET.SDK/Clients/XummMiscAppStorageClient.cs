@@ -4,10 +4,16 @@ using XUMM.NET.SDK.Models.Misc.AppStorage;
 
 namespace XUMM.NET.SDK.Clients;
 
+/// <summary>
+/// Represents the client for app storage API calls.
+/// </summary>
 public class XummMiscAppStorageClient : IXummMiscAppStorageClient
 {
     private readonly IXummHttpClient _httpClient;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="XummMiscAppStorageClient"/> class.
+    /// </summary>
     public XummMiscAppStorageClient(IXummHttpClient httpClient)
     {
         _httpClient = httpClient;

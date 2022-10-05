@@ -9,11 +9,17 @@ using XUMM.NET.SDK.Models.Misc;
 
 namespace XUMM.NET.SDK.Clients;
 
+/// <summary>
+/// Represents the client for miscellaneous API calls.
+/// </summary>
 public class XummMiscClient : IXummMiscClient
 {
     private const int MinimumAvatarDimensions = 200;
     private readonly IXummHttpClient _httpClient;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="XummMiscClient"/> class.
+    /// </summary>
     public XummMiscClient(IXummHttpClient httpClient)
     {
         _httpClient = httpClient;
