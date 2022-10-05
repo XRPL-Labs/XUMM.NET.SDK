@@ -1,11 +1,9 @@
 ﻿@page "/account-meta"
-@using XUMM.NET.SDK.Clients.Interfaces
 @using XUMM.NET.SDK.Extensions
 @using XUMM.NET.SDK.Models.Misc
-@using XUMM.NET.ServerApp.Extensions
 
 @inject IOptions<XrplConfig> Config
-@inject IXummMiscClient _miscClient
+@inject IXummMiscClient MiscClient
 
 <PageTitle>Account Meta</PageTitle>
 
@@ -99,7 +97,7 @@
     </div>
 </div>
 @code {
-    private ResponseAlertBox _responseAlertBox = default!;
+    private ResponseAlertBox? _responseAlertBox;
     private string _account = default!;
     private XummAccountMetaResponse? _accountMeta;
 
@@ -110,7 +108,7 @@
             _account = Config.Value.Account;
         }
 
-        _accountMeta = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.AccountMetaAsync(_account));
+        _accountMeta = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => MiscClient.AccountMetaAsync(_account));
         _responseAlertBox.SetAlert("Account Meta", _accountMeta != null);
     }
 }

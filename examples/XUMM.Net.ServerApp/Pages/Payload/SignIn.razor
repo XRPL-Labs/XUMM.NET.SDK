@@ -1,18 +1,17 @@
 ﻿@page "/signin"
-@using System.Text.Json
-@using System.Text.Json.Serialization
 @using Microsoft.Extensions.Caching.Memory
-@using XUMM.NET.SDK.Clients.Interfaces
 @using XUMM.NET.SDK.Enums
 @using XUMM.NET.SDK.Extensions
 @using XUMM.NET.SDK.WebSocket.EventArgs
 @using XUMM.NET.SDK.Models.Payload
 @using XUMM.NET.SDK.Models.Payload.Xumm
 
-@inject IXummPayloadClient _payloadClient
-@inject IMemoryCache _memoryCache
+@inject IMemoryCache MemoryCache
 
 <PageTitle>Sign In</PageTitle>
+
+<ResponseAlertBox @ref="_responseAlertBox"></ResponseAlertBox>
+
 @if (_userToken != null)
 {
     <h1>Signed In</h1>
@@ -49,8 +48,9 @@
         </div>
     }
 }
-<div class="row">
-    <div class="mb-3">
+
+<div class="row align-items-start">
+    <div class="col-md-6">
         @if (_qrCodeUrl != null)
         {
             <div class="btn-group mb-3" role="group">
@@ -60,19 +60,17 @@
         }
         else
         {
+            <XummSdkCredentials @ref="_xummSdkCredentials"></XummSdkCredentials>
+
             <div class="mb-3">
                 <label for="customIdentifier" class="form-label">Custom Identifier</label>
-                <input id="customIdentifier" type="text" class="form-control" placeholder="Custom Identifier" aria-label="Custom Identifier" aria-describedby="basic-addon2" @bind="_customIdentifier">
+                <input id="customIdentifier" type="text" class="form-control" placeholder="Custom Identifier" maxlength="40" aria-label="Custom Identifier" aria-describedby="basic-addon2" @bind="_customIdentifier">
             </div>
             <div class="btn-group mb-3" role="group">
                 <button class="btn btn-primary" @onclick="CreatePayloadAndSubscribe">Create payload and subscribe</button>
             </div>
         }
-    </div>
-</div>
 
-<div class="row align-items-start">
-    <div class="col-md-6">
         @if (_qrCodeUrl != null)
         {
             <div>
@@ -80,7 +78,7 @@
 
                 <div class="input-group mb-3">
                     <figure class="figure">
-                        <img src="@_qrCodeUrl" class="figure-img img-fluid rounded" alt="QR Code of @_payloadUuid" />
+                        <img src="@_qrCodeUrl" class="figure-img img-fluid rounded" alt="QR Code of @_payloadUuid"/>
                         <figcaption class="figure-caption">@_payloadUuid</figcaption>
                     </figure>
                 </div>
@@ -105,6 +103,8 @@
 
 @code {
     private CancellationTokenSource _cts = default!;
+    private ResponseAlertBox? _responseAlertBox;
+    private XummSdkCredentials? _xummSdkCredentials;
     private readonly List<string> _messages = new();
     private string? _qrCodeUrl;
     private string? _payloadUuid;
@@ -114,13 +114,13 @@
 
     protected override Task OnInitializedAsync()
     {
-        _memoryCache.TryGetValue("USER_TOKEN", out _userToken);
+        MemoryCache.TryGetValue("USER_TOKEN", out _userToken);
         return base.OnInitializedAsync();
     }
 
     private void SignOut()
     {
-        _memoryCache.Remove("USER_TOKEN");
+        MemoryCache.Remove("USER_TOKEN");
         _userToken = null;
         StateHasChanged();
     }
@@ -135,7 +135,8 @@
             payload.CustomMeta.Identifier = _customIdentifier;
         }
 
-        var payloadResult = await _payloadClient.CreateAsync(payload);
+        var payloadResult = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => _xummSdkCredentials!.Payload.CreateAsync(payload, true));
+        _responseAlertBox.SetAlert("Payload response", payloadResult != null);
 
         if (payloadResult != null)
         {
@@ -147,7 +148,7 @@
             StateHasChanged();
 
             _cts = new CancellationTokenSource();
-            await _payloadClient.SubscribeAsync(payloadResult, Subscription_EventArgs, _cts.Token);
+            await _xummSdkCredentials!.Payload.SubscribeAsync(payloadResult, Subscription_EventArgs, _cts.Token);
         }
     }
 
@@ -156,6 +157,7 @@
         _cts.Cancel();
         _qrCodeUrl = null;
         _messages.Add($"Payload {_payloadUuid} subscription cancelled.");
+        _responseAlertBox!.Clear();
         StateHasChanged();
     }
 
@@ -166,7 +168,9 @@
             return;
         }
 
-        var payloadResult = await _payloadClient.CancelAsync(_payloadUuid);
+        var payloadResult = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => _xummSdkCredentials!.Payload.CancelAsync(_payloadUuid, true));
+        _responseAlertBox.SetAlert("Payload cancelled response", payloadResult != null);
+
         if (payloadResult != null)
         {
             _messages.Add($"Payload {_payloadUuid} cancel {(payloadResult.Result.Cancelled ? "succeeded" : "failed")} with reason: \"{payloadResult.Result.Reason}\".");

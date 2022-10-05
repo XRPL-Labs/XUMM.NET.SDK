@@ -1,13 +1,12 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.NET.SDK.Models.Misc
-{
-    public class XummProfile
-    {
-        [JsonPropertyName("accountAlias")]
-        public string? AccountAlias { get; set; }
+namespace XUMM.NET.SDK.Models.Misc;
 
-        [JsonPropertyName("ownerAlias")]
-        public string? OwnerAlias { get; set; }
-    }
+public class XummProfile
+{
+    [JsonPropertyName("accountAlias")]
+    public string? AccountAlias { get; set; }
+
+    [JsonPropertyName("ownerAlias")]
+    public string? OwnerAlias { get; set; }
 }

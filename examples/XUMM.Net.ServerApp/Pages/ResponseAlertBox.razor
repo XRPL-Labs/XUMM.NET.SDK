@@ -11,6 +11,10 @@
     {
         <div class="alert alert-danger" role="alert">
             <h4 class="alert-heading">Failed to retrieve @Name!</h4>
+            @if (!string.IsNullOrWhiteSpace(_errorMessage))
+            {
+                <div>@_errorMessage</div>
+            }
             Response Time: @_responseTime ms
         </div>
     }
@@ -19,6 +23,7 @@
 @code {
     public string Name { get; set; } = default!;
     private bool? _success;
+    private string? _errorMessage;
     private double _responseTime;
 
     public async Task<T?> GetResponseAndSetAlertAsync<T>(Func<Task<T>> task)
@@ -28,10 +33,11 @@
         try
         {
             result = await task();
+            _errorMessage = null;
         }
-        catch
+        catch (Exception ex)
         {
-            // Ignored for now
+            _errorMessage = ex.Message;
         }
 
         _responseTime = Math.Round((DateTime.UtcNow - start).TotalMilliseconds);
@@ -42,6 +48,12 @@
     {
         _success = success;
         Name = name;
+        StateHasChanged();
+    }
+
+    public void Clear()
+    {
+        _success = null;
         StateHasChanged();
     }
 }

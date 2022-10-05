@@ -7,15 +7,34 @@
 
 <h1>@ViewData["Title"]</h1>
 
-@if (Model.Pong.Pong)
+@if (Model.Pong != null)
 {
     <div class="alert alert-success" role="alert">
-        <h4 class="alert-heading">Retrieved Pong!</h4>
+        <h4 class="alert-heading">Retrieved pong of @Model.Pong.Auth.Application.Name</h4>
     </div>
 }
-else
+else if (!string.IsNullOrWhiteSpace(Model.ErrorMessage))
 {
     <div class="alert alert-danger" role="alert">
         <h4 class="alert-heading">Failed to retrieve Pong!</h4>
+        <div>@Model.ErrorMessage</div>
     </div>
 }
+
+<form method="post">
+    <div class="col-md-6">
+        <div class="mb-3">
+            <label for="apikey" class="form-label">API Key <small>(Optional)</small></label>
+            <input id="apikey" type="password" class="form-control" placeholder="API Key" aria-label="API Key" aria-describedby="basic-addon2" asp-for="ApiKey">
+            <small id="apikeyhelp" class="form-text text-muted">Leave empty to use the configured API Key.</small>
+        </div>
+        <div class="mb-3">
+            <label for="apisecret" class="form-label">API Secret <small>(Optional)</small></label>
+            <input id="apisecret" type="password" min="0" class="form-control" placeholder="API Secret" aria-label="API Secret" aria-describedby="basic-addon2" asp-for="ApiSecret">
+            <small id="apisecrethelp" class="form-text text-muted">Leave empty to use the configured API Secret.</small>
+        </div>
+        <div class="btn-group mb-3" role="group">
+            <button type="submit" class="btn btn-primary">Ping</button>
+        </div>
+    </div>
+</form>

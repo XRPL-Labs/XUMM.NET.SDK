@@ -11,11 +11,17 @@ using XUMM.NET.SDK.WebSocket.EventArgs;
 
 namespace XUMM.NET.SDK.Clients;
 
+/// <summary>
+/// Represents the client for Payload API calls.
+/// </summary>
 public class XummPayloadClient : IXummPayloadClient
 {
     private readonly IXummHttpClient _httpClient;
     private readonly IXummWebSocket _webSocket;
 
+    /// <summary>
+    /// Initializes a new instance of the <see cref="XummPayloadClient"/> class.
+    /// </summary>
     public XummPayloadClient(IXummHttpClient httpClient,
         IXummWebSocket webSocket)
     {

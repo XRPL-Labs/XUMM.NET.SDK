@@ -1,10 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.NET.SDK.Models.XApp
+namespace XUMM.NET.SDK.Models.XApp;
+
+public class XummXAppOriginDataResponse
 {
-    public class XummXAppOriginDataResponse
-    {
-        [JsonPropertyName("payload")]
-        public string? Payload { get; set; }
-    }
+    [JsonPropertyName("payload")]
+    public string? Payload { get; set; }
 }

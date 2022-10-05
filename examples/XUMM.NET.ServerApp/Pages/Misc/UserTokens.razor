@@ -1,9 +1,8 @@
 ﻿@page "/user-tokens"
-@using XUMM.NET.SDK.Clients.Interfaces
 @using XUMM.NET.SDK.Models.Misc
 @using System.Text.RegularExpressions
 
-@inject IXummMiscClient _miscClient
+@inject IXummMiscClient MiscClient
 
 <PageTitle>User Tokens</PageTitle>
 
@@ -51,7 +50,7 @@
 }
 
 @code {
-    private ResponseAlertBox _responseAlertBox = default!;
+    private ResponseAlertBox? _responseAlertBox;
     private string _userTokens = default!;
     private XummUserTokens? _xummUserTokens;
 
@@ -70,11 +69,11 @@
 
         if (userTokens.Length == 1)
         {
-            _xummUserTokens = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.VerifyUserTokenAsync(userTokens[0]));
+            _xummUserTokens = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => MiscClient.VerifyUserTokenAsync(userTokens[0]));
         }
         else
         {
-            _xummUserTokens = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.VerifyUserTokensAsync(userTokens));
+            _xummUserTokens = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => MiscClient.VerifyUserTokensAsync(userTokens));
         }
 
         _responseAlertBox.SetAlert("User Token validity", _xummUserTokens != null);

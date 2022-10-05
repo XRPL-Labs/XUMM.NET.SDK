@@ -94,7 +94,7 @@ public static class CurrencyExtensions
             throw new ArgumentOutOfRangeException(nameof(value), $"Maximum value of XRP is {MaximumXrpValue}");
         }
 
-        return Math.Truncate(value * XrpDrops).ToString();
+        return Math.Truncate(value * XrpDrops).ToString(CultureInfo.InvariantCulture);
     }
 
     /// <summary>

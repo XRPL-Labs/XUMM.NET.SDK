@@ -1,8 +1,5 @@
 ﻿@page "/pingpong"
-@using XUMM.NET.SDK.Clients.Interfaces
 @using XUMM.NET.SDK.Models.Misc
-
-@inject IXummMiscClient _miscClient
 
 <PageTitle>Ping</PageTitle>
 
@@ -10,17 +7,26 @@
 
 <h1>Ping</h1>
 
-<div class="btn-group mb-3" role="group">
-    <button class="btn btn-primary" @onclick="CreatePayloadAndSubscribe">Ping</button>
+<div class="row">
+    <div class="col-md-6">
+        <XummSdkCredentials @ref="_xummSdkCredentials"></XummSdkCredentials>
+
+        <div class="btn-group mb-3" role="group">
+            <button class="btn btn-primary" @onclick="CreatePayloadAndSubscribe">Ping</button>
+        </div>
+    </div>
 </div>
 
 @code {
-    private ResponseAlertBox _responseAlertBox = default!;
+    private ResponseAlertBox? _responseAlertBox;
+    private XummSdkCredentials? _xummSdkCredentials;
     private XummPong? _pong;
 
     private async Task CreatePayloadAndSubscribe()
     {
-        _pong = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetPingAsync());
-        _responseAlertBox.SetAlert("Pong", _pong != null);
+        _pong = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => _xummSdkCredentials!.Miscellaneous.GetPingAsync());
+
+        var name = _pong != null ? $"pong of {_pong.Auth.Application.Name}" : "pong";
+        _responseAlertBox.SetAlert(name, _pong != null);
     }
 }

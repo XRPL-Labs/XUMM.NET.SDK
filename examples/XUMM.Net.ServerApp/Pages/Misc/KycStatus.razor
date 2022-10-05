@@ -1,10 +1,9 @@
 ﻿@page "/kyc-status"
-@using XUMM.NET.SDK.Clients.Interfaces
 @using XUMM.NET.SDK.Enums
 @using XUMM.NET.SDK.Extensions
 
 @inject IOptions<XrplConfig> Config
-@inject IXummMiscClient _miscClient
+@inject IXummMiscClient MiscClient
 
 <PageTitle>KYC Status</PageTitle>
 
@@ -39,7 +38,7 @@
 </div>
 
 @code {
-    private ResponseAlertBox _responseAlertBox = default!;
+    private ResponseAlertBox? _responseAlertBox;
     private string _userTokenOrAccount = default!;
     private string _userTokenOrAccountType = default!;
     private XummKycStatus? _kycStatus;
@@ -51,7 +50,7 @@
             _userTokenOrAccount = Config.Value.Account;
         }
 
-        _kycStatus = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetKycStatusAsync(_userTokenOrAccount));
+        _kycStatus = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => MiscClient.GetKycStatusAsync(_userTokenOrAccount));
         _userTokenOrAccountType = _userTokenOrAccount.IsAccountAddress() ? "Account" : "User token";
         _responseAlertBox.SetAlert("KYC Status", _kycStatus != null);
     }

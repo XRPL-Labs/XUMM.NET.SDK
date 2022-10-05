@@ -1,9 +1,8 @@
 ﻿@page "/transaction"
-@using XUMM.NET.SDK.Clients.Interfaces
 @using XUMM.NET.SDK.Models.Misc
 @using XUMM.NET.ServerApp.Extensions
 
-@inject IXummMiscClient _miscClient
+@inject IXummMiscClient MiscClient
 
 <PageTitle>Transaction</PageTitle>
 
@@ -33,7 +32,7 @@
 }
 
 @code {
-    private ResponseAlertBox _responseAlertBox = default!;
+    private ResponseAlertBox? _responseAlertBox;
     private string _txHash = default!;
     private XummTransaction? _transaction;
 
@@ -44,7 +43,7 @@
             return;
         }
 
-        _transaction = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetTransactionAsync(_txHash));
+        _transaction = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => MiscClient.GetTransactionAsync(_txHash));
         _responseAlertBox.SetAlert("Transaction Details", _transaction != null);
     }
 }

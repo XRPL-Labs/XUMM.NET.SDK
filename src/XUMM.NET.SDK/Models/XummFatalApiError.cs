@@ -1,25 +1,24 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.NET.SDK.Models
+namespace XUMM.NET.SDK.Models;
+
+public class XummFatalApiError
 {
-    public class XummFatalApiError
-    {
-        [JsonPropertyName("error")]
-        public bool Error { get; set; }
+    [JsonPropertyName("error")]
+    public bool Error { get; set; }
 
-        [JsonPropertyName("message")]
-        public string Message { get; set; } = default!;
+    [JsonPropertyName("message")]
+    public string Message { get; set; } = default!;
 
-        [JsonPropertyName("reference")]
-        public string? Reference { get; set; }
+    [JsonPropertyName("reference")]
+    public string? Reference { get; set; }
 
-        [JsonPropertyName("code")]
-        public int Code { get; set; }
+    [JsonPropertyName("code")]
+    public int Code { get; set; }
 
-        [JsonPropertyName("req")]
-        public string? Request { get; set; }
+    [JsonPropertyName("req")]
+    public string? Request { get; set; }
 
-        [JsonPropertyName("method")]
-        public string? Method { get; set; }
-    }
+    [JsonPropertyName("method")]
+    public string? Method { get; set; }
 }

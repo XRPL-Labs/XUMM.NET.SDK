@@ -1,19 +1,18 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.NET.SDK.Models.Payload
+namespace XUMM.NET.SDK.Models.Payload;
+
+public class XummPayloadResponse
 {
-    public class XummPayloadResponse
-    {
-        [JsonPropertyName("uuid")]
-        public string Uuid { get; set; } = default!;
+    [JsonPropertyName("uuid")]
+    public string Uuid { get; set; } = default!;
 
-        [JsonPropertyName("next")]
-        public XummPayloadNextResponse Next { get; set; } = default!;
+    [JsonPropertyName("next")]
+    public XummPayloadNextResponse Next { get; set; } = default!;
 
-        [JsonPropertyName("refs")]
-        public XummPayloadRefsResponse Refs { get; set; } = default!;
+    [JsonPropertyName("refs")]
+    public XummPayloadRefsResponse Refs { get; set; } = default!;
 
-        [JsonPropertyName("pushed")]
-        public bool Pushed { get; set; }
-    }
+    [JsonPropertyName("pushed")]
+    public bool Pushed { get; set; }
 }
