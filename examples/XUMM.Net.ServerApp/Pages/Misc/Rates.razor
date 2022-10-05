@@ -1,9 +1,9 @@
 ﻿@page "/rates"
-@using XUMM.NET.SDK.Clients.Interfaces
+
 @using XUMM.NET.SDK.Models.Misc
 
 @inject IOptions<XrplConfig> Config
-@inject IXummMiscClient _miscClient
+@inject IXummMiscClient MiscClient
 
 <PageTitle>Rates</PageTitle>
 
@@ -40,7 +40,7 @@
 </div>
 
 @code {
-    private ResponseAlertBox _responseAlertBox = default!;
+    private ResponseAlertBox? _responseAlertBox;
     private string _currency = default!;
     private XummRates? _rates;
 
@@ -51,7 +51,7 @@
             _currency = Config.Value.CurrencyCode;
         }
 
-        _rates = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetRatesAsync(_currency));
+        _rates = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => MiscClient.GetRatesAsync(_currency));
         _responseAlertBox.SetAlert("Rates", _rates != null);
     }
 }

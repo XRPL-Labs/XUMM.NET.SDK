@@ -50,4 +50,10 @@
         Name = name;
         StateHasChanged();
     }
+
+    public void Clear()
+    {
+        _success = null;
+        StateHasChanged();
+    }
 }

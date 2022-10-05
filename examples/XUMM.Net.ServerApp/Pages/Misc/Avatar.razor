@@ -1,9 +1,8 @@
 ﻿@page "/avatar"
-@using XUMM.NET.SDK.Clients.Interfaces
 @using XUMM.NET.SDK.Extensions
 
 @inject IOptions<XrplConfig> Config
-@inject IXummMiscClient _miscClient
+@inject IXummMiscClient MiscClient
 
 <PageTitle>Avatar</PageTitle>
 
@@ -66,6 +65,6 @@
             _padding = 0;
         }
 
-        _avatarUrl = _miscClient.GetAvatarUrl(_account, _dimensions, _padding);
+        _avatarUrl = MiscClient.GetAvatarUrl(_account, _dimensions, _padding);
     }
 }

@@ -1,15 +1,10 @@
 ﻿@page "/custom-json"
-@using System.Text.Json
-@using System.Text.Json.Serialization
-@using XUMM.NET.SDK.Clients.Interfaces
-@using XUMM.NET.SDK.Enums
 @using XUMM.NET.SDK.WebSocket.EventArgs
 @using XUMM.NET.SDK.Models.Payload
-@using XUMM.NET.SDK.Models.Payload.Xumm
-
-@inject IXummPayloadClient _payloadClient
 
 <PageTitle>Custom Payload</PageTitle>
+
+<ResponseAlertBox @ref="_responseAlertBox"></ResponseAlertBox>
 
 <h1>Custom Payload</h1>
 
@@ -41,9 +36,11 @@
         }
         else
         {
+            <XummSdkCredentials @ref="_xummSdkCredentials"></XummSdkCredentials>
+
             <div class="mb-3">
                 <label for="json" class="form-label">JSON data</label>
-                <textarea id="json" class="form-control" placeholder="JSON" aria-label="Currency" aria-describedby="basic-addon2" rows="10" @bind="_json"></textarea>
+                <textarea id="json" class="form-control" placeholder="JSON" aria-label="JSON data" aria-describedby="basic-addon2" rows="10" @bind="_json"></textarea>
             </div>
 
             <div class="btn-group mb-3" role="group">
@@ -86,6 +83,8 @@
 
 @code {
     private CancellationTokenSource _cts = default!;
+    private ResponseAlertBox? _responseAlertBox;
+    private XummSdkCredentials? _xummSdkCredentials;
     private readonly List<string> _messages = new();
     private string? _json;
     private string? _qrCodeUrl;
@@ -99,7 +98,8 @@
             return;
         }
 
-        var payloadResult = await _payloadClient.CreateAsync(new XummPostJsonPayload(_json));
+        var payloadResult = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => _xummSdkCredentials!.Payload.CreateAsync(new XummPostJsonPayload(_json), true));
+        _responseAlertBox.SetAlert("Payload response", payloadResult != null);
 
         if (payloadResult != null)
         {
@@ -111,7 +111,7 @@
             StateHasChanged();
 
             _cts = new CancellationTokenSource();
-            await _payloadClient.SubscribeAsync(payloadResult, Subscription_EventArgs, _cts.Token);
+            await _xummSdkCredentials!.Payload.SubscribeAsync(payloadResult, Subscription_EventArgs, _cts.Token);
         }
     }
 
@@ -130,7 +130,7 @@
             return;
         }
 
-        var payloadResult = await _payloadClient.CancelAsync(_payloadUuid);
+        var payloadResult = await _xummSdkCredentials!.Payload.CancelAsync(_payloadUuid);
         if (payloadResult != null)
         {
             _messages.Add($"Payload {_payloadUuid} cancel {(payloadResult.Result.Cancelled ? "succeeded" : "failed")} with reason: \"{payloadResult.Result.Reason}\".");

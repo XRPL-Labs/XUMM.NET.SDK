@@ -1,8 +1,5 @@
 ﻿@page "/storage"
-@using XUMM.NET.SDK.Clients.Interfaces
 @using XUMM.NET.ServerApp.Extensions
-
-@inject IXummMiscAppStorageClient _miscAppStorageClient
 
 <PageTitle>Storage</PageTitle>
 
@@ -12,6 +9,8 @@
 
 <div class="row align-items-start">
     <div class="col-md-6">
+        <XummSdkCredentials @ref="_xummSdkCredentials"></XummSdkCredentials>
+
         <div class="mb-3">
             <label for="json" class="form-label">JSON data</label>
             <textarea id="json" class="form-control" placeholder="JSON" aria-label="Currency" aria-describedby="basic-addon2" @bind="_json"></textarea>
@@ -19,7 +18,8 @@
 
         <div class="btn-group mb-3" role="group">
             <button class="btn btn-primary" type="button" @onclick="StoreAsync">Save</button>
-            <button class="btn btn-secondary" @onclick="ClearAsync">Clear</button>
+            <button class="btn btn-secondary" type="button" @onclick="GetStorageAsync">Retrieve</button>
+            <button class="btn btn-danger" @onclick="ClearAsync">Clear</button>
         </div>
     </div>
     <div class="col-md-6">
@@ -40,7 +40,8 @@
 </div>
 
 @code {
-    private ResponseAlertBox _responseAlertBox = default!;
+    private ResponseAlertBox? _responseAlertBox;
+    private XummSdkCredentials? _xummSdkCredentials;
     private string? _json;
     private object? _storedData;
 
@@ -54,7 +55,7 @@
 
     private async Task GetStorageAsync()
     {
-        var storage = await _miscAppStorageClient.GetAsync();
+        var storage = await _xummSdkCredentials!.AppStorage.GetAsync();
         _storedData = storage?.Data?.ToJsonString();
         StateHasChanged();
     }
@@ -66,7 +67,7 @@
             return;
         }
 
-        var storageStore = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscAppStorageClient.StoreAsync(_json));
+        var storageStore = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => _xummSdkCredentials!.AppStorage.StoreAsync(_json));
         var success = storageStore?.Stored ?? false;
         _responseAlertBox.SetAlert("Storage Result", success);
 
@@ -79,7 +80,7 @@
 
     private async Task ClearAsync()
     {
-        var storageStore = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscAppStorageClient.ClearAsync());
+        var storageStore = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => _xummSdkCredentials!.AppStorage.ClearAsync());
         var success = storageStore?.Stored ?? false;
         _responseAlertBox.SetAlert("Storage Cleared Result", success);
 

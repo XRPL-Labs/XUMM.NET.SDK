@@ -1,8 +1,7 @@
 ﻿@page "/curatedassets"
-@using XUMM.NET.SDK.Clients.Interfaces
 @using XUMM.NET.SDK.Models.Misc
 
-@inject IXummMiscClient _miscClient
+@inject IXummMiscClient MiscClient
 
 <PageTitle>Curated Assets</PageTitle>
 
@@ -48,12 +47,12 @@ else
 }
 
 @code {
-    private ResponseAlertBox _responseAlertBox = default!;
+    private ResponseAlertBox? _responseAlertBox;
     private List<XummCuratedAssetsDetails>? _details;
 
     private async Task GetCuratedAssetsAsync()
     {
-        var curatedAssets = await _responseAlertBox.GetResponseAndSetAlertAsync(() => _miscClient.GetCuratedAssetsAsync());
+        var curatedAssets = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => MiscClient.GetCuratedAssetsAsync());
         _details = curatedAssets != null ? new List<XummCuratedAssetsDetails>(curatedAssets.Details.Values) : default;
         _responseAlertBox.SetAlert("Curated Assets", curatedAssets != null);
     }
