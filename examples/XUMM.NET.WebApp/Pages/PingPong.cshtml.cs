@@ -1,5 +1,8 @@
-﻿using System.Threading.Tasks;
+﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
+using System;
+using System.Threading.Tasks;
+using XUMM.NET.SDK;
 using XUMM.NET.SDK.Clients.Interfaces;
 using XUMM.NET.SDK.Models.Misc;
 
@@ -9,6 +12,14 @@ namespace XUMM.NET.WebApp.Pages
     {
         public XummPong Pong { get; set; }
 
+        [BindProperty]
+        public string ApiKey { get; set; }
+
+        [BindProperty]
+        public string ApiSecret { get; set; }
+
+        public string? ErrorMessage { get; set; }
+
         private readonly IXummMiscClient _miscClient;
 
         public PingPongModel(IXummMiscClient miscClient)
@@ -16,9 +27,18 @@ namespace XUMM.NET.WebApp.Pages
             _miscClient = miscClient;
         }
 
-        public async Task OnGetAsync()
+        public async Task OnPostAsync()
         {
-            Pong = await _miscClient.GetPingAsync();
+            try
+            {
+                var client = !string.IsNullOrWhiteSpace(ApiKey) && !string.IsNullOrWhiteSpace(ApiSecret) ? new XummSdk(ApiKey, ApiSecret).Miscellaneous : _miscClient;
+                Pong = await client.GetPingAsync();
+                ErrorMessage = null;
+            }
+            catch (Exception ex)
+            {
+                ErrorMessage = ex.Message;
+            }
         }
     }
 }
