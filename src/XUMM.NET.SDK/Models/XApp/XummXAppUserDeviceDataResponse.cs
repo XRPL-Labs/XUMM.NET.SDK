@@ -1,10 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.NET.SDK.Models.XApp
+namespace XUMM.NET.SDK.Models.XApp;
+
+public class XummXAppUserDeviceDataResponse
 {
-    public class XummXAppUserDeviceDataResponse
-    {
-        [JsonPropertyName("currency")]
-        public string? Currency { get; set; }
-    }
+    [JsonPropertyName("currency")]
+    public string? Currency { get; set; }
 }

@@ -1,10 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.NET.SDK.Models.Misc
+namespace XUMM.NET.SDK.Models.Misc;
+
+internal class XummKycStatusRequest
 {
-    internal class XummKycStatusRequest
-    {
-        [JsonPropertyName("user_token")]
-        public string UserToken { get; set; } = default!;
-    }
+    [JsonPropertyName("user_token")]
+    public string UserToken { get; set; } = default!;
 }

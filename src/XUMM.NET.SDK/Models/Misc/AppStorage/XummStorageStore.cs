@@ -1,10 +1,9 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.NET.SDK.Models.Misc.AppStorage
+namespace XUMM.NET.SDK.Models.Misc.AppStorage;
+
+public class XummStorageStore : XummStorage
 {
-    public class XummStorageStore : XummStorage
-    {
-        [JsonPropertyName("stored")]
-        public bool Stored { get; set; }
-    }
+    [JsonPropertyName("stored")]
+    public bool Stored { get; set; }
 }

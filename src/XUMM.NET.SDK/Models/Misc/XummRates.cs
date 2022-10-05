@@ -1,16 +1,15 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.NET.SDK.Models.Misc
+namespace XUMM.NET.SDK.Models.Misc;
+
+public class XummRates
 {
-    public class XummRates
-    {
-        [JsonPropertyName("USD")]
-        public double USD { get; set; }
+    [JsonPropertyName("USD")]
+    public double USD { get; set; }
 
-        [JsonPropertyName("XRP")]
-        public double XRP { get; set; }
+    [JsonPropertyName("XRP")]
+    public double XRP { get; set; }
 
-        [JsonPropertyName("__meta")]
-        public XummMeta Meta { get; set; } = default!;
-    }
+    [JsonPropertyName("__meta")]
+    public XummMeta Meta { get; set; } = default!;
 }

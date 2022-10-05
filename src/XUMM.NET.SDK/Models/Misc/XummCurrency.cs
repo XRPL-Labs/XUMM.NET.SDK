@@ -1,19 +1,18 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.NET.SDK.Models.Misc
+namespace XUMM.NET.SDK.Models.Misc;
+
+public class XummCurrency
 {
-    public class XummCurrency
-    {
-        [JsonPropertyName("en")]
-        public string En { get; set; } = default!;
+    [JsonPropertyName("en")]
+    public string En { get; set; } = default!;
 
-        [JsonPropertyName("code")]
-        public string Code { get; set; } = default!;
+    [JsonPropertyName("code")]
+    public string Code { get; set; } = default!;
 
-        [JsonPropertyName("symbol")]
-        public string? Symbol { get; set; }
+    [JsonPropertyName("symbol")]
+    public string? Symbol { get; set; }
 
-        [JsonPropertyName("isoDecimals")]
-        public int IsoDecimals { get; set; }
-    }
+    [JsonPropertyName("isoDecimals")]
+    public int IsoDecimals { get; set; }
 }
