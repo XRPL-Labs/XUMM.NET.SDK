@@ -46,13 +46,25 @@ More information about the XUMM API, payloads, the API workflow, sending Push no
 - https://xumm.readme.io/docs
 
 
+### Multiple Xumm Applications support
+You can create an instance of `XummSdk` if your .NET application has to connect to multiple Xumm Applications.
+The `XummSdk` class contains client properties instead of using the clients by dependency injection.
+* **IXummMiscAppStorageClient**: `XummSdk.AppStorage`
+* **IXummMiscClient**: `XummSdk.Miscellaneous`
+* **IXummPayloadClient**: `XummSdk.Payload`
+
+```C#
+var xummSdk = new XummSdk("00000000-0000-0000-000-000000000000", "00000000-0000-0000-000-000000000000");
+var pong = await xummSdk.Miscellaneous.GetPingAsync();
+```
+
 ##### IXummMiscClient.GetPingAsync()
 
 The `GetPingAsync()` method allows you to verify API access (valid credentials) and returns some info on your XUMM APP:
 
 ```C#
-@inject IXummMiscClient _miscClient
-var pong = await _miscClient.GetPingAsync();
+@inject IXummMiscClient MiscClient
+var pong = await MiscClient.GetPingAsync();
 ```
 
 Returns: [`XummPong`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/XUMM.Net/Models/Misc/XummPong.cs)
@@ -95,8 +107,8 @@ Alternatively, KYC status can be retrieved for an XPRL account address: the addr
 XUMM when the session KYC was initiated by.
 
 ```C#
-@inject IXummMiscClient _miscClient
-var kycStatus = await _miscClient.GetKycStatusAsync("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q");
+@inject IXummMiscClient MiscClient
+var kycStatus = await MiscClient.GetKycStatusAsync("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q");
 ```
 
 Returns: [`XummKycStatus`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/XUMM.Net/Enums/XummKycStatus.cs)
@@ -117,8 +129,8 @@ live from the XRP ledger, as fetched for you by the XUMM backend.
 [![npm version](https://badge.fury.io/js/xrpl-txdata.svg)](https://www.npmjs.com/xrpl-txdata)
 
 ```C#
-@inject IXummMiscClient _miscClient
-var txInfo = await _miscClient.GetTransactionAsync("00000000-0000-0000-0000-000000000000");
+@inject IXummMiscClient MiscClient
+var txInfo = await MiscClient.GetTransactionAsync("00000000-0000-0000-0000-000000000000");
 ```
 
 Returns: [`XummTransaction`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/XUMM.Net/Models/Misc/XummTransaction.cs)
@@ -132,21 +144,21 @@ Your XUMM APP storage is stored at the XUMM API backend, meaning it persists unt
 This data is private, and accessible only with your own API credentials. This private JSON data can be used to store credentials / config / bootstrap info / ... for your headless application (eg. POS device).
 
 ```C#
-@inject IXummMiscAppStorageClient _miscAppStorageClient
+@inject IXummMiscAppStorageClient MiscAppStorageClient
 
-var storageSet = await _miscAppStorageClient.StoreAsync({name: 'Dominique', age: 32, male: true});
+var storageSet = await MiscAppStorageClient.StoreAsync({name: 'Dominique', age: 32, male: true});
 Console.WriteLine(storageSet.Stored)
 // true
 
-var storageGet = await _miscAppStorageClient.GetAsync()
+var storageGet = await MiscAppStorageClient.GetAsync()
 Console.WriteLine(storageGet.Data)
 // { name: 'Dominique', age: 32, male: true }
 
-var storageDelete = await _miscAppStorageClient.ClearAsync()
+var storageDelete = await MiscAppStorageClient.ClearAsync()
 Console.WriteLine(storageSet.Stored)
 // true
 
-var storageGetAfterDelete = await _miscAppStorageClient.GetAsync()
+var storageGetAfterDelete = await MiscAppStorageClient.GetAsync()
 Console.WriteLine(storageGetAfterDelete.Data)
 // null
 ```
@@ -191,23 +203,23 @@ Note! Please don't use _polling_! The XUMM API offers Webhooks (configure your W
 You can `GetAsync()` a payload by:
 - Payload UUID  
   ```C#
-  @inject IXummPayloadClient _payloadClient
-  var payload = await _payloadClient.GetAsync("00000000-0000-0000-0000-000000000000");
+  @inject IXummPayloadClient PayloadClient
+  var payload = await PayloadClient.GetAsync("00000000-0000-0000-0000-000000000000");
   ```
 
 - Passing a created Payload object (see: [IXummPayloadClient.CreateAsync](#IXummPayloadClient.CreateAsync))  
   ```C#
-  @inject IXummPayloadClient _payloadClient
+  @inject IXummPayloadClient PayloadClient
   var newPayload = new XummPostJsonPayload("{...}");
-  var created = await _payloadClient.CreateAsync(newPayload);
-  var payload = await _payloadClient.GetAsync(created);
+  var created = await PayloadClient.CreateAsync(newPayload);
+  var payload = await PayloadClient.GetAsync(created);
   ```
 
 If a payload can't be fetched (eg. doesn't exist), `null` will be returned, unless a second param (boolean) is provided to get the SDK to throw an exception in case a payload can't be retrieved:
 
 ```C#
-@inject IXummPayloadClient _payloadClient
-var payload = await _payloadClient.GetAsync("00000000-0000-0000-0000-000000000000", true);
+@inject IXummPayloadClient PayloadClient
+var payload = await PayloadClient.GetAsync("00000000-0000-0000-0000-000000000000", true);
 ```
 
 
