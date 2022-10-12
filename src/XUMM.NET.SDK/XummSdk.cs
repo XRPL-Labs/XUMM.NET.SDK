@@ -26,6 +26,11 @@ public class XummSdk
     public IXummPayloadClient Payload { get; }
 
     /// <summary>
+    /// xApp API calls.
+    /// </summary>
+    public IXummXAppClient XApp { get; }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="XummSdk"/> class.
     /// </summary>
     /// <param name="apiKey">API Key which can be obtained from the <see href="https://apps.xumm.dev/">Xumm Developer Console</see>.</param>
@@ -54,5 +59,6 @@ public class XummSdk
         AppStorage = provider.GetRequiredService<IXummMiscAppStorageClient>();
         Miscellaneous = provider.GetRequiredService<IXummMiscClient>();
         Payload = provider.GetRequiredService<IXummPayloadClient>();
+        XApp = provider.GetRequiredService<IXummXAppClient>();
     }
 }
