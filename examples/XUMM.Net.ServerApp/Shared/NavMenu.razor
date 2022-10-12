@@ -74,6 +74,20 @@
                 </NavLink>
             }
         </div>
+        <div class="nav-item px-3">
+            <NavLink class="nav-link" @onclick='(() => ToggleSubNavMenu("XApp"))'>
+                <span class="oi oi-chevron-@(IsSubNavMenuExpanded("XApp") ? "bottom": "right")" aria-hidden="true"></span> xApp
+            </NavLink>
+            @if (IsSubNavMenuExpanded("XApp"))
+            {
+                <NavLink class="nav-link ps-4" href="/onetimetoken">
+                    <span class="oi oi-clock" aria-hidden="true"></span> OTT Data
+                </NavLink>
+                <NavLink class="nav-link ps-4" href="/refetchonetimetoken">
+                    <span class="oi oi-reload" aria-hidden="true"></span> Re-Fetch OTT Data
+                </NavLink>
+            }
+        </div>
     </nav>
 </div>
 

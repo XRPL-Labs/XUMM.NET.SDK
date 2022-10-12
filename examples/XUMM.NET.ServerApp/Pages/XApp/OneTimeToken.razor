@@ -1,0 +1,54 @@
+﻿@page "/onetimetoken"
+@using XUMM.NET.SDK.Models.XApp
+@using System.Text.Json
+
+<PageTitle>One Time Token</PageTitle>
+
+<ResponseAlertBox @ref="_responseAlertBox"></ResponseAlertBox>
+
+<h1>One Time Token</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <XummSdkCredentials @ref="_xummSdkCredentials"></XummSdkCredentials>
+
+        <div class="mb-3">
+            <label for="onetimetoken" class="form-label">One Time Token</label>
+            <input id="onetimetoken" type="text" class="form-control" placeholder="UUID (token) received (URL get param.) when Xumm launches your xApp URL" aria-label="One Time Token" aria-describedby="basic-addon2" @bind="_oneTimeToken">
+        </div>
+        <div class="btn-group mb-3" role="group">
+            <button class="btn btn-primary" type="button" @onclick="GetOneTimeTokenDataAsync">Get OTT data</button>
+        </div>
+    </div>
+</div>
+
+@if (_ottData != null)
+{
+    <div class="row">
+        <div class="mb-3">
+            <h2>One Time Token Data</h2>
+            <div class="text-break">
+                <code>@JsonSerializer.Serialize(_ottData)</code>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private ResponseAlertBox? _responseAlertBox;
+    private XummSdkCredentials? _xummSdkCredentials;
+    private XummXAppOttResponse? _ottData;
+
+    private string _oneTimeToken = default!;
+
+    private async Task GetOneTimeTokenDataAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_oneTimeToken))
+        {
+            return;
+        }
+
+        _ottData = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => _xummSdkCredentials!.XApp.GetOneTimeTokenDataAsync(_oneTimeToken));
+        _responseAlertBox.SetAlert("One Time Token Data", _ottData != null);
+    }
+}
