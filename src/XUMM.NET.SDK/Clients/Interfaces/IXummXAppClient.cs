@@ -21,4 +21,16 @@ public interface IXummXAppClient
     /// <param name="oneTimeToken">UUID (token) received (URL get param.) when Xumm launches your xApp URL.</param>
     /// <param name="deviceId">The device ID that retrieved the One Time Token data.</param>
     Task<XummXAppOttResponse> ReFetchOneTimeTokenDataAsync(string oneTimeToken, string deviceId);
+
+    /// <summary>
+    /// The 'event' endpoint allows publishing an xApp event in the "Requests" event list of a user, while sending a Push notification pointing to the event.
+    /// </summary>
+    /// <param name="request">Event request values.</param>
+    Task<XummXAppEventResponse> EventAsync(XummXAppEventRequest request);
+
+    /// <summary>
+    /// The 'push' endpoint allows publishing a push notification linking to an xApp. If the user clears the push notification there is no way to retrieve the link to the xApp.
+    /// </summary>
+    /// <param name="request">Push request values.</param>
+    Task<XummXAppPushResponse> PushAsync(XummXAppPushRequest request);
 }
