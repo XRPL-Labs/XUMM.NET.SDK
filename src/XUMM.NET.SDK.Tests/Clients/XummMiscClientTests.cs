@@ -131,8 +131,7 @@ public class XummMiscClientTests
     [TestCase(null)]
     [TestCase("")]
     [TestCase(" ")]
-    public void GetKycStatusAsync_WithNullOrWhiteSpaceUserTokenAndAccount_ShouldThrowExceptionAsync(
-        string userTokenOrAccount)
+    public void GetKycStatusAsync_WithNullOrWhiteSpaceUserTokenAndAccount_ShouldThrowExceptionAsync(string userTokenOrAccount)
     {
         // Act
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.GetKycStatusAsync(userTokenOrAccount));
