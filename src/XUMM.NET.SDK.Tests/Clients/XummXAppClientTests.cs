@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using XUMM.NET.SDK.Clients;
 using XUMM.NET.SDK.Configs;
+using XUMM.NET.SDK.Models.XApp;
 using XUMM.NET.SDK.Tests.Extensions;
 using XUMM.NET.SDK.Tests.Fixtures;
 
@@ -156,5 +157,127 @@ public class XummXAppClientTests
         // Assert
         Assert.IsNotNull(ex);
         Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'deviceId')"));
+    }
+
+    [Test]
+    [TestCase("e86fe076-e80a-44f9-b172-a558fdc91e38", "Test")]
+    public async Task EventAsync_WithValidEventRequest_ShouldReturnEventDataAsync(string userToken, string subTitle)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "xapp-event");
+
+        var request = new XummXAppEventRequest
+        {
+            UserToken = userToken,
+            Subtitle = subTitle
+        };
+
+        // Act
+        var result = await _subject.EventAsync(request);
+
+        // Assert
+        AssertExtensions.AreEqual(XAppFixtures.EventResponse, result);
+    }
+
+    [Test]
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase(" ")]
+    public void EventAsync_WithInvalidUserToken_ShouldThrowExceptionAsync(string userToken)
+    {
+        // Arrange
+        var request = new XummXAppEventRequest
+        {
+            UserToken = userToken
+        };
+
+        // Act
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.EventAsync(request));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'UserToken')"));
+    }
+
+    [Test]
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase(" ")]
+    public void EventAsync_WithInvalidSubtitle_ShouldThrowExceptionAsync(string subtitle)
+    {
+        // Arrange
+        var request = new XummXAppEventRequest
+        {
+            UserToken = "e86fe076-e80a-44f9-b172-a558fdc91e38",
+            Subtitle = subtitle
+        };
+
+        // Act
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.EventAsync(request));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'Subtitle')"));
+    }
+
+    [Test]
+    [TestCase("e86fe076-e80a-44f9-b172-a558fdc91e38", "Test")]
+    public async Task PushAsync_WithValidPushRequest_ShouldReturnPushDataAsync(string userToken, string subTitle)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "xapp-Push");
+
+        var request = new XummXAppPushRequest
+        {
+            UserToken = userToken,
+            Subtitle = subTitle
+        };
+
+        // Act
+        var result = await _subject.PushAsync(request);
+
+        // Assert
+        AssertExtensions.AreEqual(XAppFixtures.PushResponse, result);
+    }
+
+    [Test]
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase(" ")]
+    public void PushAsync_WithInvalidUserToken_ShouldThrowExceptionAsync(string userToken)
+    {
+        // Arrange
+        var request = new XummXAppPushRequest
+        {
+            UserToken = userToken
+        };
+
+        // Act
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.PushAsync(request));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'UserToken')"));
+    }
+
+    [Test]
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase(" ")]
+    public void PushAsync_WithInvalidSubtitle_ShouldThrowExceptionAsync(string subtitle)
+    {
+        // Arrange
+        var request = new XummXAppPushRequest
+        {
+            UserToken = "e86fe076-e80a-44f9-b172-a558fdc91e38",
+            Subtitle = subtitle
+        };
+
+        // Act
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.PushAsync(request));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'Subtitle')"));
     }
 }
