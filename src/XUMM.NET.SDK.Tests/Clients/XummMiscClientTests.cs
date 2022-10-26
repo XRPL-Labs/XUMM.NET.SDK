@@ -17,6 +17,11 @@ namespace XUMM.NET.SDK.Tests.Clients;
 [TestFixture]
 public class XummMiscClientTests
 {
+    private Mock<XummHttpClient> _xummHttpClient = default!;
+    private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
+    private Mock<IHttpClientFactory> _httpClientFactory = default!;
+    private XummMiscClient _subject = default!;
+
     [SetUp]
     public void SetUp()
     {
@@ -37,11 +42,6 @@ public class XummMiscClientTests
 
         _subject = new XummMiscClient(_xummHttpClient.Object);
     }
-
-    private Mock<XummHttpClient> _xummHttpClient = default!;
-    private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
-    private Mock<IHttpClientFactory> _httpClientFactory = default!;
-    private XummMiscClient _subject = default!;
 
     [Test]
     public async Task GetPingAsync_ShouldReturnPongAsync()
@@ -95,9 +95,7 @@ public class XummMiscClientTests
 
         // Assert
         Assert.IsNotNull(ex);
-        Assert.That(ex!.Message,
-            Is.EqualTo(
-                $"Specified argument was out of the range of valid values. (Parameter 'name'){Environment.NewLine}Actual value was INVALID_STATUS."));
+        Assert.That(ex!.Message, Is.EqualTo($"Specified argument was out of the range of valid values. (Parameter 'name'){Environment.NewLine}Actual value was INVALID_STATUS."));
     }
 
     [Test]
@@ -254,12 +252,8 @@ public class XummMiscClientTests
     }
 
     [Test]
-    [TestCase("user-tokens", new[]
-    {
-        "691d5ae8-968b-44c8-8835-f25da1214f35", "b12b59a8-83c8-4bc0-8acb-1d1d743871f1"
-    })]
-    public async Task VerifyUserTokensAsync_WithValidUserTokens_ShouldReturnUserTokensAsync(string fixture,
-        string[] userTokens)
+    [TestCase("user-tokens", new[] { "691d5ae8-968b-44c8-8835-f25da1214f35", "b12b59a8-83c8-4bc0-8acb-1d1d743871f1" })]
+    public async Task VerifyUserTokensAsync_WithValidUserTokens_ShouldReturnUserTokensAsync(string fixture, string[] userTokens)
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, fixture);
@@ -367,8 +361,7 @@ public class XummMiscClientTests
     [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q", 200, 5, "https://xumm.app/avatar/rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q_200_5.png")]
     [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q", 250, 0, "https://xumm.app/avatar/rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q_250_0.png")]
     [TestCase("rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q", 500, 2, "https://xumm.app/avatar/rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q_500_2.png")]
-    public void GetAvatarUrl_WithValidDimensions_ShouldReturnAvatarUrl(string account, int dimensions, int padding,
-        string expected)
+    public void GetAvatarUrl_WithValidDimensions_ShouldReturnAvatarUrl(string account, int dimensions, int padding, string expected)
     {
         // Act
         var result = _subject.GetAvatarUrl(account, dimensions, padding);
