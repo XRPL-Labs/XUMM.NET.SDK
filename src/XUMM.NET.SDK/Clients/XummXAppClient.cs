@@ -62,9 +62,9 @@ public class XummXAppClient : IXummXAppClient
             throw new ArgumentException("Value cannot be null or white space", nameof(request.UserToken));
         }
 
-        if (string.IsNullOrWhiteSpace(request.Subtitle))
+        if (string.IsNullOrWhiteSpace(request.Body))
         {
-            throw new ArgumentException("Value cannot be null or white space", nameof(request.Subtitle));
+            throw new ArgumentException("Value cannot be null or white space", nameof(request.Body));
         }
 
         return await _httpClient.PostAsync<XummXAppEventResponse>("xapp/event", request);
@@ -78,9 +78,9 @@ public class XummXAppClient : IXummXAppClient
             throw new ArgumentException("Value cannot be null or white space", nameof(request.UserToken));
         }
 
-        if (string.IsNullOrWhiteSpace(request.Subtitle))
+        if (string.IsNullOrWhiteSpace(request.Body))
         {
-            throw new ArgumentException("Value cannot be null or white space", nameof(request.Subtitle));
+            throw new ArgumentException("Value cannot be null or white space", nameof(request.Body));
         }
 
         return await _httpClient.PostAsync<XummXAppPushResponse>("xapp/push", request);

@@ -161,7 +161,7 @@ public class XummXAppClientTests
 
     [Test]
     [TestCase("e86fe076-e80a-44f9-b172-a558fdc91e38", "Test")]
-    public async Task EventAsync_WithValidEventRequest_ShouldReturnEventDataAsync(string userToken, string subTitle)
+    public async Task EventAsync_WithValidEventRequest_ShouldReturnEventDataAsync(string userToken, string body)
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "xapp-event");
@@ -169,7 +169,7 @@ public class XummXAppClientTests
         var request = new XummXAppEventRequest
         {
             UserToken = userToken,
-            Subtitle = subTitle
+            Body = body
         };
 
         // Act
@@ -203,13 +203,13 @@ public class XummXAppClientTests
     [TestCase(null)]
     [TestCase("")]
     [TestCase(" ")]
-    public void EventAsync_WithInvalidSubtitle_ShouldThrowExceptionAsync(string subtitle)
+    public void EventAsync_WithInvalidBody_ShouldThrowExceptionAsync(string body)
     {
         // Arrange
         var request = new XummXAppEventRequest
         {
             UserToken = "e86fe076-e80a-44f9-b172-a558fdc91e38",
-            Subtitle = subtitle
+            Body = body
         };
 
         // Act
@@ -217,12 +217,12 @@ public class XummXAppClientTests
 
         // Assert
         Assert.IsNotNull(ex);
-        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'Subtitle')"));
+        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'Body')"));
     }
 
     [Test]
     [TestCase("e86fe076-e80a-44f9-b172-a558fdc91e38", "Test")]
-    public async Task PushAsync_WithValidPushRequest_ShouldReturnPushDataAsync(string userToken, string subTitle)
+    public async Task PushAsync_WithValidPushRequest_ShouldReturnPushDataAsync(string userToken, string body)
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "xapp-Push");
@@ -230,7 +230,7 @@ public class XummXAppClientTests
         var request = new XummXAppPushRequest
         {
             UserToken = userToken,
-            Subtitle = subTitle
+            Body = body
         };
 
         // Act
@@ -264,13 +264,13 @@ public class XummXAppClientTests
     [TestCase(null)]
     [TestCase("")]
     [TestCase(" ")]
-    public void PushAsync_WithInvalidSubtitle_ShouldThrowExceptionAsync(string subtitle)
+    public void PushAsync_WithInvalidBody_ShouldThrowExceptionAsync(string body)
     {
         // Arrange
         var request = new XummXAppPushRequest
         {
             UserToken = "e86fe076-e80a-44f9-b172-a558fdc91e38",
-            Subtitle = subtitle
+            Body = body
         };
 
         // Act
@@ -278,6 +278,6 @@ public class XummXAppClientTests
 
         // Assert
         Assert.IsNotNull(ex);
-        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'Subtitle')"));
+        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'Body')"));
     }
 }

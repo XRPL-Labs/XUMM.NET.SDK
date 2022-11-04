@@ -15,13 +15,13 @@ public class XummXAppPushRequest
     /// Push notification subtitle &amp; subtitle in the Event list (Request tab)
     /// </summary>
     [JsonPropertyName("subtitle")]
-    public string Subtitle { get; set; } = default!;
+    public string? Subtitle { get; set; }
 
     /// <summary>
     /// Description (text) for the push notification
     /// </summary>
     [JsonPropertyName("body")]
-    public string? Body{ get; set; }
+    public string Body { get; set; } = default!;
 
     /// <summary>
     /// Free form JSON to pass to the Request &amp; push notification context (passed to the JSON received when calling the ott endpoint)

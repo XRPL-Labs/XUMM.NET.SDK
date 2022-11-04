@@ -51,13 +51,13 @@
     private XummXAppPushResponse? _pushResponse;
 
     private string _userToken = default!;
-    private string _subtitle = default!;
-    private string? _body;
+    private string? _subtitle;
+    private string _body = default!;
     private string? _data;
 
     private async Task GetOneTimeTokenDataAsync()
     {
-        if (string.IsNullOrWhiteSpace(_userToken) || string.IsNullOrWhiteSpace(_subtitle))
+        if (string.IsNullOrWhiteSpace(_userToken) || string.IsNullOrWhiteSpace(_body))
         {
             return;
         }
