@@ -48,6 +48,8 @@ namespace XUMM.NET.SDK.Tests
             _serviceCollectionMock.Verify(sc => sc.Add(
                 It.Is<ServiceDescriptor>(x => x.Is<IXummPayloadClient, XummPayloadClient>(ServiceLifetime.Singleton))));
             _serviceCollectionMock.Verify(sc => sc.Add(
+                It.Is<ServiceDescriptor>(x => x.Is<IXummXAppClient, XummXAppClient>(ServiceLifetime.Singleton))));
+            _serviceCollectionMock.Verify(sc => sc.Add(
                 It.Is<ServiceDescriptor>(x => x.Is<IXummWebSocket, XummWebSocket>(ServiceLifetime.Transient))));
             _serviceCollectionMock.Verify(sc => sc.Add(
                 It.Is<ServiceDescriptor>(x => x.Is<IXummHttpClient, XummHttpClient>(ServiceLifetime.Singleton))));
@@ -72,6 +74,8 @@ namespace XUMM.NET.SDK.Tests
                 It.Is<ServiceDescriptor>(x => x.Is<IXummMiscClient, XummMiscClient>(ServiceLifetime.Singleton))));
             _serviceCollectionMock.Verify(sc => sc.Add(
                 It.Is<ServiceDescriptor>(x => x.Is<IXummPayloadClient, XummPayloadClient>(ServiceLifetime.Singleton))));
+            _serviceCollectionMock.Verify(sc => sc.Add(
+                It.Is<ServiceDescriptor>(x => x.Is<IXummXAppClient, XummXAppClient>(ServiceLifetime.Singleton))));
             _serviceCollectionMock.Verify(sc => sc.Add(
                 It.Is<ServiceDescriptor>(x => x.Is<IXummHttpClient, XummHttpClient>(ServiceLifetime.Singleton))));
         }

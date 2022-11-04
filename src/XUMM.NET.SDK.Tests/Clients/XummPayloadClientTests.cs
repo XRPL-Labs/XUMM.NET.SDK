@@ -22,6 +22,12 @@ namespace XUMM.NET.SDK.Tests.Clients;
 [TestFixture]
 public class XummPayloadClientTests
 {
+    private Mock<XummHttpClient> _xummHttpClient = default!;
+    private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
+    private Mock<IHttpClientFactory> _httpClientFactory = default!;
+    private Mock<IXummWebSocket> _xummWebSocket = default!;
+    private XummPayloadClient _subject = default!;
+
     [SetUp]
     public void SetUp()
     {
@@ -48,12 +54,6 @@ public class XummPayloadClientTests
             _xummHttpClient.Object,
             _xummWebSocket.Object);
     }
-
-    private Mock<XummHttpClient> _xummHttpClient = default!;
-    private Mock<HttpMessageHandler> _httpMessageHandlerMock = default!;
-    private Mock<IHttpClientFactory> _httpClientFactory = default!;
-    private Mock<IXummWebSocket> _xummWebSocket = default!;
-    private XummPayloadClient _subject = default!;
 
     [Test]
     public async Task CreateAsync_WithValidXummPostJsonPayload_ShouldReturnXummPayloadResponseAsync()
@@ -88,13 +88,11 @@ public class XummPayloadClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.InternalServerError, "payload-error");
 
         // Act
-        var ex = Assert.ThrowsAsync<HttpRequestException>(async () =>
-            await _subject.CreateAsync(It.IsAny<XummPostJsonPayload>(), true));
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.CreateAsync(It.IsAny<XummPostJsonPayload>(), true));
 
         // Assert
         Assert.IsNotNull(ex);
-        Assert.That(ex!.Message,
-            Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
+        Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
     [Test]
@@ -130,13 +128,11 @@ public class XummPayloadClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.InternalServerError, "payload-error");
 
         // Act
-        var ex = Assert.ThrowsAsync<HttpRequestException>(async () =>
-            await _subject.CreateAsync(It.IsAny<XummPostBlobPayload>(), true));
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.CreateAsync(It.IsAny<XummPostBlobPayload>(), true));
 
         // Assert
         Assert.IsNotNull(ex);
-        Assert.That(ex!.Message,
-            Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
+        Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
     [Test]
@@ -147,12 +143,8 @@ public class XummPayloadClientTests
 
         var transaction = new XummPayloadTransaction(XummTransactionType.SignIn)
         {
-            {
-                "Destination", "rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY"
-            },
-            {
-                "DestinationTag", "495"
-            }
+            { "Destination", "rPEPPER7kfTD9w2To4CQk6UCfuHM9c6GDY"  },
+            { "DestinationTag", "495"  }
         };
 
         // Act
@@ -182,13 +174,11 @@ public class XummPayloadClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.InternalServerError, "payload-error");
 
         // Act
-        var ex = Assert.ThrowsAsync<HttpRequestException>(async () =>
-            await _subject.CreateAsync(It.IsAny<XummPayloadTransaction>(), true));
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.CreateAsync(It.IsAny<XummPayloadTransaction>(), true));
 
         // Assert
         Assert.IsNotNull(ex);
-        Assert.That(ex!.Message,
-            Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
+        Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
     [Test]
@@ -198,8 +188,7 @@ public class XummPayloadClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.InternalServerError, "payload-fatal");
 
         // Act
-        var ex = Assert.ThrowsAsync<HttpRequestException>(async () =>
-            await _subject.CreateAsync(It.IsAny<XummPayloadTransaction>(), true));
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.CreateAsync(It.IsAny<XummPayloadTransaction>(), true));
 
         // Assert
         Assert.IsNotNull(ex);
@@ -247,7 +236,7 @@ public class XummPayloadClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-get");
 
         // Act
-        var result = await _subject.GetAsync(payloadUuid);
+        _ = await _subject.GetAsync(payloadUuid);
 
         // Assert
         _httpMessageHandlerMock.AssertRequestUri(HttpMethod.Get, $"/payload/{payloadUuid}");
@@ -273,19 +262,16 @@ public class XummPayloadClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.InternalServerError, "payload-error");
 
         // Act
-        var ex = Assert.ThrowsAsync<HttpRequestException>(async () =>
-            await _subject.GetAsync(It.IsAny<string>(), true));
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.GetAsync(It.IsAny<string>(), true));
 
         // Assert
         Assert.IsNotNull(ex);
-        Assert.That(ex!.Message,
-            Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
+        Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
     [Test]
     [TestCase("custom-identifier")]
-    public async Task GetByCustomIdentifierAsync_WithValidCustomIdentifier_ShouldReturnPayloadAsync(
-        string customIdentifier)
+    public async Task GetByCustomIdentifierAsync_WithValidCustomIdentifier_ShouldReturnPayloadAsync(string customIdentifier)
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-get");
@@ -299,9 +285,7 @@ public class XummPayloadClientTests
 
     [Test]
     [TestCase("00000000-0000-4839-af2f-f794874a80b0")]
-    public async Task
-        GetByCustomIdentifierAsync_WithValidCustomIdentifier_ShouldContainCustomIdentifierInRequestUriAsync(
-            string customIdentifier)
+    public async Task GetByCustomIdentifierAsync_WithValidCustomIdentifier_ShouldContainCustomIdentifierInRequestUriAsync(string customIdentifier)
     {
         // Arrange
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-get");
@@ -333,13 +317,11 @@ public class XummPayloadClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.InternalServerError, "payload-error");
 
         // Act
-        var ex = Assert.ThrowsAsync<HttpRequestException>(async () =>
-            await _subject.GetByCustomIdentifierAsync(It.IsAny<string>(), true));
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.GetByCustomIdentifierAsync(It.IsAny<string>(), true));
 
         // Assert
         Assert.IsNotNull(ex);
-        Assert.That(ex!.Message,
-            Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
+        Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
     [Test]
@@ -472,13 +454,11 @@ public class XummPayloadClientTests
         _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.NotFound, "payload-notfound");
 
         // Act
-        var ex = Assert.ThrowsAsync<HttpRequestException>(async () =>
-            await _subject.CancelAsync(It.IsAny<string>(), true));
+        var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.CancelAsync(It.IsAny<string>(), true));
 
         // Assert
         Assert.IsNotNull(ex);
-        Assert.That(ex!.Message,
-            Is.EqualTo("Error code 404, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
+        Assert.That(ex!.Message, Is.EqualTo("Error code 404, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
     [Test]
@@ -497,9 +477,7 @@ public class XummPayloadClientTests
         };
 
         // Act
-        await _subject.SubscribeAsync(payloadDetails, delegate
-        {
-        }, It.IsAny<CancellationToken>());
+        await _subject.SubscribeAsync(payloadDetails, delegate { }, It.IsAny<CancellationToken>());
 
         // Assert
         _xummWebSocket.Verify(x => x.SubscribeAsync(payloadUuid, It.IsAny<CancellationToken>()));
@@ -518,9 +496,7 @@ public class XummPayloadClientTests
         };
 
         // Act
-        await _subject.SubscribeAsync(payloadDetails, delegate
-        {
-        }, It.IsAny<CancellationToken>());
+        await _subject.SubscribeAsync(payloadDetails, delegate { }, It.IsAny<CancellationToken>());
 
         // Assert
         _xummWebSocket.Verify(x => x.SubscribeAsync(payloadUuid, It.IsAny<CancellationToken>()));
@@ -536,7 +512,7 @@ public class XummPayloadClientTests
         var eventArgs = new List<XummSubscriptionEventArgs>();
 
         // Act
-        await _subject.SubscribeAsync(payloadUuid, delegate(object? sender, XummSubscriptionEventArgs e)
+        await _subject.SubscribeAsync(payloadUuid, delegate (object? sender, XummSubscriptionEventArgs e)
         {
             eventArgs.Add(e);
         }, It.IsAny<CancellationToken>());
@@ -554,7 +530,7 @@ public class XummPayloadClientTests
         var eventArgs = new List<XummSubscriptionEventArgs>();
 
         // Act
-        await _subject.SubscribeAsync(It.IsAny<string>(), delegate(object? sender, XummSubscriptionEventArgs e)
+        await _subject.SubscribeAsync(It.IsAny<string>(), delegate (object? sender, XummSubscriptionEventArgs e)
         {
             eventArgs.Add(e);
         }, It.IsAny<CancellationToken>());
@@ -592,8 +568,7 @@ public class XummPayloadClientTests
 
         // Assert
         Assert.IsNotNull(ex);
-        Assert.That(ex!.Message,
-            Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
+        Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
     [Test]
@@ -625,8 +600,7 @@ public class XummPayloadClientTests
 
         // Assert
         Assert.IsNotNull(ex);
-        Assert.That(ex!.Message,
-            Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
+        Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
     public static async IAsyncEnumerable<string> GetWebSocketMessagesAsync()

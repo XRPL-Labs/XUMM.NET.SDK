@@ -1,0 +1,83 @@
+﻿@page "/onetimetokenevent"
+@using XUMM.NET.SDK.Models.XApp
+@using System.Text.Json
+
+<PageTitle>One Time Token Event</PageTitle>
+
+<ResponseAlertBox @ref="_responseAlertBox"></ResponseAlertBox>
+
+<h1>One Time Token Event</h1>
+
+<div class="row">
+    <div class="col-md-6">
+        <XummSdkCredentials @ref="_xummSdkCredentials"></XummSdkCredentials>
+
+        <div class="mb-3">
+            <label for="usertoken" class="form-label">User Token</label>
+            <input id="usertoken" type="text" class="form-control" placeholder="The User Token to send the event & push notification to. Obtained with a Sign Request (payload)" aria-label="usertoken" aria-describedby="basic-addon2" @bind="_userToken">
+        </div>
+        <div class="mb-3">
+            <label for="subtitle" class="form-label">Subtitle</label>
+            <input id="subtitle" type="text" class="form-control" placeholder="Push notification subtitle & subtitle in the Event list (Request tab)" aria-label="subtitle" aria-describedby="basic-addon2" @bind="_subtitle">
+        </div>
+        <div class="mb-3">
+            <label for="body" class="form-label">Body</label>
+            <textarea id="body" class="form-control" placeholder="Description (text) for the push notification" aria-label="Body" aria-describedby="basic-addon2" rows="10" @bind="_body"></textarea>
+        </div>
+        <div class="mb-3">
+            <label for="data" class="form-label">Data</label>
+            <textarea id="data" class="form-control" placeholder="Free form JSON to pass to the Request & push notification context (passed to the JSON received when calling the ott endpoint)" aria-label="Data" aria-describedby="basic-addon2" rows="10" @bind="_data"></textarea>
+        </div>
+        <div class="mb-3 form-check">
+            <input class="form-check-input" type="checkbox" value="" id="silent" @bind="_silent">
+            <label class="form-check-label" for="silent">
+                Silent (Only create the event in the user's Event list, don't send a push notification)
+            </label>
+        </div>
+        <div class="btn-group mb-3" role="group">
+            <button class="btn btn-primary" type="button" @onclick="GetOneTimeTokenDataAsync">Send Event</button>
+        </div>
+    </div>
+    @if (_eventResponse != null)
+    {
+        <div class="col-md-6">
+            <div class="mb-3">
+                <h2>One Time Token Event Data</h2>
+                <div class="text-break">
+                    <code>@JsonSerializer.Serialize(_eventResponse)</code>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+@code {
+    private ResponseAlertBox? _responseAlertBox;
+    private XummSdkCredentials? _xummSdkCredentials;
+    private XummXAppEventResponse? _eventResponse;
+
+    private string _userToken = default!;
+    private string? _subtitle;
+    private string _body = default!;
+    private string? _data;
+    private bool _silent;
+
+    private async Task GetOneTimeTokenDataAsync()
+    {
+        if (string.IsNullOrWhiteSpace(_userToken) || string.IsNullOrWhiteSpace(_body))
+        {
+            return;
+        }
+        var request = new XummXAppEventRequest
+            {
+                UserToken = _userToken,
+                Subtitle = _subtitle,
+                Body = _body,
+                Data = !string.IsNullOrWhiteSpace(_data) ? JsonDocument.Parse(_data) : null,
+                Silent = _silent
+            };
+
+        _eventResponse = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => _xummSdkCredentials!.XApp.EventAsync(request));
+        _responseAlertBox.SetAlert("One Time Token Event", _eventResponse != null);
+    }
+}

@@ -30,4 +30,16 @@ public class XummXAppOttResponse
 
     [JsonPropertyName("user_device")]
     public XummXAppUserDeviceDataResponse? UserDevice { get; set; }
+
+    [JsonPropertyName("account_info")]
+    public XummXAppAccountInfoResponse AccountInfo { get; set; }
+
+    [JsonPropertyName("nodetype")]
+    public string? NodeType { get; set; }
+
+    [JsonPropertyName("currency")]
+    public string? Currency { get; set; }
+
+    [JsonPropertyName("subscriptions")]
+    public string[]? Subscriptions { get; set; }
 }
