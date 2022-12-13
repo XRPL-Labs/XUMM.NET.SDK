@@ -18,7 +18,6 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageProjectUrl>https://github.com/XRPL-Labs/XUMM.NET.SDK</PackageProjectUrl>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
-    <PackageVersion>$(PackageVersion)</PackageVersion>
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageReadmeFile>README_WEBHOOKS.md</PackageReadmeFile>
     <PackageVersion>$(PackageVersion)</PackageVersion>
