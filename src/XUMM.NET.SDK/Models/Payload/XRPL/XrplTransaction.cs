@@ -9,10 +9,10 @@ public class XrplTransaction
     public string? Account { get; set; }
 
     [JsonPropertyName("TransactionType")]
-    public string TransactionType { get; set; }
+    public string TransactionType { get; set; } = default!;
 
     [JsonPropertyName("Fee")]
-    public string Fee { get; set; }
+    public string Fee { get; set; } = default!;
 
     [JsonPropertyName("Sequence")]
     public int? Sequence { get; set; }

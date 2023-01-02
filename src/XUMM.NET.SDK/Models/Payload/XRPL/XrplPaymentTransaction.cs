@@ -34,7 +34,7 @@ public class XrplPaymentTransaction : XrplTransaction
     /// <summary>
     /// The unique address of the account receiving the payment.
     /// </summary>
-    public string Destination { get; set; }
+    public string Destination { get; set; } = default!;
 
     /// <summary>
     /// (Optional) Arbitrary tag that identifies the reason for the payment to the destination, or a hosted recipient to pay.

@@ -1,7 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.RazorPages;
-using System;
+﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using XUMM.NET.SDK;
 using XUMM.NET.SDK.Clients.Interfaces;
 using XUMM.NET.SDK.Models.Misc;
@@ -10,13 +10,13 @@ namespace XUMM.NET.WebApp.Pages
 {
     public class PingPongModel : PageModel
     {
-        public XummPong Pong { get; set; }
+        public XummPong? Pong { get; set; }
 
         [BindProperty]
-        public string ApiKey { get; set; }
+        public string ApiKey { get; set; } = default!;
 
         [BindProperty]
-        public string ApiSecret { get; set; }
+        public string ApiSecret { get; set; } = default!;
 
         public string? ErrorMessage { get; set; }
 

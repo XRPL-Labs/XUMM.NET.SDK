@@ -32,7 +32,7 @@ public class XummXAppOttResponse
     public XummXAppUserDeviceDataResponse? UserDevice { get; set; }
 
     [JsonPropertyName("account_info")]
-    public XummXAppAccountInfoResponse AccountInfo { get; set; }
+    public XummXAppAccountInfoResponse AccountInfo { get; set; } = default!;
 
     [JsonPropertyName("nodetype")]
     public string? NodeType { get; set; }
