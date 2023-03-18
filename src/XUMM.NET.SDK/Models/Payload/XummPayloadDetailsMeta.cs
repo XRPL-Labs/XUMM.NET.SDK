@@ -19,6 +19,12 @@ public class XummPayloadDetailsMeta
     [JsonPropertyName("pathfinding")]
     public bool? Pathfinding { get; set; }
 
+    [JsonPropertyName("pathfinding_fallback")]
+    public bool? PathfindingFallback { get; set; }
+
+    [JsonPropertyName("force_network")]
+    public string? ForceNetwork { get; set; } = default!;
+
     [JsonPropertyName("destination")]
     public string Destination { get; set; } = default!;
 

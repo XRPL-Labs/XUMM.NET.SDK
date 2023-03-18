@@ -5,6 +5,8 @@
     "multisign": false,
     "submit": false,
     "pathfinding": null,
+    "pathfinding_fallback": null,
+    "force_network": null,
     "destination": "",
     "resolved_destination": "",
     "resolved": true,
