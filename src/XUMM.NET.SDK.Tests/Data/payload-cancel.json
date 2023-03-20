@@ -9,6 +9,8 @@
     "multisign": false,
     "submit": false,
     "pathfinding": true,
+    "pathfinding_fallback": true,
+    "force_network": "MAINNET",
     "destination": "",
     "resolved_destination": "",
     "resolved": false,
