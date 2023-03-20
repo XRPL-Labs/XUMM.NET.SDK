@@ -41,7 +41,7 @@ public class XummPayloadOptions
     public string[]? Signers { get; set; }
 
     /// <summary>
-    /// (Optional) When set, the payload can only be opened by a device connected to the specified network. Xumm 2.5.0 will inform users, &lt; Xumm 2.5.0 users will get an "Invalid Payload" message.
+    /// (Optional) When set, the payload can only be opened by a device connected to the specified network. Xumm 2.5.0 and higher required.
     /// </summary>
     [JsonPropertyName("force_network")]
     public string? ForceNetwork { get; set; }
