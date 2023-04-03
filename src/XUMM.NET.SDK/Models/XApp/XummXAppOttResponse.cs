@@ -37,6 +37,9 @@ public class XummXAppOttResponse
     [JsonPropertyName("nodetype")]
     public string? NodeType { get; set; }
 
+    [JsonPropertyName("nodewss")]
+    public string? NodeWebSocketSecure { get; set; }
+
     [JsonPropertyName("currency")]
     public string? Currency { get; set; }
 
