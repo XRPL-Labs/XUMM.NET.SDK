@@ -31,6 +31,11 @@ public class XummSdk
     public IXummXAppClient XApp { get; }
 
     /// <summary>
+    /// xApp JWT API calls.
+    /// </summary>
+    public IXummXAppJwtClient XAppJwt { get; }
+
+    /// <summary>
     /// Initializes a new instance of the <see cref="XummSdk"/> class.
     /// </summary>
     /// <param name="apiKey">API Key which can be obtained from the <see href="https://apps.xumm.dev/">Xumm Developer Console</see>.</param>
@@ -60,5 +65,6 @@ public class XummSdk
         Miscellaneous = provider.GetRequiredService<IXummMiscClient>();
         Payload = provider.GetRequiredService<IXummPayloadClient>();
         XApp = provider.GetRequiredService<IXummXAppClient>();
+        XAppJwt = provider.GetRequiredService<IXummXAppJwtClient>();
     }
 }

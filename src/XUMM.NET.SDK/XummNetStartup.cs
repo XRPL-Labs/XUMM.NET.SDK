@@ -37,6 +37,7 @@ public static class XummNetStartup
         services.AddSingleton<IXummMiscClient, XummMiscClient>();
         services.AddSingleton<IXummPayloadClient, XummPayloadClient>();
         services.AddSingleton<IXummXAppClient, XummXAppClient>();
+        services.AddSingleton<IXummXAppJwtClient, XummXAppJwtClient>();
         services.AddSingleton<IXummHttpClient, XummHttpClient>();
         services.AddHttpClient();
         return services;
