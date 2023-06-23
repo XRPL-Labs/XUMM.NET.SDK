@@ -22,18 +22,18 @@ public class XummMiscAppStorageClient : IXummMiscAppStorageClient
     /// <inheritdoc />
     public async Task<XummStorage> GetAsync()
     {
-        return await _httpClient.GetAsync<XummStorage>("app-storage");
+        return await _httpClient.GetAsync<XummStorage>("platform/app-storage");
     }
 
     /// <inheritdoc />
     public async Task<XummStorageStore> StoreAsync(string json)
     {
-        return await _httpClient.PostAsync<XummStorageStore>("app-storage", json);
+        return await _httpClient.PostAsync<XummStorageStore>("platform/app-storage", json);
     }
 
     /// <inheritdoc />
     public async Task<XummStorageStore> ClearAsync()
     {
-        return await _httpClient.DeleteAsync<XummStorageStore>("app-storage");
+        return await _httpClient.DeleteAsync<XummStorageStore>("platform/app-storage");
     }
 }

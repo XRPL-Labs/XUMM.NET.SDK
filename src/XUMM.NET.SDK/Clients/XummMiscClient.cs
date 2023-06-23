@@ -28,13 +28,13 @@ public class XummMiscClient : IXummMiscClient
     /// <inheritdoc />
     public async Task<XummPong> GetPingAsync()
     {
-        return await _httpClient.GetAsync<XummPong>("ping");
+        return await _httpClient.GetAsync<XummPong>("platform/ping");
     }
 
     /// <inheritdoc />
     public async Task<XummCuratedAssets> GetCuratedAssetsAsync()
     {
-        return await _httpClient.GetAsync<XummCuratedAssets>("curated-assets");
+        return await _httpClient.GetAsync<XummCuratedAssets>("platform/curated-assets");
     }
 
     /// <inheritdoc />
@@ -45,7 +45,7 @@ public class XummMiscClient : IXummMiscClient
             throw new ArgumentException("Value cannot be null or white space", nameof(txHash));
         }
 
-        return await _httpClient.GetAsync<XummTransaction>($"xrpl-tx/{txHash}");
+        return await _httpClient.GetAsync<XummTransaction>($"platform/xrpl-tx/{txHash}");
     }
 
     /// <inheritdoc />
@@ -58,7 +58,7 @@ public class XummMiscClient : IXummMiscClient
 
         if (userTokenOrAccount.IsAccountAddress())
         {
-            var kycInfo = await _httpClient.GetPublicAsync<XummKycInfo>($"kyc-status/{userTokenOrAccount}");
+            var kycInfo = await _httpClient.GetPublicAsync<XummKycInfo>($"platform/kyc-status/{userTokenOrAccount}");
             return kycInfo.KycApproved ? XummKycStatus.Successful : XummKycStatus.None;
         }
 
@@ -69,7 +69,7 @@ public class XummMiscClient : IXummMiscClient
                 UserToken = userTokenOrAccount
             };
 
-            var kycInfo = await _httpClient.PostAsync<XummKycStatusInfo>("kyc-status", request);
+            var kycInfo = await _httpClient.PostAsync<XummKycStatusInfo>("platform/kyc-status", request);
             return EnumHelper.GetValueFromName<XummKycStatus>(kycInfo.KycStatus);
         }
 
@@ -84,7 +84,7 @@ public class XummMiscClient : IXummMiscClient
             throw new ArgumentException("Value cannot be null or white space", nameof(currencyCode));
         }
 
-        return await _httpClient.GetAsync<XummRates>($"rates/{currencyCode.Trim().ToUpperInvariant()}");
+        return await _httpClient.GetAsync<XummRates>($"platform/rates/{currencyCode.Trim().ToUpperInvariant()}");
     }
 
     /// <inheritdoc />
@@ -95,7 +95,7 @@ public class XummMiscClient : IXummMiscClient
             throw new ArgumentException("Value cannot be null or white space", nameof(userToken));
         }
 
-        return await _httpClient.GetAsync<XummUserTokens>($"user-token/{userToken}");
+        return await _httpClient.GetAsync<XummUserTokens>($"platform/user-token/{userToken}");
     }
 
     /// <inheritdoc />
@@ -111,7 +111,7 @@ public class XummMiscClient : IXummMiscClient
             Tokens = new List<string>(userTokens)
         };
 
-        return await _httpClient.PostAsync<XummUserTokens>("user-tokens", request);
+        return await _httpClient.PostAsync<XummUserTokens>("platform/user-tokens", request);
     }
 
     /// <inheritdoc />
@@ -122,7 +122,7 @@ public class XummMiscClient : IXummMiscClient
             throw new ArgumentException("Value should be a valid account address", nameof(account));
         }
 
-        return await _httpClient.GetAsync<XummAccountMetaResponse>($"account-meta/{account}");
+        return await _httpClient.GetAsync<XummAccountMetaResponse>($"platform/account-meta/{account}");
     }
 
     /// <inheritdoc />

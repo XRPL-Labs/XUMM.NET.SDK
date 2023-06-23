@@ -29,6 +29,11 @@ public class XummHttpClient : IXummHttpClient
         _logger = logger;
     }
 
+    public async Task<T> GetAsync<T>(HttpClient client, string endpoint)
+    {
+        return await SendAsync<T>(client, HttpMethod.Get, endpoint, default);
+    }
+
     public async Task<T> GetAsync<T>(string endpoint)
     {
         return await SendAsync<T>(HttpMethod.Get, endpoint, true, default);
@@ -49,9 +54,19 @@ public class XummHttpClient : IXummHttpClient
         return await SendAsync<T>(HttpMethod.Post, endpoint, true, json);
     }
 
+    public async Task<T> PostAsync<T>(HttpClient client, string endpoint, string json)
+    {
+        return await SendAsync<T>(client, HttpMethod.Post, endpoint, json);
+    }
+
     public async Task<T> DeleteAsync<T>(string endpoint)
     {
         return await SendAsync<T>(HttpMethod.Delete, endpoint, true, default);
+    }
+
+    public async Task<T> DeleteAsync<T>(HttpClient client, string endpoint)
+    {
+        return await SendAsync<T>(client, HttpMethod.Delete, endpoint, default);
     }
 
     public HttpClient GetHttpClient(bool setCredentials)
@@ -70,11 +85,16 @@ public class XummHttpClient : IXummHttpClient
         return httpClient;
     }
 
-    private async Task<T> SendAsync<T>(HttpMethod method, string endpoint, bool setCredentials, string? json)
+    private Task<T> SendAsync<T>(HttpMethod method, string endpoint, bool setCredentials, string? json)
+    {
+        var client = GetHttpClient(setCredentials);
+        return SendAsync<T>(client, method, endpoint, json);
+    }
+
+    private async Task<T> SendAsync<T>(HttpClient client, HttpMethod method, string endpoint, string? json)
     {
         try
         {
-            using var client = GetHttpClient(setCredentials);
             using var requestMessage = new HttpRequestMessage(method, GetRequestUrl(endpoint));
 
             if (json != null)
@@ -169,8 +189,7 @@ public class XummHttpClient : IXummHttpClient
             result += "/";
         }
 
-        result += $"platform/{endpoint}";
-
+        result += endpoint;
         return result;
     }
 }

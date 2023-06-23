@@ -34,7 +34,7 @@ public class XummXAppClient : IXummXAppClient
             throw new ArgumentException("Value cannot be null or white space", nameof(oneTimeToken));
         }
 
-        return await _httpClient.GetAsync<XummXAppOttResponse>($"xapp/ott/{oneTimeToken}");
+        return await _httpClient.GetAsync<XummXAppOttResponse>($"platform/xapp/ott/{oneTimeToken}");
     }
 
     /// <inheritdoc />
@@ -51,7 +51,7 @@ public class XummXAppClient : IXummXAppClient
         }
 
         var hash = $"{oneTimeToken}.{_config.ApiSecret}.{deviceId}".ToUpperInvariant().ToSha1Hash().ToLowerInvariant();
-        return await _httpClient.GetAsync<XummXAppOttResponse>($"xapp/ott/{oneTimeToken}/{hash}");
+        return await _httpClient.GetAsync<XummXAppOttResponse>($"platform/xapp/ott/{oneTimeToken}/{hash}");
     }
 
     /// <inheritdoc />
@@ -67,7 +67,7 @@ public class XummXAppClient : IXummXAppClient
             throw new ArgumentException("Value cannot be null or white space", nameof(request.Body));
         }
 
-        return await _httpClient.PostAsync<XummXAppEventResponse>("xapp/event", request);
+        return await _httpClient.PostAsync<XummXAppEventResponse>("platform/xapp/event", request);
     }
 
     /// <inheritdoc />
@@ -83,6 +83,6 @@ public class XummXAppClient : IXummXAppClient
             throw new ArgumentException("Value cannot be null or white space", nameof(request.Body));
         }
 
-        return await _httpClient.PostAsync<XummXAppPushResponse>("xapp/push", request);
+        return await _httpClient.PostAsync<XummXAppPushResponse>("platform/xapp/push", request);
     }
 }

@@ -47,7 +47,7 @@ public class XummPayloadClient : IXummPayloadClient
     {
         try
         {
-            return await _httpClient.PostAsync<XummPayloadResponse>("payload", new Dictionary<string, object>
+            return await _httpClient.PostAsync<XummPayloadResponse>("platform/payload", new Dictionary<string, object>
             {
                 {
                     "txJson", payloadTransaction
@@ -76,7 +76,7 @@ public class XummPayloadClient : IXummPayloadClient
     {
         try
         {
-            return await _httpClient.GetAsync<XummPayloadDetails>($"payload/{payloadUuid}");
+            return await _httpClient.GetAsync<XummPayloadDetails>($"platform/payload/{payloadUuid}");
         }
         catch
         {
@@ -94,7 +94,7 @@ public class XummPayloadClient : IXummPayloadClient
     {
         try
         {
-            return await _httpClient.GetAsync<XummPayloadDetails>($"payload/ci/{customIdentifier}");
+            return await _httpClient.GetAsync<XummPayloadDetails>($"platform/payload/ci/{customIdentifier}");
         }
         catch
         {
@@ -124,7 +124,7 @@ public class XummPayloadClient : IXummPayloadClient
     {
         try
         {
-            return await _httpClient.DeleteAsync<XummDeletePayload>($"payload/{payloadUuid}");
+            return await _httpClient.DeleteAsync<XummDeletePayload>($"platform/payload/{payloadUuid}");
         }
         catch
         {
@@ -199,7 +199,7 @@ public class XummPayloadClient : IXummPayloadClient
     {
         try
         {
-            return await _httpClient.PostAsync<XummPayloadResponse>("payload", payload);
+            return await _httpClient.PostAsync<XummPayloadResponse>("platform/payload", payload);
         }
         catch
         {
