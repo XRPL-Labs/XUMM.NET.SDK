@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Options;
 using XUMM.NET.SDK.Clients.Interfaces;
-using XUMM.NET.SDK.Configs;
 using XUMM.NET.SDK.Models.XAppJwt;
 using XUMM.NET.SDK.Models.XAppJWT;
 
@@ -11,16 +9,13 @@ namespace XUMM.NET.SDK.Clients;
 public class XummXAppJwtClient : IXummXAppJwtClient
 {
     private readonly IXummHttpClient _httpClient;
-    private readonly ApiConfig _config;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="XummXAppJwtClient"/> class.
     /// </summary>
-    public XummXAppJwtClient(IXummHttpClient httpClient,
-        IOptions<ApiConfig> options)
+    public XummXAppJwtClient(IXummHttpClient httpClient)
     {
         _httpClient = httpClient;
-        _config = options.Value;
     }
 
     /// <inheritdoc />

@@ -7,7 +7,7 @@ namespace XUMM.NET.SDK.Clients.Interfaces;
 public interface IXummXAppJwtClient
 {
     /// <summary>
-    /// 
+    /// Authorize with the One Time Token
     /// </summary>
     /// <param name="oneTimeToken">UUID (token) received (URL get param.) when Xumm launches your xApp URL.</param>
     Task<XummXAppJwtAuthorizeResponse> AuthorizeAsync(string oneTimeToken);
