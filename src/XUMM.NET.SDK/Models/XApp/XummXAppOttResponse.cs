@@ -40,6 +40,9 @@ public class XummXAppOttResponse
     [JsonPropertyName("nodewss")]
     public string? NodeWebSocketSecure { get; set; }
 
+    [JsonPropertyName("networkid")]
+    public uint? NetworkId { get; set; }
+
     [JsonPropertyName("currency")]
     public string? Currency { get; set; }
 
