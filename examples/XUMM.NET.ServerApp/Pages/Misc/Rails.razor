@@ -1,0 +1,60 @@
+﻿@page "/rails"
+@using XUMM.NET.SDK.Models.Misc
+
+@inject IXummMiscClient MiscClient
+
+<PageTitle>Rails</PageTitle>
+
+<ResponseAlertBox @ref="_responseAlertBox"></ResponseAlertBox>
+
+<h1>Rails</h1>
+
+@if (_rails != null)
+{
+    <div class="row">
+        <div class="mb-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Id</th>
+                        <th scope="col">Livenet</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Asset</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var network in _rails.Values.OrderBy(x => x.ChainId))
+                    {
+                        <tr>
+                            <td>@network.ChainId</td>
+                            <td><span class="oi @(network.IsLivenet ? "oi-check":"oi-x")" aria-hidden="true"></span> </td>
+                            <td style="color:@network.Color">@network.Name</td>
+                            <td><img src="@network.Icons.IconSquare" alt="@network.Name" height="24" /> @network.NativeAsset</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+else
+{
+    <div class="row">
+        <div class="mb-3">
+            <div class="btn-group mb-3" role="group">
+                <button class="btn btn-primary" @onclick="GetRailsAsync">Get Rails</button>
+            </div>
+        </div>
+    </div>
+}
+
+@code {
+    private ResponseAlertBox? _responseAlertBox;
+    private XummRails? _rails;
+
+    private async Task GetRailsAsync()
+    {
+        _rails = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => MiscClient.GetRailsAsync());
+        _responseAlertBox.SetAlert("Rails", _rails != null);
+    }
+}
