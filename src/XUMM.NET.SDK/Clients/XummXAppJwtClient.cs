@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using XUMM.NET.SDK.Clients.Interfaces;
 using XUMM.NET.SDK.Models.XAppJwt;
-using XUMM.NET.SDK.Models.XAppJWT;
 
 namespace XUMM.NET.SDK.Clients;
 
@@ -56,5 +55,19 @@ public class XummXAppJwtClient : IXummXAppJwtClient
         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
 
         return await _httpClient.DeleteAsync<XummXAppJwtUserDataUpdateResponse>(httpClient, $"xapp-jwt/userdata/{key}");
+    }
+
+    /// <inheritdoc />
+    public async Task<XummXAppJwtNFTokenDetail> GetNFTokenDetailAsync(string jwt, string tokenId)
+    {
+        if (string.IsNullOrWhiteSpace(tokenId))
+        {
+            throw new ArgumentException("Value cannot be null or white space", nameof(tokenId));
+        }
+
+        var httpClient = _httpClient.GetHttpClient(false);
+        httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
+
+        return await _httpClient.GetAsync<XummXAppJwtNFTokenDetail>(httpClient, $"xapp-jwt/nftoken-detail/{tokenId}");
     }
 }

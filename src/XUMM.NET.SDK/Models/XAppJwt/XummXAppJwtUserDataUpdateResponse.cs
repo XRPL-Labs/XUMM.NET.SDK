@@ -1,6 +1,6 @@
 ﻿using System.Text.Json.Serialization;
 
-namespace XUMM.NET.SDK.Models.XAppJWT;
+namespace XUMM.NET.SDK.Models.XAppJwt;
 
 public class XummXAppJwtUserDataUpdateResponse
 {

@@ -1,6 +1,5 @@
 ﻿using System.Text.Json.Serialization;
 using XUMM.NET.SDK.Models.XApp;
-using XUMM.NET.SDK.Models.XAppJWT;
 
 namespace XUMM.NET.SDK.Models.XAppJwt;
 
