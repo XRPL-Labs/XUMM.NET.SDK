@@ -26,7 +26,7 @@ public class XummCuratedAssetsDetailsCurrency
     public string Name { get; set; } = default!;
 
     [JsonPropertyName("avatar")]
-    public string Avatar { get; set; } = default!;
+    public string? Avatar { get; set; }
 
     [JsonPropertyName("shortlist")]
     public int Shortlist { get; set; }
