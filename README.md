@@ -136,18 +136,18 @@ var txInfo = await MiscClient.GetTransactionAsync("00000000-0000-0000-0000-00000
 Returns: [`XummTransaction`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/src/XUMM.NET.SDK/Models/Misc/XummTransaction.cs)
 
 
-##### IXummMiscClient.GetNFTokenDetailAsync()
+##### IXummXAppJwtClient.GetNFTokenDetailAsync()
 
 The `GetNFTokenDetailAsync` method allows you to get basic XLS20 token information as fetched/parsed/cached for you by the XUMM backend.
 
 **Note**: it's best to retrieve these results **yourself** instead of relying on the XUMM platform to get live XRPL transaction information! 
 
 ```C#
-@inject IXummMiscClient MiscClient
-var detall = await MiscClient.GetNFTokenDetailAsync("");
+@inject IXummXAppJwtClient XAppJwtClient
+var detall = await XAppJwtClient.GetNFTokenDetailAsync("", "");
 ```
 
-Returns: [`XummNFTokenDetail`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/src/XUMM.NET.SDK/Models/Misc/XummNFTokenDetail.cs)
+Returns: [`XummXAppJwtNFTokenDetail`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/src/XUMM.NET.SDK/Models/XAppJwt/XummXAppJwtNFTokenDetail.cs)
 
 
 #### App Storage
