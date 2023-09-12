@@ -49,6 +49,17 @@ public class XummMiscClient : IXummMiscClient
     }
 
     /// <inheritdoc />
+    public async Task<XummNFTokenDetail> GetNFTokenDetailAsync(string tokenId)
+    {
+        if (string.IsNullOrWhiteSpace(tokenId))
+        {
+            throw new ArgumentException("Value cannot be null or white space", nameof(tokenId));
+        }
+
+        return await _httpClient.GetAsync<XummNFTokenDetail>($"platform/nftoken-detail/{tokenId}");
+    }
+
+    /// <inheritdoc />
     public async Task<XummKycStatus> GetKycStatusAsync(string userTokenOrAccount)
     {
         if (string.IsNullOrWhiteSpace(userTokenOrAccount))

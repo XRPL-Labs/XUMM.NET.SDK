@@ -28,6 +28,13 @@ public interface IXummMiscClient
     Task<XummTransaction> GetTransactionAsync(string txHash);
 
     /// <summary>
+    /// This method allows you to get basic XLS20 token information as fetched/parsed/cached for you by the Xumm backend.
+    /// Note: it's best to retrieve these results yourself instead of relying on the Xumm platform to get live XRPL transaction information!
+    /// </summary>
+    /// <param name="tokenId">The NFTokenID.</param>
+    Task<XummNFTokenDetail> GetNFTokenDetailAsync(string tokenId);
+
+    /// <summary>
     /// Fetch the KYC status for a Xumm user (based on a public XRPL account address, r...).
     /// </summary>
     /// <param name="userTokenOrAccount">Account address, eg. rBLomsmaSJ1ttBmS3WPmPpWLAUDKFwiF9Q</param>
