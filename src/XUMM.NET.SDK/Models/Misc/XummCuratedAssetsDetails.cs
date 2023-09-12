@@ -12,10 +12,10 @@ public class XummCuratedAssetsDetails
     public string Name { get; set; } = default!;
 
     [JsonPropertyName("domain")]
-    public string Domain { get; set; } = default!;
+    public string? Domain { get; set; }
 
     [JsonPropertyName("avatar")]
-    public string Avatar { get; set; } = default!;
+    public string? Avatar { get; set; }
 
     [JsonPropertyName("shortlist")]
     public int Shortlist { get; set; }
