@@ -38,6 +38,12 @@ public class XummMiscClient : IXummMiscClient
     }
 
     /// <inheritdoc />
+    public async Task<XummRails> GetRailsAsync()
+    {
+        return await _httpClient.GetAsync<XummRails>("platform/rails");
+    }
+
+    /// <inheritdoc />
     public async Task<XummTransaction> GetTransactionAsync(string txHash)
     {
         if (string.IsNullOrWhiteSpace(txHash))

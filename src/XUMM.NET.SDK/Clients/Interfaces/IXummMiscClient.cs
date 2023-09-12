@@ -21,6 +21,11 @@ public interface IXummMiscClient
     Task<XummCuratedAssets> GetCuratedAssetsAsync();
 
     /// <summary>
+    /// Get rails from the Xumm API with endpoints and explorer information.
+    /// </summary>
+    Task<XummRails> GetRailsAsync();
+
+    /// <summary>
     /// Fetch transaction and outcome live from XRP ledger full history nodes (through the Xumm platform) containing parsed
     /// transaction outcome balance mutations.
     /// </summary>
