@@ -67,7 +67,7 @@ The `GetPingAsync()` method allows you to verify API access (valid credentials) 
 var pong = await MiscClient.GetPingAsync();
 ```
 
-Returns: [`XummPong`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/XUMM.Net/Models/Misc/XummPong.cs)
+Returns: [`XummPong`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/src/XUMM.NET.SDK/Models/Misc/XummPong.cs)
 ```C#
 var pong = new XummPong
 {
@@ -133,7 +133,21 @@ live from the XRP ledger, as fetched for you by the XUMM backend.
 var txInfo = await MiscClient.GetTransactionAsync("00000000-0000-0000-0000-000000000000");
 ```
 
-Returns: [`XummTransaction`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/XUMM.Net/Models/Misc/XummTransaction.cs)
+Returns: [`XummTransaction`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/src/XUMM.NET.SDK/Models/Misc/XummTransaction.cs)
+
+
+##### IXummXAppJwtClient.GetNFTokenDetailAsync()
+
+The `GetNFTokenDetailAsync` method allows you to get basic XLS20 token information as fetched/parsed/cached for you by the XUMM backend.
+
+**Note**: it's best to retrieve these results **yourself** instead of relying on the XUMM platform to get live XRPL transaction information! 
+
+```C#
+@inject IXummXAppJwtClient XAppJwtClient
+var detall = await XAppJwtClient.GetNFTokenDetailAsync("", "");
+```
+
+Returns: [`XummXAppJwtNFTokenDetail`](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/src/XUMM.NET.SDK/Models/XAppJwt/XummXAppJwtNFTokenDetail.cs)
 
 
 #### App Storage
@@ -183,7 +197,7 @@ var payload = new XummPostJsonPayload(
 
 As you can see the payload looks like a regular XRPL transaction, wrapped in an `TxJson` object, omitting the mandatory `Account`, `Fee` and `Sequence` properties. They will be added containing the correct values when the payload is signed by an app user.
 
-Optionally (besides `TxJson`) a payload can contain these properties ([XummPayloadBodyBase definition](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/XUMM.Net/Models/Payload/XummPayloadBodyBase.cs)):
+Optionally (besides `TxJson`) a payload can contain these properties ([XummPayloadBodyBase definition](https://github.com/XRPL-Labs/XUMM.NET.SDK/blob/main/src/XUMM.NET.SDK/Models/Payload/XummPayloadBodyBase.cs)):
 
 - `XummPayloadOptions` to define payload options like a return URL, expiration, etc.
 - `XummPayloadCustomMeta` to add metadata, user instruction, your own unique ID, ...

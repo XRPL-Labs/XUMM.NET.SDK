@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using XUMM.NET.SDK.Models.XAppJwt;
-using XUMM.NET.SDK.Models.XAppJWT;
 
 namespace XUMM.NET.SDK.Clients.Interfaces;
 
@@ -33,4 +32,12 @@ public interface IXummXAppJwtClient
     /// <param name="jwt">The JWT obtained by calling the /authorize endpoint first.</param>
     /// <param name="key">Key/value store: key (lower case, a-z, 0-9, min. 3 chars)</param>
     Task<XummXAppJwtUserDataUpdateResponse> DeleteUserDataAsync(string jwt, string key);
+
+    /// <summary>
+    /// This method allows you to get basic XLS20 token information as fetched/parsed/cached for you by the Xumm backend.
+    /// Note: it's best to retrieve these results yourself instead of relying on the Xumm platform to get live XRPL transaction information!
+    /// </summary>
+    /// <param name="jwt">The JWT obtained by calling the /authorize endpoint first.</param>
+    /// <param name="tokenId">The NFTokenID.</param>
+    Task<XummXAppJwtNFTokenDetail> GetNFTokenDetailAsync(string jwt, string tokenId);
 }
