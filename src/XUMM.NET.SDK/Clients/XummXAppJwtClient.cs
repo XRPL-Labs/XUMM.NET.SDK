@@ -7,14 +7,14 @@ namespace XUMM.NET.SDK.Clients;
 
 public class XummXAppJwtClient : IXummXAppJwtClient
 {
-    private readonly IXummHttpClient _httpClient;
+    private readonly IXummHttpClient _xummHttpClient;
 
     /// <summary>
     /// Initializes a new instance of the <see cref="XummXAppJwtClient"/> class.
     /// </summary>
-    public XummXAppJwtClient(IXummHttpClient httpClient)
+    public XummXAppJwtClient(IXummHttpClient xummhttpClient)
     {
-        _httpClient = httpClient;
+        _xummHttpClient = xummhttpClient;
     }
 
     /// <inheritdoc />
@@ -25,36 +25,36 @@ public class XummXAppJwtClient : IXummXAppJwtClient
             throw new ArgumentException("Value cannot be null or white space", nameof(oneTimeToken));
         }
 
-        var httpClient = _httpClient.GetHttpClient(true);
+        var httpClient = _xummHttpClient.GetHttpClient(true);
         httpClient.DefaultRequestHeaders.Add("X-API-OTT", oneTimeToken);
-        return await _httpClient.GetAsync<XummXAppJwtAuthorizeResponse>(httpClient, "xapp-jwt/authorize");
+        return await _xummHttpClient.GetAsync<XummXAppJwtAuthorizeResponse>(httpClient, "xapp-jwt/authorize");
     }
 
     /// <inheritdoc />
     public async Task<XummXAppJwtUserDataResponse> GetUserDataAsync(string jwt, string key)
     {
-        var httpClient = _httpClient.GetHttpClient(false);
+        var httpClient = _xummHttpClient.GetHttpClient(false);
         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
 
-        return await _httpClient.GetAsync<XummXAppJwtUserDataResponse>(httpClient, $"xapp-jwt/userdata/{key}");
+        return await _xummHttpClient.GetAsync<XummXAppJwtUserDataResponse>(httpClient, $"xapp-jwt/userdata/{key}");
     }
 
     /// <inheritdoc />
     public async Task<XummXAppJwtUserDataUpdateResponse> SetUserDataAsync(string jwt, string key, string json)
     {
-        var httpClient = _httpClient.GetHttpClient(false);
+        var httpClient = _xummHttpClient.GetHttpClient(false);
         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
 
-        return await _httpClient.PostAsync<XummXAppJwtUserDataUpdateResponse>(httpClient, $"xapp-jwt/userdata/{key}", json);
+        return await _xummHttpClient.PostAsync<XummXAppJwtUserDataUpdateResponse>(httpClient, $"xapp-jwt/userdata/{key}", json);
     }
 
     /// <inheritdoc />
     public async Task<XummXAppJwtUserDataUpdateResponse> DeleteUserDataAsync(string jwt, string key)
     {
-        var httpClient = _httpClient.GetHttpClient(false);
+        var httpClient = _xummHttpClient.GetHttpClient(false);
         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
 
-        return await _httpClient.DeleteAsync<XummXAppJwtUserDataUpdateResponse>(httpClient, $"xapp-jwt/userdata/{key}");
+        return await _xummHttpClient.DeleteAsync<XummXAppJwtUserDataUpdateResponse>(httpClient, $"xapp-jwt/userdata/{key}");
     }
 
     /// <inheritdoc />
@@ -65,9 +65,9 @@ public class XummXAppJwtClient : IXummXAppJwtClient
             throw new ArgumentException("Value cannot be null or white space", nameof(tokenId));
         }
 
-        var httpClient = _httpClient.GetHttpClient(false);
+        var httpClient = _xummHttpClient.GetHttpClient(false);
         httpClient.DefaultRequestHeaders.Add("Authorization", $"Bearer {jwt}");
 
-        return await _httpClient.GetAsync<XummXAppJwtNFTokenDetail>(httpClient, $"xapp-jwt/nftoken-detail/{tokenId}");
+        return await _xummHttpClient.GetAsync<XummXAppJwtNFTokenDetail>(httpClient, $"xapp-jwt/nftoken-detail/{tokenId}");
     }
 }
