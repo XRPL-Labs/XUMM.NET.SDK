@@ -80,7 +80,6 @@ public class XummMiscClientTests
         var result = await _subject.GetRailsAsync();
 
         // Assert
-
         AssertExtensions.AreEqual(MiscFixtures.XummRailsNetworkKey, result.First().NetworkKey);
         AssertExtensions.AreEqual(MiscFixtures.XummRailsNetwork, result.First().Network);
     }
