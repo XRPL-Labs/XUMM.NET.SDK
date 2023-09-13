@@ -3,7 +3,7 @@ using System.Text.Json.Serialization;
 
 namespace XUMM.NET.SDK.Models.Misc;
 
-public class XummHookHash
+public class XummHookInfo
 {
     [JsonPropertyName("name")]
     public string Name { get; set; } = default!;
@@ -12,7 +12,7 @@ public class XummHookHash
     public string Description { get; set; } = default!;
 
     [JsonPropertyName("creator")]
-    public XummHookHashCreator? Creator { get; set; } 
+    public XummHookInfoCreator? Creator { get; set; } 
 
     [JsonPropertyName("xapp")]
     public string? Xapp { get; set; }

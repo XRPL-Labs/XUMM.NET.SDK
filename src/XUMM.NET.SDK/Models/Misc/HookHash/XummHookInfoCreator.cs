@@ -2,7 +2,7 @@
 
 namespace XUMM.NET.SDK.Models.Misc;
 
-public class XummHookHashCreator
+public class XummHookInfoCreator
 {
     [JsonPropertyName("name")]
     public string? Name { get; set; }
