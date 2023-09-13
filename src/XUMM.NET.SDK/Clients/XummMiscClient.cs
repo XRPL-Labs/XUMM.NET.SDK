@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using XUMM.NET.SDK.Clients.Interfaces;
 using XUMM.NET.SDK.Enums;
@@ -38,9 +39,10 @@ public class XummMiscClient : IXummMiscClient
     }
 
     /// <inheritdoc />
-    public async Task<XummRails> GetRailsAsync()
+    public async Task<List<XummRailsResponse>> GetRailsAsync()
     {
-        return await _httpClient.GetAsync<XummRails>("platform/rails");
+        var result = await _httpClient.GetAsync<Dictionary<string, XummRailsNetwork>>("platform/rails");
+        return result.Select(x => new XummRailsResponse(x.Key, x.Value)).ToList();
     }
 
     /// <inheritdoc />

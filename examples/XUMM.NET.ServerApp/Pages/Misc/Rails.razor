@@ -23,13 +23,13 @@
                     </tr>
                 </thead>
                 <tbody>
-                    @foreach (var network in _rails.Values.OrderBy(x => x.ChainId))
+                    @foreach (var network in _rails.OrderBy(x => x.Network.ChainId))
                     {
                         <tr>
-                            <td>@network.ChainId</td>
-                            <td><span class="oi @(network.IsLivenet ? "oi-check":"oi-x")" aria-hidden="true"></span> </td>
-                            <td style="color:@network.Color">@network.Name</td>
-                            <td><img src="@network.Icons.IconSquare" alt="@network.Name" height="24" /> @network.NativeAsset</td>
+                            <td>@network.Network.ChainId</td>
+                            <td><span class="oi @(network.Network.IsLivenet ? "oi-check":"oi-x")" aria-hidden="true"></span> </td>
+                            <td style="color:@network.Network.Color">@network.Network.Name</td>
+                            <td><img src="@network.Network.Icons.IconSquare" alt="@network.Network.Name" height="24" /> @network.Network.NativeAsset</td>
                         </tr>
                     }
                 </tbody>
@@ -50,7 +50,7 @@ else
 
 @code {
     private ResponseAlertBox? _responseAlertBox;
-    private XummRails? _rails;
+    private List<XummRailsResponse>? _rails;
 
     private async Task GetRailsAsync()
     {

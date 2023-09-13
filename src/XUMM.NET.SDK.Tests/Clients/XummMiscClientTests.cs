@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
@@ -79,7 +80,9 @@ public class XummMiscClientTests
         var result = await _subject.GetRailsAsync();
 
         // Assert
-        AssertExtensions.AreEqual(MiscFixtures.XummRails, result);
+
+        AssertExtensions.AreEqual(MiscFixtures.XummRailsNetworkKey, result.First().NetworkKey);
+        AssertExtensions.AreEqual(MiscFixtures.XummRailsNetwork, result.First().Network);
     }
 
     [Test]

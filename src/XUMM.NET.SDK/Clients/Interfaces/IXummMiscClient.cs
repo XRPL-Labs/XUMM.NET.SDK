@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using XUMM.NET.SDK.Enums;
 using XUMM.NET.SDK.Models.Misc;
 
@@ -21,9 +22,9 @@ public interface IXummMiscClient
     Task<XummCuratedAssets> GetCuratedAssetsAsync();
 
     /// <summary>
-    /// Get rails from the Xumm API with endpoints and explorer information.
+    /// This method allows you to get the network information for all networks known to Xumm.
     /// </summary>
-    Task<XummRails> GetRailsAsync();
+    Task<List<XummRailsResponse>> GetRailsAsync();
 
     /// <summary>
     /// Fetch transaction and outcome live from XRP ledger full history nodes (through the Xumm platform) containing parsed
