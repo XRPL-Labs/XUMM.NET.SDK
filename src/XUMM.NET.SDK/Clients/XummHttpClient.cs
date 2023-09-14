@@ -157,7 +157,7 @@ public class XummHttpClient : IXummHttpClient
             if (exception == null)
             {
                 var apiError = JsonSerializer.Deserialize<XummApiError>(responseText);
-                if (apiError != null)
+                if (apiError?.Error != null)
                 {
                     var message = $"Error code {apiError.Error.Code}, see XUMM Dev Console, reference: '{apiError.Error.Reference}'.";
 

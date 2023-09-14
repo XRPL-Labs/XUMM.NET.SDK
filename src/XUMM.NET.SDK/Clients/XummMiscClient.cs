@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 using XUMM.NET.SDK.Clients.Interfaces;
 using XUMM.NET.SDK.Enums;
@@ -38,11 +39,37 @@ public class XummMiscClient : IXummMiscClient
     }
 
     /// <inheritdoc />
+    public async Task<XummHookInfoResponse> GetHookInfoAsync(string hookHash)
+    {
+        if (!hookHash.IsSHA512H())
+        {
+            throw new ArgumentException("Invalid Hook Hash (expecting SHA-512Half)", nameof(hookHash));
+        }
+
+        var result = await _httpClient.GetAsync<XummHookInfo>($"platform/hookhash/{hookHash}");
+        return new XummHookInfoResponse(hookHash, result);
+    }
+
+    /// <inheritdoc />
+    public async Task<List<XummHookInfoResponse>> GetAllHookInfosAsync()
+    {
+        var result = await _httpClient.GetAsync<Dictionary<string, XummHookInfo>>("platform/hookhash");
+        return result.Select(x => new XummHookInfoResponse(x.Key, x.Value)).ToList();
+    }
+
+    /// <inheritdoc />
+    public async Task<List<XummRailsResponse>> GetRailsAsync()
+    {
+        var result = await _httpClient.GetAsync<Dictionary<string, XummRailsNetwork>>("platform/rails");
+        return result.Select(x => new XummRailsResponse(x.Key, x.Value)).ToList();
+    }
+
+    /// <inheritdoc />
     public async Task<XummTransaction> GetTransactionAsync(string txHash)
     {
-        if (string.IsNullOrWhiteSpace(txHash))
+        if (!txHash.IsSHA512H())
         {
-            throw new ArgumentException("Value cannot be null or white space", nameof(txHash));
+            throw new ArgumentException("Invalid Transaction Hash (expecting SHA-512Half)", nameof(txHash));
         }
 
         return await _httpClient.GetAsync<XummTransaction>($"platform/xrpl-tx/{txHash}");

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using XUMM.NET.SDK.Enums;
 using XUMM.NET.SDK.Models.Misc;
 
@@ -19,6 +20,22 @@ public interface IXummMiscClient
     /// they press the "Add asset" button on the home screen.
     /// </summary>
     Task<XummCuratedAssets> GetCuratedAssetsAsync();
+
+    /// <summary>
+    /// This method allows you to get meta information for a specific Hook hash
+    /// <param name="hookHash">The hook hash (64 hexadecimal characters).</param>
+    /// </summary>
+    Task<XummHookInfoResponse> GetHookInfoAsync(string hookHash);
+
+    /// <summary>
+    /// This allows you to get all meta information for all Hooks known to Xumm.
+    /// </summary>
+    Task<List<XummHookInfoResponse>> GetAllHookInfosAsync();
+
+    /// <summary>
+    /// This method allows you to get the network information for all networks known to Xumm.
+    /// </summary>
+    Task<List<XummRailsResponse>> GetRailsAsync();
 
     /// <summary>
     /// Fetch transaction and outcome live from XRP ledger full history nodes (through the Xumm platform) containing parsed
