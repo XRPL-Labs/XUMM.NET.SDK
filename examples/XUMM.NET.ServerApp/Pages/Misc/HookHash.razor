@@ -1,0 +1,87 @@
+﻿@page "/hookhash"
+@using XUMM.NET.SDK.Models.Misc
+
+@inject IOptions<XrplConfig> Config
+@inject IXummMiscClient MiscClient
+
+<PageTitle>Hook Hash(es)</PageTitle>
+
+<ResponseAlertBox @ref="_responseAlertBox"></ResponseAlertBox>
+
+<h1>Hook Hash(es)</h1>
+
+<div class="row align-items-start">
+    <div class="col-md-6">
+        <div class="row">
+            <div class="mb-3">
+                <label for="hookhash" class="form-label">Hook Hash</label>
+                <input id="hookhash" type="text" class="form-control" placeholder="Hook Hash" aria-label="Hook Hash" aria-describedby="basic-addon2" @bind="_hookHash">
+            </div>
+            <div class="btn-group mb-3" role="group">
+                <button class="btn btn-primary" type="button" @onclick="GetHookInfoAsync">Fetch Hook Info</button>
+                <button class="btn btn-secondary" type="button" @onclick="GetHookInfosAsync">Fetch all</button>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+@if (_hookInfos != null)
+{
+    <div class="row">
+        <div class="mt-3">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">Name</th>
+                        <th scope="col">Hash</th>
+                        <th scope="col">xApp</th>
+                        <th scope="col">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var kvp in _hookInfos.OrderBy(x => x.HookInfo.Name))
+                    {
+                        <tr>
+                            <td><img src="@kvp.HookInfo.Icon" alt="@kvp.HookInfo.Name" height="24" /> @kvp.HookInfo.Name</td>
+                            <td>@kvp.HookHash</td>
+                            <td>@kvp.HookInfo.Xapp</td>
+                            <td>@kvp.HookInfo.Description</td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+    </div>
+}
+
+@code {
+    private ResponseAlertBox? _responseAlertBox;
+    private string _hookHash = default!;
+    private List<XummHookInfoResponse>? _hookInfos;
+
+    private async Task GetHookInfoAsync()
+    {
+        var hookInfo = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => MiscClient.GetHookInfoAsync(_hookHash));
+        if (hookInfo != null)
+        {
+            _hookInfos = new List<XummHookInfoResponse>
+            {
+                hookInfo
+            };
+        }
+        else
+        {
+            _hookInfos = null;
+        }
+        
+        _responseAlertBox.SetAlert("Hook Hash", hookInfo != null);
+    }
+
+    private async Task GetHookInfosAsync()
+    {
+        _hookHash = string.Empty;
+        _hookInfos = await _responseAlertBox!.GetResponseAndSetAlertAsync(() => MiscClient.GetAllHookInfosAsync());
+        _responseAlertBox.SetAlert("Hook Hashes", _hookInfos != null);
+    }
+}
