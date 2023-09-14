@@ -22,6 +22,17 @@ public interface IXummMiscClient
     Task<XummCuratedAssets> GetCuratedAssetsAsync();
 
     /// <summary>
+    /// This method allows you to get meta information for a specific Hook hash
+    /// <param name="hookHash">The hook hash (64 hexadecimal characters).</param>
+    /// </summary>
+    Task<XummHookInfoResponse> GetHookInfoAsync(string hookHash);
+
+    /// <summary>
+    /// This allows you to get all meta information for all Hooks known to Xumm.
+    /// </summary>
+    Task<List<XummHookInfoResponse>> GetAllHookInfosAsync();
+
+    /// <summary>
     /// This method allows you to get the network information for all networks known to Xumm.
     /// </summary>
     Task<List<XummRailsResponse>> GetRailsAsync();

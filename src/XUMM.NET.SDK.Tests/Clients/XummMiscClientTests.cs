@@ -183,6 +183,63 @@ public class XummMiscClientTests
     }
 
     [Test]
+    [TestCase("31C3EC186C367DA66DFBD0E576D6170A2C1AB846BFC35FC0B49D202F2A8CDFD8")]
+    public async Task GetHookInfoAsync_WithValidHookHash_ShouldReturnHookInfoAsync(string hookHash)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "hookhash");
+
+        // Act
+        var result = await _subject.GetHookInfoAsync(hookHash);
+
+        // Assert
+        AssertExtensions.AreEqual(hookHash, result.HookHash);
+        AssertExtensions.AreEqual(MiscFixtures.XummHookInfo, result.HookInfo);
+    }
+
+    [Test]
+    [TestCase("31C3EC186C367DA66DFBD0E576D6170A2C1AB846BFC35FC0B49D202F2A8CDFD8")]
+    public async Task GetHookInfoAsync_WithValidHookHash_ShouldContainHookHashInRequestUriAsync(string hookHash)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "hookhash");
+
+        // Act
+        _ = await _subject.GetHookInfoAsync(hookHash);
+
+        // Assert
+        _httpMessageHandlerMock.AssertRequestUri(HttpMethod.Get, $"/hookhash/{hookHash}");
+    }
+
+    [Test]
+    [TestCase(null)]
+    [TestCase("")]
+    [TestCase(" ")]
+    public void GetHookInfoAsync_WithInvalidTxHash_ShouldThrowExceptionAsync(string hookHash)
+    {
+        // Act
+        var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.GetHookInfoAsync(hookHash));
+
+        // Assert
+        Assert.IsNotNull(ex);
+        Assert.That(ex!.Message, Is.EqualTo("Invalid Hook Hash (expecting SHA-512Half) (Parameter 'hookHash')"));
+    }
+
+    [Test]
+    public async Task GetAllHookInfosAsync_ShouldReturnHookInfosAsync()
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "hookhashes");
+
+        // Act
+        var result = await _subject.GetAllHookInfosAsync();
+
+        // Assert
+        AssertExtensions.AreEqual(MiscFixtures.XummHookHash, result.First().HookHash);
+        AssertExtensions.AreEqual(MiscFixtures.XummHookInfo, result.First().HookInfo);
+    }
+
+    [Test]
     [TestCase("C3951A3229506DB2C505ED248EFD3BBD8F232C7684732F38270BE9DE90F75134")]
     public async Task GetTransactionAsync_WithValidTxHash_ShouldReturnTransactionAsync(string txHash)
     {
@@ -221,7 +278,7 @@ public class XummMiscClientTests
 
         // Assert
         Assert.IsNotNull(ex);
-        Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'txHash')"));
+        Assert.That(ex!.Message, Is.EqualTo("Invalid Transaction Hash (expecting SHA-512Half) (Parameter 'txHash')"));
     }
 
     [Test]

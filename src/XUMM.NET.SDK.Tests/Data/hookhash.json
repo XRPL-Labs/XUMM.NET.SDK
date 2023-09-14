@@ -1,0 +1,14 @@
+﻿{
+  "name": "Savings",
+  "description": "Efficiently manage your finances with the savings hook by automatically transferring a percentage of your transaction amount to a separate savings account to prevent accidental spending",
+  "creator": {
+    "name": "XRPL Labs",
+    "mail": "support@xrpl-labs.com",
+    "site": "xrpl-labs.com"
+  },
+  "xapp": "hooks.savings",
+  "appuuid": "d21fe83d-64b9-4aef-8908-9a4952d8922c",
+  "icon": "https://cdn.xumm.pro/cdn-cgi/image/width=500,height=500,quality=75,fit=crop/app-logo/1857a4e1-6711-4c37-bb54-7664e129e9bf.png",
+  "verifiedAccounts": [],
+  "audits": []
+}

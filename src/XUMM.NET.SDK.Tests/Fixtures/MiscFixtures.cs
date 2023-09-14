@@ -113,6 +113,25 @@ internal static class MiscFixtures
         }
     };
 
+    internal static string XummHookHash => "31C3EC186C367DA66DFBD0E576D6170A2C1AB846BFC35FC0B49D202F2A8CDFD8";
+
+    internal static XummHookInfo XummHookInfo => new()
+    {
+        Name = "Savings",
+        Description = "Efficiently manage your finances with the savings hook by automatically transferring a percentage of your transaction amount to a separate savings account to prevent accidental spending",
+        Creator=new XummHookInfoCreator
+        {
+            Name = "XRPL Labs",
+            Mail = "support@xrpl-labs.com",
+            Site = "xrpl-labs.com"
+        },
+        Xapp = "hooks.savings",
+        AppUuid = "d21fe83d-64b9-4aef-8908-9a4952d8922c",
+        Icon = "https://cdn.xumm.pro/cdn-cgi/image/width=500,height=500,quality=75,fit=crop/app-logo/1857a4e1-6711-4c37-bb54-7664e129e9bf.png",
+        Audits = new List<string>(),
+        VerifiedAccounts = new List<string>()
+    };
+
     internal static string XummRailsNetworkKey => "MAINNET";
 
     internal static XummRailsNetwork XummRailsNetwork => new()
