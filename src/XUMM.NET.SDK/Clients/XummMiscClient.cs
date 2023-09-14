@@ -58,6 +58,13 @@ public class XummMiscClient : IXummMiscClient
     }
 
     /// <inheritdoc />
+    public async Task<List<XummRailsResponse>> GetRailsAsync()
+    {
+        var result = await _httpClient.GetAsync<Dictionary<string, XummRailsNetwork>>("platform/rails");
+        return result.Select(x => new XummRailsResponse(x.Key, x.Value)).ToList();
+    }
+
+    /// <inheritdoc />
     public async Task<XummTransaction> GetTransactionAsync(string txHash)
     {
         if (!txHash.IsSHA512H())

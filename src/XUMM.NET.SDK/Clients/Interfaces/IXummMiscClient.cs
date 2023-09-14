@@ -33,6 +33,11 @@ public interface IXummMiscClient
     Task<List<XummHookInfoResponse>> GetAllHookInfosAsync();
 
     /// <summary>
+    /// This method allows you to get the network information for all networks known to Xumm.
+    /// </summary>
+    Task<List<XummRailsResponse>> GetRailsAsync();
+
+    /// <summary>
     /// Fetch transaction and outcome live from XRP ledger full history nodes (through the Xumm platform) containing parsed
     /// transaction outcome balance mutations.
     /// </summary>

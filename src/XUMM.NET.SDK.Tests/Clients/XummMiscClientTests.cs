@@ -71,6 +71,20 @@ public class XummMiscClientTests
     }
 
     [Test]
+    public async Task GetRailsAsync_ShouldReturnRailsAsync()
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "rails");
+
+        // Act
+        var result = await _subject.GetRailsAsync();
+
+        // Assert
+        AssertExtensions.AreEqual(MiscFixtures.XummRailsNetworkKey, result.First().NetworkKey);
+        AssertExtensions.AreEqual(MiscFixtures.XummRailsNetwork, result.First().Network);
+    }
+
+    [Test]
     [TestCase("2557f69c-6617-40dc-9d1e-a34487cb3f90")]
     public async Task GetKycStatusAsync_WithUserToken_ShouldReturnKycStatusAsync(string userToken)
     {
