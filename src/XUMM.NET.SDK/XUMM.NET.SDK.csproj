@@ -25,6 +25,9 @@
     <GeneratePackageOnBuild>True</GeneratePackageOnBuild>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <PackageVersion>$(PackageVersion)</PackageVersion>
+    <AssemblyVersion>$(PackageVersion)</AssemblyVersion>
+    <AssemblyFileVersion>$(PackageVersion)</AssemblyFileVersion>
+    <AssemblyInformationalVersion>$(PackageVersion)</AssemblyInformationalVersion>
   </PropertyGroup>
 
   <ItemGroup>
