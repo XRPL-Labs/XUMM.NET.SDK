@@ -15,6 +15,8 @@ namespace XUMM.NET.SDK.Clients;
 
 public class XummHttpClient : IXummHttpClient
 {
+    private static readonly string? UserAgentVersion = typeof(XummHttpClient).Assembly.GetName().Version?.ToString();
+
     private readonly ApiConfig _config;
     private readonly IHttpClientFactory _httpClientFactory;
     private readonly ILogger<XummHttpClient> _logger;
@@ -81,7 +83,7 @@ public class XummHttpClient : IXummHttpClient
         }
 
         httpClient.DefaultRequestHeaders.Add("Accept", "application/json");
-        httpClient.DefaultRequestHeaders.Add("User-Agent", "XUMM-Net");
+        httpClient.DefaultRequestHeaders.Add("User-Agent", $"XummDotNet/{UserAgentVersion}");
         return httpClient;
     }
 
