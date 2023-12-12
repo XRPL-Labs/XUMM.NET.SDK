@@ -44,8 +44,8 @@ public class XummHttpClientTests
         var httpClient = xummHttpClient.GetHttpClient(true);
 
         // Assert
-        Assert.AreEqual(apiKey, httpClient.DefaultRequestHeaders.GetValues("X-API-Key").First());
-        Assert.AreEqual(apiSecret, httpClient.DefaultRequestHeaders.GetValues("X-API-Secret").First());
+        Assert.That(apiKey, Is.EqualTo(httpClient.DefaultRequestHeaders.GetValues("X-API-Key").First()));
+        Assert.That(apiSecret, Is.EqualTo(httpClient.DefaultRequestHeaders.GetValues("X-API-Secret").First()));
     }
 
     [Test]
@@ -64,7 +64,7 @@ public class XummHttpClientTests
                 new Mock<ILogger<XummHttpClient>>().Object));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo(message));
     }
 }

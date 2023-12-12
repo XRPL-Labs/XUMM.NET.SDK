@@ -90,7 +90,7 @@ namespace XUMM.NET.SDK.Tests
             var ex = Assert.Throws<Exception>(() => _serviceCollectionMock.Object.AddXummNet(_configurationMock.Object));
 
             // Assert
-            Assert.IsNotNull(ex);
+            Assert.That(ex, Is.Not.Null);
             Assert.That(ex!.Message, Is.EqualTo("Failed to find configuration section with key 'Xumm'"));
         }
     }

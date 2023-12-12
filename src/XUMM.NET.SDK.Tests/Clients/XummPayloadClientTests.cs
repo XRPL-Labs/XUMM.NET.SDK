@@ -78,7 +78,7 @@ public class XummPayloadClientTests
         var result = await _subject.CreateAsync(It.IsAny<XummPostJsonPayload>());
 
         // Assert
-        Assert.IsNull(result);
+        Assert.That(result, Is.Null);
     }
 
     [Test]
@@ -91,7 +91,7 @@ public class XummPayloadClientTests
         var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.CreateAsync(It.IsAny<XummPostJsonPayload>(), true));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
@@ -118,7 +118,7 @@ public class XummPayloadClientTests
         var result = await _subject.CreateAsync(It.IsAny<XummPostBlobPayload>());
 
         // Assert
-        Assert.IsNull(result);
+        Assert.That(result, Is.Null);
     }
 
     [Test]
@@ -131,7 +131,7 @@ public class XummPayloadClientTests
         var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.CreateAsync(It.IsAny<XummPostBlobPayload>(), true));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
@@ -164,7 +164,7 @@ public class XummPayloadClientTests
         var result = await _subject.CreateAsync(It.IsAny<XummPayloadTransaction>());
 
         // Assert
-        Assert.IsNull(result);
+        Assert.That(result, Is.Null);
     }
 
     [Test]
@@ -177,7 +177,7 @@ public class XummPayloadClientTests
         var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.CreateAsync(It.IsAny<XummPayloadTransaction>(), true));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
@@ -191,7 +191,7 @@ public class XummPayloadClientTests
         var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.CreateAsync(It.IsAny<XummPayloadTransaction>(), true));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Some error has occured"));
     }
 
@@ -252,7 +252,7 @@ public class XummPayloadClientTests
         var result = await _subject.GetAsync(It.IsAny<string>());
 
         // Assert
-        Assert.IsNull(result);
+        Assert.That(result, Is.Null);
     }
 
     [Test]
@@ -265,7 +265,7 @@ public class XummPayloadClientTests
         var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.GetAsync(It.IsAny<string>(), true));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
@@ -307,7 +307,7 @@ public class XummPayloadClientTests
         var result = await _subject.GetByCustomIdentifierAsync(It.IsAny<string>());
 
         // Assert
-        Assert.IsNull(result);
+        Assert.That(result, Is.Null);
     }
 
     [Test]
@@ -320,7 +320,7 @@ public class XummPayloadClientTests
         var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.GetByCustomIdentifierAsync(It.IsAny<string>(), true));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
@@ -444,7 +444,7 @@ public class XummPayloadClientTests
         var result = await _subject.CancelAsync(It.IsAny<string>());
 
         // Assert
-        Assert.IsNull(result);
+        Assert.That(result, Is.Null);
     }
 
     [Test]
@@ -457,7 +457,7 @@ public class XummPayloadClientTests
         var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.CancelAsync(It.IsAny<string>(), true));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Error code 404, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
@@ -518,7 +518,7 @@ public class XummPayloadClientTests
         }, It.IsAny<CancellationToken>());
 
         // Assert
-        Assert.AreEqual(4, eventArgs.Count);
+        Assert.That(4, Is.EqualTo(eventArgs.Count));
     }
 
     [Test]
@@ -536,7 +536,7 @@ public class XummPayloadClientTests
         }, It.IsAny<CancellationToken>());
 
         // Assert
-        Assert.IsEmpty(eventArgs);
+        Assert.That(eventArgs, Is.Empty);
     }
 
     [Test]
@@ -567,7 +567,7 @@ public class XummPayloadClientTests
             }, It.IsAny<CancellationToken>()));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 
@@ -599,7 +599,7 @@ public class XummPayloadClientTests
             }, It.IsAny<CancellationToken>()));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Error code 602, see XUMM Dev Console, reference: 'a61ba59a-0304-44ae-a86e-d74808bd5190'."));
     }
 

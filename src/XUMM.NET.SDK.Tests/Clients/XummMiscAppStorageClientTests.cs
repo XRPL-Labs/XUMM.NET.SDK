@@ -90,7 +90,7 @@ public class XummMiscAppStorageClientTests
         var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.GetAsync());
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Error code 813, see XUMM Dev Console, reference: '26279bfe-c7e1-4b12-a680-26119d8f5062'."));
     }
 
@@ -104,7 +104,7 @@ public class XummMiscAppStorageClientTests
         var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.StoreAsync(It.IsAny<string>()));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Error code 813, see XUMM Dev Console, reference: '26279bfe-c7e1-4b12-a680-26119d8f5062'."));
     }
 
@@ -118,7 +118,7 @@ public class XummMiscAppStorageClientTests
         var ex = Assert.ThrowsAsync<HttpRequestException>(async () => await _subject.ClearAsync());
 
         // Asert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Error code 813, see XUMM Dev Console, reference: '26279bfe-c7e1-4b12-a680-26119d8f5062'."));
     }
 }

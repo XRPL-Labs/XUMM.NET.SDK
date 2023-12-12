@@ -9,6 +9,6 @@ internal static class AssertExtensions
     {
         var expectedJson = JsonSerializer.Serialize(expected);
         var actualJson = JsonSerializer.Serialize(actual);
-        Assert.AreEqual(expectedJson, actualJson);
+        Assert.That(expectedJson, Is.EqualTo(actualJson));
     }
 }
