@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
   <PropertyGroup>
-    <TargetFrameworks>net7.0;net6.0;net5.0;netcoreapp3.1</TargetFrameworks>
-    <LangVersion>11.0</LangVersion>
+    <TargetFrameworks>net8.0;net7.0;net6.0;net5.0;netcoreapp3.1</TargetFrameworks>
+    <LangVersion>12.0</LangVersion>
     <Nullable>enable</Nullable>
     <Authors>Dominique Blomsma</Authors>
     <Description>XUMM .NET SDK - Interact with the XUMM Developer API the easy way</Description>
@@ -19,6 +19,7 @@
     <PackageProjectUrl>https://github.com/XRPL-Labs/XUMM.NET.SDK</PackageProjectUrl>
     <GenerateDocumentationFile>true</GenerateDocumentationFile>
     <ComponentsPackageVersion>3.1.23</ComponentsPackageVersion>
+	<ComponentsPackageVersion Condition="'$(TargetFramework)' == 'net8.0' ">8.0.0</ComponentsPackageVersion>
 	<ComponentsPackageVersion Condition="'$(TargetFramework)' == 'net7.0' ">7.0.0</ComponentsPackageVersion>
 	<ComponentsPackageVersion Condition="'$(TargetFramework)' == 'net6.0' ">6.0.0</ComponentsPackageVersion>
     <ComponentsPackageVersion Condition="'$(TargetFramework)' == 'net5.0' ">5.0.0</ComponentsPackageVersion>
