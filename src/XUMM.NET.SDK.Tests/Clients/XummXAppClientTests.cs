@@ -84,7 +84,7 @@ public class XummXAppClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.GetOneTimeTokenDataAsync(oneTimeToken));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'oneTimeToken')"));
     }
 
@@ -141,7 +141,7 @@ public class XummXAppClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.ReFetchOneTimeTokenDataAsync(oneTimeToken, It.IsAny<string>()));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'oneTimeToken')"));
     }
 
@@ -155,7 +155,7 @@ public class XummXAppClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.ReFetchOneTimeTokenDataAsync("1b9105dd-b7e7-456b-8303-3b9c7e48a622", deviceId));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'deviceId')"));
     }
 
@@ -195,7 +195,7 @@ public class XummXAppClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.EventAsync(request));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'UserToken')"));
     }
 
@@ -216,7 +216,7 @@ public class XummXAppClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.EventAsync(request));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'Body')"));
     }
 
@@ -256,7 +256,7 @@ public class XummXAppClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.PushAsync(request));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'UserToken')"));
     }
 
@@ -277,7 +277,7 @@ public class XummXAppClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.PushAsync(request));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'Body')"));
     }
 }

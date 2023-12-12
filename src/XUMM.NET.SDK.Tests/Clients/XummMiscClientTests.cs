@@ -109,7 +109,7 @@ public class XummMiscClientTests
         var ex = Assert.ThrowsAsync<ArgumentOutOfRangeException>(() => _subject.GetKycStatusAsync(userToken));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo($"Specified argument was out of the range of valid values. (Parameter 'name'){Environment.NewLine}Actual value was INVALID_STATUS."));
     }
 
@@ -136,7 +136,7 @@ public class XummMiscClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.GetKycStatusAsync(userTokenOrAccount));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Invalid user token or account provided (Parameter 'userTokenOrAccount')"));
     }
 
@@ -150,7 +150,7 @@ public class XummMiscClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.GetKycStatusAsync(userTokenOrAccount));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'userTokenOrAccount')"));
     }
 
@@ -178,7 +178,7 @@ public class XummMiscClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.GetRatesAsync(currencyCode));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'currencyCode')"));
     }
 
@@ -221,7 +221,7 @@ public class XummMiscClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.GetHookInfoAsync(hookHash));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Invalid Hook Hash (expecting SHA-512Half) (Parameter 'hookHash')"));
     }
 
@@ -277,7 +277,7 @@ public class XummMiscClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.GetTransactionAsync(txHash));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Invalid Transaction Hash (expecting SHA-512Half) (Parameter 'txHash')"));
     }
 
@@ -319,7 +319,7 @@ public class XummMiscClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.VerifyUserTokenAsync(userToken));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'userToken')"));
     }
 
@@ -344,7 +344,7 @@ public class XummMiscClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.VerifyUserTokensAsync(It.IsAny<string[]>()));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or empty (Parameter 'userTokens')"));
     }
 
@@ -384,7 +384,7 @@ public class XummMiscClientTests
         var ex = Assert.ThrowsAsync<ArgumentException>(() => _subject.AccountMetaAsync(account));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Value should be a valid account address (Parameter 'account')"));
     }
 
@@ -398,7 +398,7 @@ public class XummMiscClientTests
         var ex = Assert.Throws<ArgumentException>(() => _subject.GetAvatarUrl(account, dimensions, padding));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("Value cannot be null or white space (Parameter 'account')"));
     }
 
@@ -412,7 +412,7 @@ public class XummMiscClientTests
         var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _subject.GetAvatarUrl(account, dimensions, padding));
 
         // Assert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("The minimum (square) dimensions are 200. (Parameter 'dimensions')"));
     }
 
@@ -425,7 +425,7 @@ public class XummMiscClientTests
         var ex = Assert.Throws<ArgumentOutOfRangeException>(() => _subject.GetAvatarUrl(account, dimensions, padding));
 
         // Asert
-        Assert.IsNotNull(ex);
+        Assert.That(ex, Is.Not.Null);
         Assert.That(ex!.Message, Is.EqualTo("The padding should be equal or greater than zero. (Parameter 'padding')"));
     }
 
