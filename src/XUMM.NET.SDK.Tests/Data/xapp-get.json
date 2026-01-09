@@ -4,5 +4,16 @@
   "accounttype": "REGULAR",
   "locale": "en",
   "style": "LIGHT",
-  "version": "1.0.1"
+  "version": "1.0.1",
+  "origin": {
+    "type": "Test",
+    "data": {
+      "data_string": "Test string",
+      "data_empty_string": "",
+      "data_null_string": null,
+      "data_number_int32": 2147483647,
+      "data_number_int64": 9223372036854775807,
+      "data_number_negative": -123
+    }
+  }
 }
