@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using XUMM.NET.SDK.Clients;
 using XUMM.NET.SDK.Configs;
+using XUMM.NET.SDK.Extensions;
 using XUMM.NET.SDK.Models.XApp;
 using XUMM.NET.SDK.Tests.Extensions;
 using XUMM.NET.SDK.Tests.Fixtures;
@@ -72,6 +73,74 @@ public class XummXAppClientTests
 
         // Assert
         _httpMessageHandlerMock.AssertRequestUri(HttpMethod.Get, $"xapp/ott/{oneTimeToken}");
+    }
+
+    [Test]
+    [TestCase("1b9105dd-b7e7-456b-8303-3b9c7e48a622")]
+    public async Task GetOneTimeTokenDataAsync_WithValidAdditionalDataKeys_ShouldReturnAdditionalDataAsync(string oneTimeToken)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "xapp-get");
+
+        // Act
+        var result = await _subject.GetOneTimeTokenDataAsync(oneTimeToken);
+
+        string? stringValue = null;
+        string? emptyStringValue = null;
+        string? nullStringValue = string.Empty;
+        long int32NumberValue = 0;
+        long int64NumberValue = 0;
+        long negativeNumberValue = 0;
+
+        var hasStringField = result.Origin?.Data.TryGetAdditionalDataAsString("data_string", out stringValue);
+        var hasEmptyStringField = result.Origin?.Data.TryGetAdditionalDataAsString("data_empty_string", out emptyStringValue);
+        var hasNullStringField = result.Origin?.Data.TryGetAdditionalDataAsString("data_null_string", out nullStringValue);
+        var hasInt32Field = result.Origin?.Data.TryGetAdditionalDataAsNumber("data_number_int32", out int32NumberValue);
+        var hasInt64Field = result.Origin?.Data.TryGetAdditionalDataAsNumber("data_number_int64", out int64NumberValue);
+        var hasNegativeNumberField = result.Origin?.Data.TryGetAdditionalDataAsNumber("data_number_negative", out negativeNumberValue);
+
+        // Assert
+        Assert.That(hasStringField, Is.True);
+        Assert.That("Test string", Is.EqualTo(stringValue));
+
+        Assert.That(hasEmptyStringField, Is.True);
+        Assert.That(string.Empty, Is.EqualTo(emptyStringValue));
+
+        Assert.That(hasNullStringField, Is.True);
+        Assert.That((string?)null, Is.EqualTo(nullStringValue));
+
+        Assert.That(hasInt32Field, Is.True);
+        Assert.That(2147483647, Is.EqualTo(int32NumberValue));
+
+        Assert.That(hasInt64Field, Is.True);
+        Assert.That(9223372036854775807, Is.EqualTo(int64NumberValue));
+
+        Assert.That(hasNegativeNumberField, Is.True);
+        Assert.That(-123, Is.EqualTo(negativeNumberValue));
+    }
+
+    [Test]
+    [TestCase("1b9105dd-b7e7-456b-8303-3b9c7e48a622")]
+    public async Task GetOneTimeTokenDataAsync_WithInvalidAdditionalDataKeys_ShouldNotReturnAdditionalDataAsync(string oneTimeToken)
+    {
+        // Arrange
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "xapp-get");
+
+        // Act
+        var result = await _subject.GetOneTimeTokenDataAsync(oneTimeToken);
+
+        string? stringValue = null;
+        long numberValue = 0;
+
+        var hasStringField = result.Origin?.Data.TryGetAdditionalDataAsString("invalid_data_string", out stringValue);
+        var hasNumberField = result.Origin?.Data.TryGetAdditionalDataAsNumber("invalid_data_number", out numberValue);
+
+        // Assert
+        Assert.That(hasStringField, Is.False);
+        Assert.That((string?)null, Is.EqualTo(stringValue));
+
+        Assert.That(hasNumberField, Is.False);
+        Assert.That(0, Is.EqualTo(numberValue));
     }
 
     [Test]
