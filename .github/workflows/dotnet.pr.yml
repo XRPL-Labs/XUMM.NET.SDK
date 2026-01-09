@@ -13,7 +13,7 @@ jobs:
     - name: Setup .NET
       uses: actions/setup-dotnet@v1
       with:
-        dotnet-version: 8.0.x
+        dotnet-version: 10.0.x
     - name: Build XUMM.NET.SDK
       run: dotnet build --configuration Release ./src/XUMM.NET.SDK/XUMM.NET.SDK.csproj
     - name: Build XUMM.NET.SDK.Webhooks
