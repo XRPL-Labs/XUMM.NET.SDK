@@ -31,6 +31,28 @@ internal static class HttpMessageHandlerExtensions
             .Verifiable();
     }
 
+    internal static void SetFixtureMessage(this Mock<HttpMessageHandler> httpMessageHandler, HttpStatusCode statusCode, string fixture, Action<string?> onRequestBody)
+    {
+        var directoryName = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+        var fixtureFile = Path.Combine(directoryName!, "Data", $"{fixture}.json");
+
+        // The client disposes the request message after sending, so the body has to be read while the handler runs.
+        httpMessageHandler
+            .Protected()
+            .Setup<Task<HttpResponseMessage>>("SendAsync",
+                ItExpr.IsAny<HttpRequestMessage>(),
+                ItExpr.IsAny<CancellationToken>()
+            )
+            .Callback<HttpRequestMessage, CancellationToken>((request, _) =>
+                onRequestBody(request.Content?.ReadAsStringAsync().GetAwaiter().GetResult()))
+            .ReturnsAsync(new HttpResponseMessage
+            {
+                StatusCode = statusCode,
+                Content = new StringContent(File.ReadAllText(fixtureFile))
+            })
+            .Verifiable();
+    }
+
     internal static void AssertRequestUri(this Mock<HttpMessageHandler> httpMessageHandler, HttpMethod httpMethod, string endpoint)
     {
         httpMessageHandler

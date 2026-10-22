@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Net;
 using System.Net.Http;
+using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -152,6 +153,55 @@ public class XummPayloadClientTests
 
         // Assert
         AssertExtensions.AreEqual(PayloadFixtures.XummCreatePayload, result!);
+    }
+
+    [Test]
+    public async Task CreateAsync_WithSignerOption_ShouldSendSignerAsync()
+    {
+        // Arrange
+        string? requestBody = null;
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-create", body => requestBody = body);
+
+        var payload = new XummPostJsonPayload("{\"TransactionType\":\"Batch\"}")
+        {
+            Options = new XummPayloadOptions
+            {
+                Submit = false,
+                Signer = "r38xHAWRdc5enrYsHKQxUzHf6javKrV3i4"
+            }
+        };
+
+        // Act
+        await _subject.CreateAsync(payload);
+
+        // Assert
+        using var json = JsonDocument.Parse(requestBody!);
+        var options = json.RootElement.GetProperty("options");
+        Assert.That(options.GetProperty("signer").GetString(), Is.EqualTo("r38xHAWRdc5enrYsHKQxUzHf6javKrV3i4"));
+    }
+
+    [Test]
+    public async Task CreateAsync_WithoutSignerOption_ShouldOmitSignerAsync()
+    {
+        // Arrange
+        string? requestBody = null;
+        _httpMessageHandlerMock.SetFixtureMessage(HttpStatusCode.OK, "payload-create", body => requestBody = body);
+
+        var payload = new XummPostJsonPayload("{\"TransactionType\":\"SignIn\"}")
+        {
+            Options = new XummPayloadOptions
+            {
+                Submit = false
+            }
+        };
+
+        // Act
+        await _subject.CreateAsync(payload);
+
+        // Assert
+        using var json = JsonDocument.Parse(requestBody!);
+        var options = json.RootElement.GetProperty("options");
+        Assert.That(options.TryGetProperty("signer", out _), Is.False);
     }
 
     [Test]

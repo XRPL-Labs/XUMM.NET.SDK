@@ -41,6 +41,14 @@ public class XummPayloadOptions
     public string[]? Signers { get; set; }
 
     /// <summary>
+    /// (Optional) The account (r-address) that must sign the payload. Xaman pre-fills and enforces this signer, and rejects the sign request if the user cannot sign for it.
+    /// Required for a Batch transaction with multiple inner signers: each inner signer signs a payload with this set to their account, and the final payload sets it to the Batch account.
+    /// See https://docs.xaman.dev/concepts/special-transaction-types/batch-multiple-inner-signers
+    /// </summary>
+    [JsonPropertyName("signer")]
+    public string? Signer { get; set; }
+
+    /// <summary>
     /// (Optional) When set, the payload can only be opened by a device connected to the specified network. Xumm 2.5.0 and higher required.
     /// </summary>
     [JsonPropertyName("force_network")]
