@@ -22,6 +22,22 @@ app.MapXummControllerRoute();
 6. Start building your app. For reference, browse the [XUMM.NET.ServerApp](https://github.com/XRPL-Labs/XUMM.NET.SDK/tree/main/XUMM.NET.ServerApp) to see all the options.
 
 
+### Verify the webhook signature
+
+Anyone who knows your webhook URL can POST to it. Xaman signs every webhook with your application API secret
+(headers `X-Xumm-Request-Timestamp` and `X-Xumm-Request-Signature`). Pass the API secret to let the controller
+verify that signature and reject unsigned or forged requests with `401 Unauthorized`:
+
+```c#
+builder.Services.AddXummWebhooks<XummWebhookProcessor>(config =>
+{
+    config.ApiSecret = builder.Configuration["Xumm:ApiSecret"];
+});
+```
+
+Without an API secret the controller passes every request to your processor unverified, as in earlier versions.
+To verify webhooks in your own endpoint, call `XummWebhookSignature.IsValid` with the raw request body.
+
 ### Webhook URL
 
 Create your app and set your webhook URL for callbacks at the XUMM Developer Console:

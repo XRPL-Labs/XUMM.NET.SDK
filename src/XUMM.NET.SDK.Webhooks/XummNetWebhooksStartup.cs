@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using System;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using XUMM.NET.SDK.Webhooks.Configs;
 
 namespace XUMM.NET.SDK.Webhooks;
 
@@ -16,6 +18,20 @@ public static class XummNetWebhooksStartup
     {
         services.AddSingleton(typeof(IXummWebhookProcessor), typeof(T));
         return services;
+    }
+
+    /// <summary>
+    /// Adds services for the webhooks to the specified <see cref="IServiceCollection" /> and configures them.
+    /// Set <see cref="XummWebhookConfig.ApiSecret" /> to verify the signature of every incoming webhook.
+    /// </summary>
+    /// <param name="services">The <see cref="IServiceCollection" /> to add services to.</param>
+    /// <param name="configure">Configures the <see cref="XummWebhookConfig" />.</param>
+    /// <returns>The <see cref="IServiceCollection" />.</returns>
+    public static IServiceCollection AddXummWebhooks<T>(this IServiceCollection services, Action<XummWebhookConfig> configure)
+        where T : IXummWebhookProcessor
+    {
+        services.Configure(configure);
+        return services.AddXummWebhooks<T>();
     }
 
 #if NET5_0_OR_GREATER
